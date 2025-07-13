@@ -1,26 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Package, Truck, CheckCircle, Clock, Eye, Download, Edit, Save, X, Camera, Shield, CreditCard, Bell } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { getUser } from '@/lib/storage';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
-    const user=getUser();
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
-    firstName: user.name,
-    lastName: user.name,
-    email: user.email,
-    phone: user.number,
-    dateOfBirth: user.dateOfBirth,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    dateOfBirth: '',
     address: {
-      street: user.address,
-      city: user.address,
-      state: user.address,
-      zipCode: user.address,
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
     },
     joinDate: '2023-01-15',
     totalOrders: 12,
@@ -28,6 +31,73 @@ export default function ProfilePage() {
   });
 
   const [editData, setEditData] = useState({ ...userData });
+
+  useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
+    const currentUser = getUser();
+    if (!currentUser) {
+      router.push('/login');
+      return;
+    }
+    
+    setUser(currentUser);
+    
+    // Initialize userData with actual user data
+    const initialUserData = {
+      firstName: currentUser.name || currentUser.firstName || '',
+      lastName: currentUser.lastName || '',
+      email: currentUser.email || '',
+      phone: currentUser.number || currentUser.phone || '',
+      dateOfBirth: currentUser.dateOfBirth || '',
+      address: {
+        street: currentUser.address || '',
+        city: currentUser.address || '',
+        state: currentUser.address || '',
+        zipCode: currentUser.address || '',
+      },
+      joinDate: '2023-01-15',
+      totalOrders: 12,
+      totalSpent: 15847
+    };
+    
+    setUserData(initialUserData);
+    setEditData(initialUserData);
+    setIsLoading(false);
+  }, [router]);
+
+  // Show loading state while checking user
+  if (isLoading) {
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
+        <Navigation />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7a9e9f] mx-auto"></div>
+            <p className="mt-4 text-lg text-gray-600">Loading profile...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Don't render anything if user is not loaded yet
+  if (!user) {
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
+        <Navigation />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7a9e9f] mx-auto"></div>
+            <p className="mt-4 text-lg text-gray-600">Redirecting to login...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const orders = [
     {
