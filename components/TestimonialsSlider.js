@@ -9,35 +9,35 @@ export default function TestimonialsSlider() {
   const testimonials = [
     {
       id: 1,
-      name: 'Sarah Johnson',
-      role: 'Content Creator',
+      name: 'سفيان بن عمارة',
+      role: '',
       rating: 5,
-      comment: 'Amazing service and top-quality products! My new gaming PC performs flawlessly. The staff was incredibly knowledgeable and helped me choose the perfect components.',
-      avatar: 'SJ'
+      comment: ' خدمتهم ما شاء الله! طلبت البيسي وجاني في الوقت، والتغليف كان ممتاز. أنصح بيهم وبقوة',
+      avatar: 'SA'
     },
     {
       id: 2,
-      name: 'Mike Chen',
-      role: 'Software Developer',
+      name: ' إيناس بوزيدي',
+      role: '',
       rating: 5,
-      comment: 'Fast delivery and excellent customer support. The workstation I bought handles all my development tasks perfectly. Highly recommend TechHub for professional needs.',
-      avatar: 'MC'
+      comment: 'خدمة ممتازة! طلبت لابتوب جديد وجاني في الوقت المحدد. التغليف كان رائع والمنتج في حالة ممتازة. أنصح الجميع بالتعامل معهم.',
+      avatar: 'IB'
     },
     {
       id: 3,
-      name: 'Alex Rodriguez',
-      role: 'Gamer',
+      name: 'وليد قارة',
+      role: '',
       rating: 5,
-      comment: 'Best prices in town and genuine products. My RTX 4080 build is a beast! The team even helped with custom cable management. Outstanding service!',
-      avatar: 'AR'
+      comment: ' أول مرة نشري من موقع جزائري وثقت فيه، بصراحة ما ندمتش، الكاليتي هايلة والسعر معقول',
+      avatar: 'WL'
     },
     {
       id: 4,
-      name: 'Emily Davis',
-      role: 'Graphic Designer',
+      name: 'نسرين عماري',
+      role: '',
       rating: 5,
-      comment: 'Professional service from start to finish. They understood exactly what I needed for my design work and delivered beyond expectations. Will definitely shop here again.',
-      avatar: 'ED'
+      comment: ' خدمتهم زينة بزاف، وحتى كي كاين مشكل يجاوبوك في وقت قصير. شكراً على الاحترافية',
+      avatar: 'NS'
     }
   ];
 

@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Minus, Trash2, Cpu, HardDrive, MonitorSpeaker, Zap, Fan, MemoryStick, Clapperboard as Motherboard, ShoppingCart, AlertTriangle, CheckCircle, Info, Star } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { gettheparts } from '@/lib/api';
+import { addToCart } from '@/lib/storage';
 
 export default function PCBuilderPage() {
   const [selectedComponents, setSelectedComponents] = useState({
-    cpu: null,
+    CPU: null,
     motherboard: null,
     ram: null,
     gpu: null,
@@ -17,11 +19,23 @@ export default function PCBuilderPage() {
     case: null
   });
 
-  const [activeCategory, setActiveCategory] = useState('cpu');
+  const [activeCategory, setActiveCategory] = useState('CPU');
   const [showCompatibilityCheck, setShowCompatibilityCheck] = useState(false);
+  const [components, setComponents] = useState({
+    CPU: [],
+    motherboard: [],
+    ram: [],
+    gpu: [],
+    storage: [],
+    psu: [],
+    cooling: [],
+    case: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const componentCategories = [
-    { id: 'cpu', name: 'Processor', icon: Cpu, required: true },
+    { id: 'CPU', name: 'Processor', icon: Cpu, required: true },
     { id: 'motherboard', name: 'Motherboard', icon: Motherboard, required: true },
     { id: 'ram', name: 'Memory (RAM)', icon: MemoryStick, required: true },
     { id: 'gpu', name: 'Graphics Card', icon: MonitorSpeaker, required: true },
@@ -31,257 +45,29 @@ export default function PCBuilderPage() {
     { id: 'case', name: 'PC Case', icon: Motherboard, required: false }
   ];
 
-  const components = {
-    cpu: [
-      {
-        id: 'cpu1',
-        name: 'Intel Core i9-13900K',
-        price: 589,
-        image: 'https://images.pexels.com/photos/2225617/pexels-photo-2225617.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['24 Cores (8P+16E)', '32 Threads', '5.8 GHz Boost', 'LGA1700 Socket'],
-        powerDraw: 125,
-        socket: 'LGA1700',
-        rating: 4.8,
-        reviews: 234,
-        compatibility: ['motherboard1', 'motherboard2']
-      },
-      {
-        id: 'cpu2',
-        name: 'AMD Ryzen 9 7950X',
-        price: 699,
-        image: 'https://images.pexels.com/photos/2225617/pexels-photo-2225617.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['16 Cores', '32 Threads', '5.7 GHz Boost', 'AM5 Socket'],
-        powerDraw: 170,
-        socket: 'AM5',
-        rating: 4.9,
-        reviews: 189,
-        compatibility: ['motherboard3', 'motherboard4']
-      },
-      {
-        id: 'cpu3',
-        name: 'Intel Core i7-13700K',
-        price: 409,
-        image: 'https://images.pexels.com/photos/2225617/pexels-photo-2225617.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['16 Cores (8P+8E)', '24 Threads', '5.4 GHz Boost', 'LGA1700 Socket'],
-        powerDraw: 125,
-        socket: 'LGA1700',
-        rating: 4.7,
-        reviews: 156,
-        compatibility: ['motherboard1', 'motherboard2']
+  // Add a new useEffect to fetch parts for the active category only
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchCategoryParts() {
+      setLoading(true);
+      setError('');
+      try {
+        const data = await gettheparts(activeCategory);
+        if (isMounted) {
+          setComponents(prev => ({
+            ...prev,
+            [activeCategory]: data.data || []
+          }));
+        }
+      } catch (err) {
+        if (isMounted) setError('Failed to load parts for ' + activeCategory);
+      } finally {
+        if (isMounted) setLoading(false);
       }
-    ],
-    motherboard: [
-      {
-        id: 'motherboard1',
-        name: 'ASUS ROG Z790 Hero',
-        price: 629,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['LGA1700 Socket', 'DDR5 Support', 'PCIe 5.0', 'WiFi 6E'],
-        socket: 'LGA1700',
-        ramType: 'DDR5',
-        maxRam: 128,
-        rating: 4.8,
-        reviews: 89,
-        compatibility: ['cpu1', 'cpu3']
-      },
-      {
-        id: 'motherboard2',
-        name: 'MSI Z790 Gaming Pro',
-        price: 299,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['LGA1700 Socket', 'DDR5 Support', 'PCIe 4.0', 'WiFi 6'],
-        socket: 'LGA1700',
-        ramType: 'DDR5',
-        maxRam: 64,
-        rating: 4.6,
-        reviews: 134,
-        compatibility: ['cpu1', 'cpu3']
-      },
-      {
-        id: 'motherboard3',
-        name: 'ASUS X670E Creator',
-        price: 699,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['AM5 Socket', 'DDR5 Support', 'PCIe 5.0', 'WiFi 6E'],
-        socket: 'AM5',
-        ramType: 'DDR5',
-        maxRam: 128,
-        rating: 4.9,
-        reviews: 67,
-        compatibility: ['cpu2']
-      }
-    ],
-    ram: [
-      {
-        id: 'ram1',
-        name: 'Corsair Dominator 32GB DDR5-5600',
-        price: 299,
-        image: 'https://images.pexels.com/photos/2399840/pexels-photo-2399840.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['32GB (2x16GB)', 'DDR5-5600', 'RGB Lighting', 'Low Latency'],
-        capacity: 32,
-        type: 'DDR5',
-        speed: 5600,
-        rating: 4.8,
-        reviews: 156,
-        compatibility: ['motherboard1', 'motherboard2', 'motherboard3']
-      },
-      {
-        id: 'ram2',
-        name: 'G.Skill Trident Z5 64GB DDR5-6000',
-        price: 599,
-        image: 'https://images.pexels.com/photos/2399840/pexels-photo-2399840.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['64GB (2x32GB)', 'DDR5-6000', 'RGB Lighting', 'High Performance'],
-        capacity: 64,
-        type: 'DDR5',
-        speed: 6000,
-        rating: 4.9,
-        reviews: 89,
-        compatibility: ['motherboard1', 'motherboard3']
-      }
-    ],
-    gpu: [
-      {
-        id: 'gpu1',
-        name: 'NVIDIA RTX 4090',
-        price: 1599,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['24GB GDDR6X', '16384 CUDA Cores', '2.5 GHz Boost', '450W TDP'],
-        powerDraw: 450,
-        length: 336,
-        rating: 4.9,
-        reviews: 234,
-        compatibility: []
-      },
-      {
-        id: 'gpu2',
-        name: 'NVIDIA RTX 4080',
-        price: 1199,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['16GB GDDR6X', '9728 CUDA Cores', '2.5 GHz Boost', '320W TDP'],
-        powerDraw: 320,
-        length: 310,
-        rating: 4.8,
-        reviews: 189,
-        compatibility: []
-      },
-      {
-        id: 'gpu3',
-        name: 'AMD RX 7900 XTX',
-        price: 999,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['24GB GDDR6', '6144 Stream Processors', '2.5 GHz Boost', '355W TDP'],
-        powerDraw: 355,
-        length: 320,
-        rating: 4.7,
-        reviews: 156,
-        compatibility: []
-      }
-    ],
-    storage: [
-      {
-        id: 'storage1',
-        name: 'Samsung 980 PRO 2TB',
-        price: 199,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['2TB NVMe SSD', '7000 MB/s Read', '6900 MB/s Write', 'PCIe 4.0'],
-        capacity: 2000,
-        type: 'NVMe SSD',
-        rating: 4.8,
-        reviews: 345,
-        compatibility: []
-      },
-      {
-        id: 'storage2',
-        name: 'WD Black SN850X 1TB',
-        price: 129,
-        image: 'https://images.pexels.com/photos/159304/network-cable-ethernet-computer-159304.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['1TB NVMe SSD', '7300 MB/s Read', '6600 MB/s Write', 'PCIe 4.0'],
-        capacity: 1000,
-        type: 'NVMe SSD',
-        rating: 4.7,
-        reviews: 234,
-        compatibility: []
-      }
-    ],
-    psu: [
-      {
-        id: 'psu1',
-        name: 'Corsair RM1000x 1000W',
-        price: 199,
-        image: 'https://images.pexels.com/photos/2399840/pexels-photo-2399840.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['1000W 80+ Gold', 'Fully Modular', '10 Year Warranty', 'Zero RPM Mode'],
-        wattage: 1000,
-        efficiency: '80+ Gold',
-        rating: 4.9,
-        reviews: 189,
-        compatibility: []
-      },
-      {
-        id: 'psu2',
-        name: 'EVGA SuperNOVA 850W',
-        price: 149,
-        image: 'https://images.pexels.com/photos/2399840/pexels-photo-2399840.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['850W 80+ Gold', 'Fully Modular', '10 Year Warranty', 'Eco Mode'],
-        wattage: 850,
-        efficiency: '80+ Gold',
-        rating: 4.8,
-        reviews: 267,
-        compatibility: []
-      }
-    ],
-    cooling: [
-      {
-        id: 'cooling1',
-        name: 'Corsair H150i Elite Capellix',
-        price: 189,
-        image: 'https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['360mm AIO', 'RGB Lighting', 'ML120 RGB Fans', 'Zero RPM Mode'],
-        type: 'AIO Liquid',
-        size: 360,
-        rating: 4.8,
-        reviews: 156,
-        compatibility: []
-      },
-      {
-        id: 'cooling2',
-        name: 'Noctua NH-D15',
-        price: 99,
-        image: 'https://images.pexels.com/photos/1029757/pexels-photo-1029757.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['Dual Tower Air Cooler', 'Premium Fans', '6 Year Warranty', 'Silent Operation'],
-        type: 'Air Cooler',
-        height: 165,
-        rating: 4.9,
-        reviews: 234,
-        compatibility: []
-      }
-    ],
-    case: [
-      {
-        id: 'case1',
-        name: 'Corsair 4000D Airflow',
-        price: 109,
-        image: 'https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['Mid Tower', 'Tempered Glass', 'Excellent Airflow', 'Cable Management'],
-        formFactor: 'Mid Tower',
-        maxGpuLength: 360,
-        rating: 4.8,
-        reviews: 345,
-        compatibility: []
-      },
-      {
-        id: 'case2',
-        name: 'Fractal Design Define 7',
-        price: 169,
-        image: 'https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1',
-        specs: ['Full Tower', 'Sound Dampening', 'Modular Design', 'Premium Build'],
-        formFactor: 'Full Tower',
-        maxGpuLength: 440,
-        rating: 4.9,
-        reviews: 189,
-        compatibility: []
-      }
-    ]
-  };
+    }
+    fetchCategoryParts();
+    return () => { isMounted = false; };
+  }, [activeCategory]);
 
   const selectComponent = (category, component) => {
     setSelectedComponents(prev => ({
@@ -305,7 +91,7 @@ export default function PCBuilderPage() {
 
   const getTotalPowerDraw = () => {
     let total = 0;
-    if (selectedComponents.cpu) total += selectedComponents.cpu.powerDraw || 0;
+    if (selectedComponents.CPU) total += selectedComponents.CPU.powerDraw || 0;
     if (selectedComponents.gpu) total += selectedComponents.gpu.powerDraw || 0;
     total += 100; // Base system power draw
     return total;
@@ -315,8 +101,8 @@ export default function PCBuilderPage() {
     const issues = [];
     
     // CPU and Motherboard socket compatibility
-    if (selectedComponents.cpu && selectedComponents.motherboard) {
-      if (selectedComponents.cpu.socket !== selectedComponents.motherboard.socket) {
+    if (selectedComponents.CPU && selectedComponents.motherboard) {
+      if (selectedComponents.CPU.socket !== selectedComponents.motherboard.socket) {
         issues.push('CPU and Motherboard sockets are incompatible');
       }
     }
@@ -350,9 +136,9 @@ export default function PCBuilderPage() {
   const getRecommendations = (category) => {
     const recommendations = [];
     
-    if (category === 'motherboard' && selectedComponents.cpu) {
+    if (category === 'motherboard' && selectedComponents.CPU) {
       const compatibleMBs = components.motherboard.filter(mb => 
-        mb.socket === selectedComponents.cpu.socket
+        mb.socket === selectedComponents.CPU.socket
       );
       recommendations.push(...compatibleMBs.slice(0, 2));
     }
@@ -364,7 +150,7 @@ export default function PCBuilderPage() {
       recommendations.push(...compatibleRAM.slice(0, 2));
     }
     
-    if (category === 'psu' && (selectedComponents.cpu || selectedComponents.gpu)) {
+    if (category === 'psu' && (selectedComponents.CPU || selectedComponents.gpu)) {
       const totalPower = getTotalPowerDraw();
       const recommendedWattage = Math.ceil(totalPower / 0.8);
       const suitablePSUs = components.psu.filter(psu => 
@@ -381,72 +167,67 @@ export default function PCBuilderPage() {
   };
 
   const ComponentCard = ({ component, category, isSelected = false }) => (
-    <div className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden ${isSelected ? 'ring-2' : ''}`}
-      style={{ ringColor: isSelected ? '#669999' : 'transparent' }}
+    <div
+      className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col items-center justify-between cursor-pointer border-2 border-transparent hover:border-[#669999]"
+      style={{ minHeight: '320px', maxWidth: '340px', margin: '0 auto', padding: '32px 0' }}
+      onClick={() => selectComponent(category, component)}
     >
-      <div className="relative">
+      <div className="flex-1 flex items-center justify-center w-full" style={{ minHeight: '180px' }}>
         <img
-          src={component.image}
+          src={component.imagecover || component.image || '/placeholder-image.jpg'}
           alt={component.name}
-          className="w-full h-32 object-cover"
+          className="w-[90%] h-[180px] object-contain rounded-xl shadow-sm bg-gray-50"
         />
-        {isSelected && (
-          <div className="absolute top-2 right-2">
-            <CheckCircle className="h-6 w-6 text-white" style={{ backgroundColor: '#669999', borderRadius: '50%' }} />
-          </div>
-        )}
       </div>
-
-      <div className="p-4">
-        <h3 className="font-semibold text-lg mb-2" style={{ color: '#2e2e2e' }}>
-          {component.name}
+      <div className="w-full flex flex-col items-center justify-center mt-6">
+        <h3 className="font-semibold text-xl mb-2 text-center" style={{ color: '#2e2e2e' }}>
+          {component.title || component.name}
         </h3>
-        
-        <div className="flex items-center mb-3">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 ${
-                  i < Math.floor(component.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-          <span className="text-sm text-gray-600 ml-2">
-            ({component.reviews})
+        <span className="text-2xl font-bold text-center" style={{ color: '#669999' }}>
+          {component.price ? `${component.price}` : ''}DA
           </span>
-        </div>
-
-        <ul className="text-sm text-gray-600 mb-4 space-y-1">
-          {component.specs.slice(0, 3).map((spec, index) => (
-            <li key={index} className="flex items-center">
-              <div className="w-1 h-1 rounded-full mr-2" style={{ backgroundColor: '#669999' }}></div>
-              {spec}
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-xl font-bold" style={{ color: '#2e2e2e' }}>
-            ${component.price}
-          </span>
-        </div>
-
-        <button
-          onClick={() => selectComponent(category, component)}
-          className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 ${
-            isSelected ? 'bg-gray-100 text-gray-600' : 'text-white'
-          }`}
-          style={{ backgroundColor: isSelected ? '#f3f4f6' : '#669999' }}
-          onMouseEnter={(e) => !isSelected && (e.target.style.backgroundColor = '#5a8585')}
-          onMouseLeave={(e) => !isSelected && (e.target.style.backgroundColor = '#669999')}
-        >
-          {isSelected ? 'Selected' : 'Select Component'}
-        </button>
       </div>
     </div>
   );
+
+  // Add to Cart handler
+  const handleAddToCart = () => {
+    // Only add required components (not null)
+    const requiredCategories = componentCategories.filter(c => c.required).map(c => c.id);
+    const selectedRequired = requiredCategories.map(cat => selectedComponents[cat]).filter(Boolean);
+    selectedRequired.forEach(part => addToCart(part));
+    alert('All selected parts have been added to your cart!');
+    // Clear all chosen parts
+    setSelectedComponents({
+      cpu: null,
+      motherboard: null,
+      ram: null,
+      gpu: null,
+      storage: null,
+      psu: null,
+      cooling: null,
+      case: null
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navigation />
+        <div className="flex-1 flex items-center justify-center text-lg text-gray-600">Loading PC parts...</div>
+        <Footer />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navigation />
+        <div className="flex-1 flex items-center justify-center text-lg text-red-600">{error}</div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
@@ -592,7 +373,7 @@ export default function PCBuilderPage() {
                     Total Price
                   </span>
                   <span className="text-2xl font-bold" style={{ color: '#669999' }}>
-                    ${getTotalPrice().toLocaleString()}
+                    {getTotalPrice()}DA
                   </span>
                 </div>
                 
@@ -601,6 +382,7 @@ export default function PCBuilderPage() {
                   style={{ backgroundColor: '#669999' }}
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#5a8585'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#669999'}
+                  onClick={handleAddToCart}
                 >
                   <ShoppingCart className="h-5 w-5" />
                   <span>Add to Cart</span>
@@ -640,7 +422,7 @@ export default function PCBuilderPage() {
             </div>
 
             {/* Recommendations Section */}
-            {selectedComponents.cpu || selectedComponents.motherboard ? (
+            {selectedComponents.CPU || selectedComponents.motherboard ? (
               <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <div className="flex items-center space-x-2 mb-4">
                   <Info className="h-5 w-5" style={{ color: '#669999' }} />

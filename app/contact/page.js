@@ -33,25 +33,25 @@ export default function ContactPage() {
     {
       icon: MapPin,
       title: 'Visit Our Store',
-      details: ['123 Tech Street', 'Silicon Valley, CA 94000'],
+      details: ['06 rue Ounnoughi Benghadfa', 'Ouled Brahem'],
       color: '#669999'
     },
     {
       icon: Phone,
       title: 'Call Us',
-      details: ['(555) 123-4567', 'Mon-Fri: 9AM-6PM PST'],
+      details: ['0772725573', '0667294070'],
       color: '#669999'
     },
     {
       icon: Mail,
       title: 'Email Us',
-      details: ['info@techhub.com', 'support@techhub.com'],
+      details: ['azertycomputerdz@gmail.com', ''],
       color: '#669999'
     },
     {
       icon: Clock,
       title: 'Business Hours',
-      details: ['Mon-Fri: 9AM-6PM', 'Sat: 10AM-4PM', 'Sun: Closed'],
+      details: ['24/7 Support'],
       color: '#669999'
     }
   ];
@@ -270,7 +270,7 @@ export default function ContactPage() {
                 <div className="text-center">
                   <MapPin className="h-12 w-12 mx-auto mb-4" style={{ color: '#669999' }} />
                   <p className="text-gray-600 font-medium">Interactive Map</p>
-                  <p className="text-sm text-gray-500">123 Tech Street, Silicon Valley</p>
+                  <p className="text-sm text-gray-500">06 rue Ounnoughi Benghadfa, Ouled Brahem</p>
                 </div>
               </div>
             </div>
@@ -302,7 +302,7 @@ export default function ContactPage() {
                     What payment methods do you accept?
                   </h4>
                   <p className="text-gray-600 text-sm">
-                    We accept all major credit cards, PayPal, and financing options through our partners.
+                    We accept all financing options through our partners.
                   </p>
                 </div>
               </div>

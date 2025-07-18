@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, CreditCard } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { getCart, removeFromCart, updateCartItemQuantity } from '@/lib/storage';
+import { getCart, removeFromCart, updateCartItemQuantity, getUser } from '@/lib/storage';
 import Link from 'next/link';
+import { addOrder } from '@/lib/api';
+import { showNotification } from '@/components/NotificationSystem';
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -46,6 +48,28 @@ export default function CartPage() {
   const shipping = subtotal > 500 ? 0 : 29.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
+
+  const handleOrder = async () => {
+    const user = getUser();
+    if (!user) {
+      window.location.href = '/login';
+      return;
+    }
+    try {
+      await addOrder({});
+      showNotification({
+        title: 'Order Placed',
+        description: 'Your order has been placed successfully!',
+        variant: 'default',
+      });
+    } catch (err) {
+      showNotification({
+        title: 'Order Failed',
+        description: err?.message || 'Failed to place order. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
@@ -134,11 +158,11 @@ export default function CartPage() {
                         </div>
                         
                         <div className="text-right">
-                          <p className="text-xl font-bold" style={{ color: '#2e2e2e' }}>
-                            ${((item.price || 0) * (item.quantity || 1)).toLocaleString()}
+                          <p className="text-xl font-bold" style={{ color: '#4E8786' }}>
+                            {((item.price || 0) * (item.quantity || 1))}DA
                           </p>
                           <p className="text-sm text-gray-500">
-                            ${item.price || 0} each
+                            {item.price || 0}DA each
                           </p>
                         </div>
                       </div>
@@ -158,7 +182,7 @@ export default function CartPage() {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="font-semibold">${subtotal.toLocaleString()}</span>
+                    <span className="font-semibold" style={{color:'#4E8786'}}>{subtotal}DA</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
@@ -166,31 +190,23 @@ export default function CartPage() {
                       {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tax</span>
-                    <span className="font-semibold">${tax.toFixed(2)}</span>
-                  </div>
+
                   <div className="border-t pt-4">
                     <div className="flex justify-between text-lg font-bold">
                       <span style={{ color: '#2e2e2e' }}>Total</span>
-                      <span style={{ color: '#2e2e2e' }}>${total.toFixed(2)}</span>
+                      <span style={{ color: '#4E8786' }}>{total} DA</span>
                     </div>
                   </div>
                 </div>
 
-                {subtotal < 500 && (
-                  <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-700">
-                      Add ${(500 - subtotal).toFixed(2)} more for free shipping!
-                    </p>
-                  </div>
-                )}
+               
 
                 <button 
                   className="w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 mb-4 bg-[#4E8786] text-white hover:bg-primary-hover"
+                  onClick={handleOrder}
                 >
                   <CreditCard className="h-5 w-5" />
-                  <span>Proceed to Checkout</span>
+                  <span>ORDER</span>
                 </button>
 
                 <Link href="/products">

@@ -5,7 +5,7 @@ import { Menu, X, Search, ShoppingCart, User, Monitor } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Settings } from "lucide-react";
-import { getUser, removeUser, getCartItemCount } from '@/lib/storage';
+import { getUser, removeUser, getCartItemCount, getToken, removeToken } from '@/lib/storage';
 import { usePathname } from 'next/navigation';
 
 
@@ -57,6 +57,7 @@ export default function Navigation() {
   // Logout handler
   const handleLogout = () => {
     removeUser();
+    removeToken();
     setUser(null);
     setShowProfileMenu(false);
     window.location.href = '/';
@@ -82,8 +83,8 @@ export default function Navigation() {
 
   return (
     <header className={`shadow-md sticky top-0 z-50 transition-all duration-300 ${
-        pathname === '/' ? (isScrolled ? 'bg-[#4E8786]' : 'bg-transparent') : 'bg-[#4E8786]'
-      }`}>
+      pathname === '/' ? (isScrolled ? 'bg-[#4E8786]' : 'bg-transparent') : 'bg-[#4E8786]'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2 flex-shrink-0">
@@ -93,25 +94,29 @@ export default function Navigation() {
             */
            } 
               <div className="flex items-center sticky gap-0">
-                <a href="/" className="flex items-center ">
-
-                <Image
-                  src={image}
-                  alt="ZERTY Logo"
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 m-0 p-0"
-                  />
-                <span className="text-xl sm:text-2xl font-bold text-white m-0 p-0 " style={{ color: '#ded4d2' }}>
-                  ZERTY
-                </span>
-                  </a>
+                <a href="/" className="flex flex-col items-center justify-center ">
+                  <div className="flex items-center mb-0">
+                    <Image
+                      src={image}
+                      alt="ZERTY Logo"
+                      width={32}
+                      height={28}
+                      className="h-7 w-8 m-0 p-0"
+                    />
+                    <span className="text-xl sm:text-2xl font-bold text-white m-0 p-0 ml-0" style={{ color: '#ded4d2' }}>
+                      ZERTY
+                    </span>
+                  </div>
+                  <span className="text-xs sm:text-sm font-semibold text-white mt-0 tracking-widest" style={{ color: '#ded4d2', letterSpacing: '0.25em',lineHeight:"0.5",textTransform:"uppercase" }}>
+                    computer
+                  </span>
+                </a>
               </div>
             
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-6 xl:space-x-8">
+          <nav className="hidden lg:flex space-x-6 xl:space-x-8 bg-red">
             {menuItems.map((item) => (
               <a
                 key={item.name}
@@ -125,15 +130,7 @@ export default function Navigation() {
 
           {/* Right Section */}
           <div className="flex items-center space-x-4">
-            {/* Search */}
-            <div className="hidden md:flex items-center bg-white/20 rounded-lg px-3 py-2">
-              <Search className="h-4 w-4 text-white mr-2 flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="bg-transparent outline-none text-sm w-32 lg:w-40 text-white placeholder-white/70"
-              />
-            </div>
+            
 
             {/* Mobile Search Button */}
             <button
@@ -243,23 +240,34 @@ export default function Navigation() {
                 </div>
                 {/* Mobile Auth Links */}
                 <div className="border-t border-white/20 pt-5 space-y-2">
-                  <Link
-                    href="/admin"
-                    className="flex items-center px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Settings className="h-5 w-5 mr-3 text-white" />
-                    Admin Panel
-                  </Link>
-                  {user && user.token ? (
-                    <Link
-                      href="/profile"
-                      className="flex items-center px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <User className="h-5 w-5 mr-3 text-white" />
-                      {user.name || user.email}
-                    </Link>
+                  {getToken() ? (
+                    <>
+                      <Link
+                        href="/profile"
+                        className="flex items-center px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <User className="h-5 w-5 mr-3 text-white" />
+                        {user?.name || user?.email || "Profile"}
+                      </Link>
+                      {user?.role === 'admin' && (
+                        <Link
+                          href="/admin"
+                          className="flex items-center px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <Settings className="h-5 w-5 mr-3 text-white" />
+                          Admin Panel
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                        className="flex items-center w-full px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
+                      >
+                        <X className="h-5 w-5 mr-3 text-white" />
+                        Logout
+                      </button>
+                    </>
                   ) : (
                     <>
                       <Link
@@ -286,35 +294,8 @@ export default function Navigation() {
           </>
         )}
 
-        {/* Mobile Search Bar */}
-        {isSearchOpen && (
-          <div className="md:hidden py-3 border-t border-white/20 fixed top-16 left-0 right-0 z-50" style={{ backgroundColor: '#4E8786' }}>
-            <div className="flex items-center bg-white/20 rounded-lg px-4 py-3 mx-4 shadow-md">
-              <Search className="h-4 w-4 text-white mr-2" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                className="bg-transparent outline-none text-base flex-1 text-white placeholder-white/70"
-                autoFocus
-              />
-            </div>
-          </div>
-        )}
 
-        {/* Tablet Navigation (md to lg) */}
-        <div className="hidden md:flex lg:hidden border-t border-white/20 py-2" style={{ backgroundColor: '#4E8786' }}>
-          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 w-full">
-            {menuItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-medium transition-colors duration-200 hover:text-white px-2 py-1 text-white/90"
-              >
-                {item.name}
-              </a>
-            ))}
-          </nav>
-        </div>
+      
       </div>
     </header>
   );

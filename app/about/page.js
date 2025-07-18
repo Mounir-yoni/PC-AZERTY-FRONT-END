@@ -39,36 +39,6 @@ export default function AboutPage() {
     }
   ];
 
-  const team = [
-    {
-      name: 'Sarah Johnson',
-      role: 'CEO & Founder',
-      image: 'SJ',
-      bio: 'Tech entrepreneur with 15+ years in the industry. Passionate about making technology accessible to everyone.',
-      color: '#669999'
-    },
-    {
-      name: 'Michael Chen',
-      role: 'CTO',
-      image: 'MC',
-      bio: 'Former Silicon Valley engineer specializing in hardware optimization and system architecture.',
-      color: '#669999'
-    },
-    {
-      name: 'Emily Rodriguez',
-      role: 'Head of Customer Success',
-      image: 'ER',
-      bio: 'Customer experience expert dedicated to ensuring every interaction exceeds expectations.',
-      color: '#669999'
-    },
-    {
-      name: 'David Kim',
-      role: 'Lead Product Specialist',
-      image: 'DK',
-      bio: 'Gaming and workstation expert with deep knowledge of performance computing solutions.',
-      color: '#669999'
-    }
-  ];
 
   const timeline = [
     {
@@ -113,7 +83,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100"></div>
           <div className="relative max-w-7xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-              About TechHub
+              About AZerty
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
               We're passionate about technology and committed to helping you find the perfect 
@@ -129,11 +99,7 @@ export default function AboutPage() {
               >
                 Our Story
               </button>
-              <button className="px-8 py-3 rounded-lg font-semibold border-2 transition-all duration-300 hover:scale-105 hover:bg-gray-50"
-                style={{ borderColor: '#669999', color: '#669999' }}
-              >
-                Meet the Team
-              </button>
+
             </div>
           </div>
         </section>
@@ -165,7 +131,7 @@ export default function AboutPage() {
                   Our Mission
                 </h2>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  At TechHub, we believe technology should empower everyone to achieve their goals. 
+                  At AZerty, we believe technology should empower everyone to achieve their goals. 
                   Whether you're a gamer seeking the ultimate performance, a creator pushing the 
                   boundaries of digital art, or a professional building the next big thing, we're 
                   here to provide the tools you need.
@@ -241,46 +207,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Team Section */}
-        <section className="py-20 px-4 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-                Meet Our Team
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                The passionate individuals behind TechHub's success
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {team.map((member, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:scale-105"
-                >
-                  <div className="p-8 text-center">
-                    <div 
-                      className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-white font-bold text-2xl group-hover:scale-110 transition-transform duration-300"
-                      style={{ backgroundColor: member.color }}
-                    >
-                      {member.image}
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2" style={{ color: '#2e2e2e' }}>
-                      {member.name}
-                    </h3>
-                    <p className="font-medium mb-4" style={{ color: '#669999' }}>
-                      {member.role}
-                    </p>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {member.bio}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        
 
         {/* Timeline Section */}
         <section className="py-20 px-4" style={{ backgroundColor: '#f5f5f2' }}>
@@ -334,7 +261,7 @@ export default function AboutPage() {
         <section className="py-20 px-4" style={{ backgroundColor: '#669999' }}>
           <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-4xl font-bold mb-6">
-              Ready to Join the TechHub Family?
+              Ready to Join the AZerty Family?
             </h2>
             <p className="text-xl mb-8 opacity-90">
               Experience the difference that expert knowledge and personalized service can make. 

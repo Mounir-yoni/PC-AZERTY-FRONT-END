@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { getProducts, getProduct, getComments , addComment   } from '@/lib/api';
  import { getToken, addToCart } from '@/lib/storage'; // Uncomment if you have user authentication
+import { showNotification } from '@/components/NotificationSystem';
 
 export default function ProductPage({ params }) {
   const [product, setProduct] = useState(null);
@@ -133,9 +134,17 @@ export default function ProductPage({ params }) {
     setAddingToCart(true);
     try {
       addToCart(product);
-      alert(`${product.title} added to cart!`);
+      showNotification({
+        title: 'Added to Cart',
+        description: `${product.title} has been added to your cart!`,
+        variant: 'default',
+      });
     } catch (error) {
-      alert('Failed to add to cart. Please try again.');
+      showNotification({
+        title: 'Error',
+        description: 'Failed to add to cart. Please try again.',
+        variant: 'destructive',
+      });
     } finally {
       setAddingToCart(false);
     }
@@ -285,7 +294,7 @@ export default function ProductPage({ params }) {
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <span className="text-green-600 font-medium">
-                    In Stock (12 available)
+                    {product.quantity} {product.quantity > 0 ? 'In Stock' : 'Out of Stock'}
                   </span>
                 </div>
               </div>
