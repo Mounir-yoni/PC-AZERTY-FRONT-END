@@ -358,7 +358,24 @@ function AddProductModal({ onClose, onSave, loading, error }) {
             className="w-full border px-3 py-2 rounded"
             ref={fileInputRef}
           />
-          <input name="Partname" value={form.Partname} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="Part Name" />
+          <select
+            name="Partname"
+            value={form.Partname}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
+            required
+          >
+            <option value="">Select Part Name</option>
+            <option value="Package">Package</option>
+            <option value="CPU">CPU</option>
+            <option value="gpu">gpu</option>
+            <option value="motherboard">motherboard</option>
+            <option value="ram">ram</option>
+            <option value="storage">storage</option>
+            <option value="psu">psu</option>
+            <option value="cooling">cooling</option>
+            <option value="case">case</option>
+          </select>
           {/* Add more fields as needed */}
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end space-x-2">
