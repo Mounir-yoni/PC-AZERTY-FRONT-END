@@ -198,6 +198,14 @@ export default function Navigation() {
               )}
             </Link>
 
+            <Link href="tel:0772725573" className="flex items-center gap-1 text-white hover:underline">
+              <svg /* أيقونة هاتف */ className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h1.4a1 1 0 01.94.658L9 7a1 1 0 01-.305 1.055l-1.6 1.6a16 16 0 006.25 6.25l1.6-1.6A1 1 0 0117 13l3.342 1.66a1 1 0 01.658.94V20a2 2 0 01-2 2h-1a17 17 0 01-17-17V5z" />
+              </svg>
+              <span className="hidden sm:inline text-sm">0772725573</span>
+            </Link>
+
+
             {/* Mobile menu button */}
             <button
               className="lg:hidden p-2 rounded-lg transition-colors hover:bg-white/20"

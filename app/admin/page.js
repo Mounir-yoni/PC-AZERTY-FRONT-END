@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { gethomepagestatistic, getlast4order, getOrdersDailyStats, getProducts, updateproduct, deleteproduct, createproducts, getCategory, addcategory, updatecategory, deletecategory, getusers, createadmin, getallorders, getorderdetails, updateorder, gettopproduct, getlastcategory, getlastusers, getlastorderin15day } from '@/lib/api';
+import { gethomepagestatistic, getlast4order, getOrdersDailyStats, getProducts, updateproduct, deleteproduct, createproducts, getCategory, addcategory, updatecategory, deletecategory, getusers, createadmin, getallorders, getorderdetails, updateorder, gettopproduct, getlastcategory, getlastusers, getlastorderin15day, addsliderimages, getsliderimages, deletesliderimage } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { showNotification } from '@/components/NotificationSystem';
@@ -503,6 +503,7 @@ export default function AdminDashboard() {
     { id: 'orders', name: 'Orders', icon: ShoppingCart },
     { id: 'users', name: 'Users', icon: Users },
     { id: 'categories', name: 'Categories', icon: Tag },
+    { id: 'slider', name: 'Slider', icon: Image },
     { id: 'analytics', name: 'Analytics', icon: TrendingUp },
     { id: 'settings', name: 'Settings', icon: Settings }
   ];
@@ -1824,12 +1825,193 @@ export default function AdminDashboard() {
     );
   };
 
+  function SliderSection() {
+    const [sliders, setSliders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [addLoading, setAddLoading] = useState(false);
+    const [addError, setAddError] = useState('');
+    const [refreshFlag, setRefreshFlag] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(null); // id of slider being deleted
+
+    useEffect(() => {
+      async function fetchSliders() {
+        setLoading(true);
+        setError('');
+        try {
+          const data = await getsliderimages();
+          console.log("dd",data)
+          setSliders(Array.isArray(data) ? data : []);
+        } catch (err) {
+          setError('Failed to load sliders');
+        } finally {
+          setLoading(false);
+        }
+      }
+      fetchSliders();
+    }, [refreshFlag]);
+
+    const handleAdd = () => {
+      setAddModalOpen(true);
+      setAddError('');
+    };
+
+    const handleAddSave = async (form) => {
+      setAddLoading(true);
+      setAddError('');
+      try {
+        const formData = new FormData();
+        formData.append('title', form.title);
+        formData.append('description', form.description);
+        if (form.image) formData.append('image', form.image);
+        console.log("form da",formData)
+
+        await addsliderimages(formData); // <-- use addsliderimages
+        setAddModalOpen(false);
+        setRefreshFlag(f => !f);
+        showNotification({
+          title: 'Slider Added',
+          description: 'The slider was added successfully.',
+          variant: 'default',
+        });
+      } catch (err) {
+        setAddError(err.message || 'Failed to add slider');
+        showNotification({
+          title: 'Error',
+          description: err.message || 'Failed to add slider',
+          variant: 'destructive',
+        });
+      } finally {
+        setAddLoading(false);
+      }
+    };
+
+    const handleDelete = async (sliderId) => {
+      if (!window.confirm('Are you sure you want to delete this slider?')) return;
+      setDeleteLoading(sliderId);
+      try {
+        await deletesliderimage(sliderId);
+        setRefreshFlag(f => !f);
+        showNotification({
+          title: 'Slider Deleted',
+          description: 'The slider was deleted successfully.',
+          variant: 'default',
+        });
+      } catch (err) {
+        showNotification({
+          title: 'Error',
+          description: err.message || 'Failed to delete slider',
+          variant: 'destructive',
+        });
+      } finally {
+        setDeleteLoading(null);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 className="text-2xl font-bold" style={{ color: '#2e2e2e' }}>
+            Slider Management
+          </h2>
+          <button
+            onClick={handleAdd}
+            className="px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 flex items-center space-x-2"
+            style={{ backgroundColor: '#669999' }}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Slider</span>
+          </button>
+        </div>
+        <div className="bg-white rounded-xl shadow-md p-6">
+          {loading ? (
+            <div className="text-center py-8 text-lg text-gray-500">Loading sliders...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-lg text-red-500">{error}</div>
+          ) : sliders.length === 0 ? (
+            <div className="text-center py-8 text-lg text-gray-400">No sliders found.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sliders.map((slider) => (
+                <div key={slider._id || slider.id} className="bg-gray-50 rounded-xl shadow p-4 flex flex-col items-center">
+                  <img src={slider.image} alt={slider.title} className="w-full h-40 object-cover rounded-xl mb-4" style={{ objectFit: 'cover', width: '100%', height: '160px', borderRadius: '0.75rem' }} />
+                  <h3 className="text-lg font-semibold mb-2">{slider.title}</h3>
+                  <p className="text-gray-600 mb-2">{slider.description}</p>
+                  <button
+                    onClick={() => handleDelete(slider._id || slider.id)}
+                    className="mt-2 px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition-all duration-200 disabled:opacity-60"
+                    disabled={deleteLoading === (slider._id || slider.id)}
+                  >
+                    {deleteLoading === (slider._id || slider.id) ? 'Deleting...' : 'Delete'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {addModalOpen && (
+          <AddSliderModal
+            onClose={() => setAddModalOpen(false)}
+            onSave={handleAddSave}
+            loading={addLoading}
+            error={addError}
+          />
+        )}
+      </div>
+    );
+  }
+
+  function AddSliderModal({ onClose, onSave, loading, error }) {
+    const [form, setForm] = useState({ title: '', description: '', image: null });
+    const fileInputRef = useRef();
+    const handleChange = (e) => {
+      const { name, value, type, files } = e.target;
+      if (type === 'file') {
+        setForm(f => ({ ...f, [name]: files && files.length > 0 ? files[0] : null }));
+      } else {
+        setForm(f => ({ ...f, [name]: value }));
+      }
+    };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSave(form);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+          <h3 className="text-xl font-semibold mb-4">Add Slider</h3>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input name="title" value={form.title} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="Title" required />
+            <input name="description" value={form.description} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="Description" required />
+            <input
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+              ref={fileInputRef}
+              required
+            />
+            {error && <div className="text-red-500 text-sm">{error}</div>}
+            <div className="flex justify-end space-x-2">
+              <button type="button" onClick={onClose} className="px-4 py-2 border rounded">Cancel</button>
+              <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded" disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   const renderSection = () => {
     switch (activeSection) {
       case 'dashboard': return <DashboardSection />;
       case 'products': return <ProductsSection products={products} productsLoading={productsLoading} productsError={productsError} searchTerm={searchTerm} setSearchTerm={setSearchTerm} openModal={openModal} getStatusColor={getStatusColor} />;
       case 'users': return <UsersSection />;
       case 'categories': return <CategoriesSection />;
+      case 'slider': return <SliderSection />;
       case 'analytics': return <AnalyticsSection />;
       case 'orders': return <OrdersSection />;
       case 'settings': return <AnalyticsSection />; // Placeholder

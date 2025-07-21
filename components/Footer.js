@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="space-y-4 lg:space-y-6 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center space-x-2">
               <Monitor className="h-8 w-8" style={{ color: '#4E8786' }} />
-              <span className="text-2xl font-bold">AZerty computer</span>
+              <span className="text-2xl font-bold">AZERTY COMPUTER</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
               Your trusted destination for premium computers, components, and tech accessories. 
@@ -129,7 +129,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 lg:mt-12 pt-6 lg:pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <p className="text-sm lg:text-base text-gray-400 text-center sm:text-left">
-              © 2025 AZerty. All rights reserved.
+              © 2025 AZERTY. All rights reserved.
             </p>
             <div className="flex space-x-6 text-gray-400">
               <a href="#" className="hover:text-white transition-colors">Privacy</a>

@@ -83,7 +83,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100"></div>
           <div className="relative max-w-7xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-              About AZerty
+              About AZERTY
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
               We're passionate about technology and committed to helping you find the perfect 
@@ -131,7 +131,7 @@ export default function AboutPage() {
                   Our Mission
                 </h2>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  At AZerty, we believe technology should empower everyone to achieve their goals. 
+                  At AZERTY, we believe technology should empower everyone to achieve their goals. 
                   Whether you're a gamer seeking the ultimate performance, a creator pushing the 
                   boundaries of digital art, or a professional building the next big thing, we're 
                   here to provide the tools you need.
@@ -261,7 +261,7 @@ export default function AboutPage() {
         <section className="py-20 px-4" style={{ backgroundColor: '#669999' }}>
           <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-4xl font-bold mb-6">
-              Ready to Join the AZerty Family?
+              Ready to Join the AZERTY Family?
             </h2>
             <p className="text-xl mb-8 opacity-90">
               Experience the difference that expert knowledge and personalized service can make. 
