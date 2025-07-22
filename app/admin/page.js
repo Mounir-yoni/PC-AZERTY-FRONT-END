@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { gethomepagestatistic, getlast4order, getOrdersDailyStats, getProducts, updateproduct, deleteproduct, createproducts, getCategory, addcategory, updatecategory, deletecategory, getusers, createadmin, getallorders, getorderdetails, updateorder, gettopproduct, getlastcategory, getlastusers, getlastorderin15day, addsliderimages, getsliderimages, deletesliderimage } from '@/lib/api';
+import { gethomepagestatistic, getlast4order, getOrdersDailyStats, getProducts, updateproduct, deleteproduct, createproducts, getCategory, addcategory, updatecategory, deletecategory, getusers, createadmin, getallorders, getorderdetails, updateorder, gettopproduct, getlastcategory, getlastusers, getlastorderin15day, addsliderimages, getsliderimages, deletesliderimage,getcategorysbyadmin,getproductsbyadmin } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { showNotification } from '@/components/NotificationSystem';
@@ -76,7 +76,8 @@ function ProductsSection({ products, productsLoading, productsError, searchTerm,
       const updateFields = {
         title: updatedProduct.title,
         price: updatedProduct.price,
-        quantity: updatedProduct.quantity
+        quantity: updatedProduct.quantity,
+        active: updatedProduct.active
       };
       await updateproduct(updatedProduct._id || updatedProduct.id, updateFields);
       setEditModalOpen(false);
@@ -207,8 +208,8 @@ function ProductsSection({ products, productsLoading, productsError, searchTerm,
                     </td>
                     <td className="py-3 px-4 text-gray-600">{product.quantity || product.quantity || '-'}</td>
                     <td className="py-3 px-4">
-                      <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(product.status || 'Active')}`}>
-                        {product.status || 'Active'}
+                      <span className={`text-xs px-2 py-1 rounded-full ${product.active ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-200'}`}>
+                        {product.active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="py-3 px-4">
@@ -274,6 +275,10 @@ function EditProductModal({ product, onClose, onSave, loading, error }) {
           <input name="price" value={form.price || ''} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="Price" type="number" />
           <input name="quantity" value={form.quantity || ''} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="quantity" type="number" />
           {/* Add more fields as needed */}
+          <select name="active" value={form.active ? 'true' : 'false'} onChange={e => setForm(f => ({ ...f, active: e.target.value === 'true' }))} className="w-full border px-3 py-2 rounded">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end space-x-2">
             <button type="button" onClick={onClose} className="px-4 py-2 border rounded">Cancel</button>
@@ -306,7 +311,7 @@ function AddProductModal({ onClose, onSave, loading, error }) {
       setCategoriesLoading(true);
       setCategoriesError('');
       try {
-        const data = await getCategory();
+        const data = await getcategorysbyadmin();
         setCategories(data.data || []);
       } catch (err) {
         setCategoriesError('Failed to load categories');
@@ -472,7 +477,7 @@ export default function AdminDashboard() {
       setProductsLoading(true);
       setProductsError('');
       try {
-        const data = await getProducts();
+        const data = await getproductsbyadmin();
         setProducts(data.data || []);
       } catch (err) {
         setProductsError('Failed to load products');
@@ -779,8 +784,8 @@ export default function AdminDashboard() {
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                        <span className={`text-xs px-2 py-1 rounded-full ${user.status === 'Active' ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-100'}`}>
-                          {user.status}
+                        <span className={`text-xs px-2 py-1 rounded-full ${user.active === 'Active' ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-100'}`}>
+                          {user.active}
                         </span>
                   </td>
                 </tr>
@@ -818,7 +823,7 @@ export default function AdminDashboard() {
         setCategoriesLoading(true);
         setCategoriesError('');
         try {
-          const data = await getCategory();
+          const data = await getcategorysbyadmin();
           setCategories(data.data || []);
         } catch (err) {
           setCategoriesError('Failed to load categories');
