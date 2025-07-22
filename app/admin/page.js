@@ -1049,6 +1049,8 @@ export default function AdminDashboard() {
     const [updateLoading, setUpdateLoading] = useState(false);
     const [updateError, setUpdateError] = useState('');
     const [refreshFlag, setRefreshFlag] = useState(false);
+    const [filterDate, setFilterDate] = useState('');
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     useEffect(() => {
       async function fetchOrders() {
@@ -1065,6 +1067,33 @@ export default function AdminDashboard() {
       }
       fetchOrders();
     }, [refreshFlag]);
+
+    useEffect(() => {
+      console.log('orders:', orders);
+      console.log('filterDate:', filterDate);
+      if (!filterDate) {
+        setFilteredOrders(orders);
+      } else {
+        const filtered = orders.filter(order => {
+          let orderDate = null;
+          if (order.orderDate) {
+            const d = new Date(order.orderDate);
+            if (!isNaN(d)) orderDate = d;
+          } else if (order.createdAt) {
+            const d = new Date(order.createdAt);
+            if (!isNaN(d)) orderDate = d;
+          } else if (order.date) {
+            const d = new Date(order.date);
+            if (!isNaN(d)) orderDate = d;
+          }
+          if (!orderDate) return false;
+          // Compare only yyyy-mm-dd
+          const formatted = orderDate.toISOString().slice(0, 10);
+          return formatted === filterDate;
+        });
+        setFilteredOrders(filtered);
+      }
+    }, [orders, filterDate]);
 
     const handleViewOrder = async (order) => {
       setOrderDetailsModal(true);
@@ -1105,14 +1134,32 @@ export default function AdminDashboard() {
           </h2>
         </div>
       <div className="bg-white rounded-xl shadow-md p-6">
+        {/* Date Filter */}
+        <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <label className="font-medium" style={{ color: '#2e2e2e' }}>Filter by Date:</label>
+          <input
+            type="date"
+            value={filterDate}
+            onChange={e => setFilterDate(e.target.value)}
+            className="border px-3 py-2 rounded"
+          />
+          {filterDate && (
+            <button
+              onClick={() => setFilterDate('')}
+              className="px-3 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+            >
+              Clear
+            </button>
+          )}
+        </div>
         <div className="overflow-x-auto">
-            {ordersLoading ? (
-              <div className="text-center py-8 text-lg text-gray-500">Loading orders...</div>
-            ) : ordersError ? (
-              <div className="text-center py-8 text-lg text-red-500">{ordersError}</div>
-            ) : orders.length === 0 ? (
-              <div className="text-center py-8 text-lg text-gray-400">No orders found.</div>
-            ) : (
+          {ordersLoading ? (
+            <div className="text-center py-8 text-lg text-gray-500">Loading orders...</div>
+          ) : ordersError ? (
+            <div className="text-center py-8 text-lg text-red-500">{ordersError}</div>
+          ) : filteredOrders.length === 0 ? (
+            <div className="text-center py-8 text-lg text-gray-400">No orders found.</div>
+          ) : (
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
@@ -1126,7 +1173,7 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-                  {orders.map((order) => (
+                  {filteredOrders.map((order) => (
                     <tr key={order._id || order.id} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-3 px-4">
                     <div className="font-medium" style={{ color: '#2e2e2e' }}>
