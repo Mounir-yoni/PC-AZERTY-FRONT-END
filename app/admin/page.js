@@ -28,11 +28,12 @@ import {
   Tag,
   Image,
   Save,
-  X
+  X,
+  MapPin
 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { gethomepagestatistic, getlast4order, getOrdersDailyStats, getProducts, updateproduct, deleteproduct, createproducts, getCategory, addcategory, updatecategory, deletecategory, getusers, createadmin, getallorders, getorderdetails, updateorder, gettopproduct, getlastcategory, getlastusers, getlastorderin15day, addsliderimages, getsliderimages, deletesliderimage,getcategorysbyadmin,getproductsbyadmin } from '@/lib/api';
+import { gethomepagestatistic, getlast4order, getOrdersDailyStats, getProducts, updateproduct, deleteproduct, createproducts, getCategory, addcategory, updatecategory, deletecategory, getusers, createadmin, getallorders, getorderdetails, updateorder, gettopproduct, getlastcategory, getlastusers, getlastorderin15day, addsliderimages, getsliderimages, deletesliderimage,getcategorysbyadmin,getproductsbyadmin, getwilayas, addwilaya, editwilaya } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { showNotification } from '@/components/NotificationSystem';
@@ -72,19 +73,48 @@ function ProductsSection({ products, productsLoading, productsError, searchTerm,
     setEditLoading(true);
     setEditError('');
     try {
-      // Only send the fields you want to update
-      const updateFields = {
-        title: updatedProduct.title,
-        price: updatedProduct.price,
-        quantity: updatedProduct.quantity,
-        active: updatedProduct.active
-      };
-      await updateproduct(updatedProduct._id || updatedProduct.id, updateFields);
+      console.log('updatedProduct:', updatedProduct); // Debug log
+      
+      // Create FormData for image upload
+      const formData = new FormData();
+      
+      // Add all fields to FormData
+      Object.entries(updatedProduct).forEach(([key, value]) => {
+        console.log(`Adding field: ${key} = ${value}`); // Debug log
+        if (value !== undefined && value !== null && value !== '') {
+          if (key === 'imagecover' && value instanceof File) {
+            formData.append(key, value);
+          } else if (key !== 'imagecover') {
+            formData.append(key, value);
+          }
+        }
+      });
+
+      // Debug: Log FormData contents
+      for (let [key, value] of formData.entries()) {
+        console.log(`FormData: ${key} = ${value}`);
+      }
+
+      // Use the original product ID from editProduct state
+      const productId = editProduct._id || editProduct.id;
+      console.log('Product ID:', productId); // Debug log
+      
+      await updateproduct(productId, formData);
       setEditModalOpen(false);
       setEditProduct(null);
       setRefreshFlag(f => !f); // trigger refresh
+      showNotification({
+        title: 'Product Updated',
+        description: 'The product was updated successfully.',
+        variant: 'default',
+      });
     } catch (err) {
       setEditError(err.message || 'Failed to update product');
+      showNotification({
+        title: 'Error',
+        description: err.message || 'Failed to update product',
+        variant: 'destructive',
+      });
     } finally {
       setEditLoading(false);
     }
@@ -257,32 +287,217 @@ function ProductsSection({ products, productsLoading, productsError, searchTerm,
 }
 
 function EditProductModal({ product, onClose, onSave, loading, error }) {
-  const [form, setForm] = useState({ ...product });
+  const [form, setForm] = useState({ 
+    title: product?.title || '',
+    price: product?.price || '',
+    quantity: product?.quantity || '',
+    priceAfterDiscount: product?.priceAfterDiscount || '',
+    description: product?.description || '',
+    category: product?.category?._id || product?.category || '',
+    Partname: product?.Partname || '',
+    active: product?.active !== undefined ? product.active : true,
+    imagecover: null
+  });
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoriesError, setCategoriesError] = useState('');
+  const fileInputRef = useRef();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      setCategoriesLoading(true);
+      setCategoriesError('');
+      try {
+        const data = await getcategorysbyadmin();
+        setCategories(data.data || []);
+      } catch (err) {
+        setCategoriesError('Failed to load categories');
+      } finally {
+        setCategoriesLoading(false);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    const { name, value, type, files } = e.target;
+    console.log(`Form change: ${name} = ${value}`); // Debug log
+    if (type === 'file') {
+      setForm(f => ({ ...f, [name]: files && files.length > 0 ? files[0] : null }));
+    } else {
+      setForm(f => ({ ...f, [name]: value }));
+    }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Form submitted:', form); // Debug log
     onSave(form);
   };
+
+  // Update form when product changes
+  useEffect(() => {
+    console.log('Product changed:', product); // Debug log
+    setForm({
+      title: product?.title || '',
+      price: product?.price || '',
+      quantity: product?.quantity || '',
+      priceAfterDiscount: product?.priceAfterDiscount || '',
+      description: product?.description || '',
+      category: product?.category?._id || product?.category || '',
+      Partname: product?.Partname || '',
+      active: product?.active !== undefined ? product.active : true,
+      imagecover: null
+    });
+  }, [product]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      setCategoriesLoading(true);
+      setCategoriesError('');
+      try {
+        const data = await getcategorysbyadmin();
+        setCategories(data.data || []);
+      } catch (err) {
+        setCategoriesError('Failed to load categories');
+      } finally {
+        setCategoriesLoading(false);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
         <h3 className="text-xl font-semibold mb-4">Edit Product</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input name="title" value={form.title || ''} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="Title" />
-          <input name="price" value={form.price || ''} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="Price" type="number" />
-          <input name="quantity" value={form.quantity || ''} onChange={handleChange} className="w-full border px-3 py-2 rounded" placeholder="quantity" type="number" />
-          {/* Add more fields as needed */}
-          <select name="active" value={form.active ? 'true' : 'false'} onChange={e => setForm(f => ({ ...f, active: e.target.value === 'true' }))} className="w-full border px-3 py-2 rounded">
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-          </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input 
+              name="title" 
+              value={form.title} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Title" 
+              required 
+            />
+            <input 
+              name="price" 
+              value={form.price} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Price" 
+              type="number" 
+              required 
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input 
+              name="quantity" 
+              value={form.quantity} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Quantity" 
+              type="number" 
+              required 
+            />
+            <input 
+              name="priceAfterDiscount" 
+              value={form.priceAfterDiscount} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Price After Discount" 
+              type="number" 
+            />
+          </div>
+
+          <textarea 
+            name="description" 
+            value={form.description} 
+            onChange={handleChange} 
+            className="w-full border px-3 py-2 rounded" 
+            placeholder="Description" 
+            rows="3"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <select 
+              name="category" 
+              value={form.category} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map(cat => (
+                <option key={cat._id || cat.id} value={cat._id || cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            {categoriesLoading && <div className="text-gray-500 text-sm">Loading categories...</div>}
+            {categoriesError && <div className="text-red-500 text-sm">{categoriesError}</div>}
+
+            <select
+              name="Partname"
+              value={form.Partname}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+              required
+            >
+              <option value="">Select Part Name</option>
+              <option value="Package">Package</option>
+              <option value="CPU">CPU</option>
+              <option value="gpu">gpu</option>
+              <option value="motherboard">motherboard</option>
+              <option value="ram">ram</option>
+              <option value="storage">storage</option>
+              <option value="psu">psu</option>
+              <option value="cooling">cooling</option>
+              <option value="case">case</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <select 
+              name="active" 
+              value={form.active ? 'true' : 'false'} 
+              onChange={e => setForm(f => ({ ...f, active: e.target.value === 'true' }))} 
+              className="w-full border px-3 py-2 rounded"
+            >
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+
+            <input
+              name="imagecover"
+              type="file"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+              ref={fileInputRef}
+            />
+          </div>
+
+          {/* Show current image if exists */}
+          {product?.imagecover && (
+            <div className="border rounded p-3">
+              <p className="text-sm text-gray-600 mb-2">Current Image:</p>
+              <img 
+                src={product.imagecover} 
+                alt="Current product" 
+                className="w-32 h-32 object-cover rounded"
+              />
+            </div>
+          )}
+
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end space-x-2">
             <button type="button" onClick={onClose} className="px-4 py-2 border rounded">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded" disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
+            <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded" disabled={loading}>
+              {loading ? 'Saving...' : 'Save'}
+            </button>
           </div>
         </form>
       </div>
@@ -444,10 +659,15 @@ export default function AdminDashboard() {
       setOrdersLoading(true);
       setOrdersError('');
       try {
+        console.log('Fetching recent orders...');
         const data = await getlast4order();
+        console.log('Recent orders response:', data);
         setRecentOrders(data.data || []);
       } catch (err) {
-        setOrdersError('Failed to load recent orders');
+        console.error('Error fetching recent orders:', err);
+        setOrdersError(`Failed to load recent orders: ${err.message || err}`);
+        // Set empty array as fallback so the UI doesn't break
+        setRecentOrders([]);
       } finally {
         setOrdersLoading(false);
       }
@@ -508,6 +728,7 @@ export default function AdminDashboard() {
     { id: 'orders', name: 'Orders', icon: ShoppingCart },
     { id: 'users', name: 'Users', icon: Users },
     { id: 'categories', name: 'Categories', icon: Tag },
+    { id: 'wilayas', name: 'Wilayas', icon: MapPin },
     { id: 'slider', name: 'Slider', icon: Image },
     { id: 'analytics', name: 'Analytics', icon: TrendingUp },
     { id: 'settings', name: 'Settings', icon: Settings }
@@ -631,7 +852,7 @@ export default function AdminDashboard() {
                 <div key={order._id || order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div>
                     <p className="font-medium" style={{ color: '#2e2e2e' }}>
-                      {order.customer?.name || order.customerName || order.user?.name || 'Unknown Customer'}
+                      {order.name || 'Unknown Customer'}
                     </p>
                   </div>
                   <div className="text-right">
@@ -1000,6 +1221,77 @@ export default function AdminDashboard() {
     );
   }
 
+  function WilayaModal({ onClose, onSave, loading, error, initialData }) {
+    const [form, setForm] = useState({
+      name: initialData?.name || '',
+      number: initialData?.number || '',
+      pricetooffice: initialData?.pricetooffice || '',
+      pricetohome: initialData?.pricetohome || ''
+    });
+    
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setForm(f => ({ ...f, [name]: value }));
+    };
+    
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSave(form);
+    };
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+          <h3 className="text-xl font-semibold mb-4">{initialData ? 'Edit Wilaya' : 'Add Wilaya'}</h3>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input 
+              name="name" 
+              value={form.name} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Wilaya Name" 
+              required 
+            />
+            <input 
+              name="number" 
+              value={form.number} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Wilaya Number" 
+              type="number"
+              required 
+            />
+            <input 
+              name="pricetooffice" 
+              value={form.pricetooffice} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Price to Office (DA)" 
+              type="number"
+              required 
+            />
+            <input 
+              name="pricetohome" 
+              value={form.pricetohome} 
+              onChange={handleChange} 
+              className="w-full border px-3 py-2 rounded" 
+              placeholder="Price to Home (DA)" 
+              type="number"
+              required 
+            />
+            {error && <div className="text-red-500 text-sm">{error}</div>}
+            <div className="flex justify-end space-x-2">
+              <button type="button" onClick={onClose} className="px-4 py-2 border rounded">Cancel</button>
+              <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded" disabled={loading}>
+                {loading ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   function AddAdminModal({ onClose, onSave, loading, error }) {
     const [form, setForm] = useState({ name: '', email: '', password: '', role: 'admin', status: 'Active' });
     const handleChange = (e) => {
@@ -1183,7 +1475,7 @@ export default function AdminDashboard() {
                   <td className="py-3 px-4">
                         <div>
                           <div className="font-medium" style={{ color: '#2e2e2e' }}>
-                            {order.user?.name || 'Unknown'}
+                            {order.name || 'Unknown'}
                           </div>
                           <div className="text-sm text-gray-500">
                             { order.user?.email || order.phone || 'No contact'}
@@ -1312,11 +1604,11 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm text-gray-600">Name</p>
-                      <p className="font-medium">{ order.user.name || 'Unknown'}</p>
+                      <p className="font-medium">{ order.name || 'Unknown'}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Email</p>
-                      <p className="font-medium">{ order.user.email || 'N/A'}</p>
+                      <p className="font-medium">{ order.email || 'N/A'}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Phone</p>
@@ -1324,7 +1616,15 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Address</p>
-                      <p className="font-medium">{order.user.address || order.address || 'N/A'}</p>
+                      <p className="font-medium">{order.address || order.address || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Wilaya</p>
+                      <p className="font-medium">{order.wilaya?.name || 'N/A'}</p>
+                      </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Place</p>
+                      <p className="font-medium">{order.place || 'N/A'}</p> 
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Order Date</p>
@@ -2057,12 +2357,184 @@ export default function AdminDashboard() {
     );
   }
 
+  function WilayasSection() {
+    const [wilayas, setWilayas] = useState([]);
+    const [wilayasLoading, setWilayasLoading] = useState(true);
+    const [wilayasError, setWilayasError] = useState('');
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [editWilaya, setEditWilaya] = useState(null);
+    const [modalLoading, setModalLoading] = useState(false);
+    const [modalError, setModalError] = useState('');
+    const [refreshFlag, setRefreshFlag] = useState(false);
+
+    useEffect(() => {
+      async function fetchWilayas() {
+        setWilayasLoading(true);
+        setWilayasError('');
+        try {
+          const data = await getwilayas();
+          setWilayas(data.data || data || []);
+        } catch (err) {
+          setWilayasError('Failed to load wilayas');
+        } finally {
+          setWilayasLoading(false);
+        }
+      }
+      fetchWilayas();
+    }, [refreshFlag]);
+
+    const handleAdd = () => {
+      setEditWilaya(null);
+      setAddModalOpen(true);
+      setModalError('');
+    };
+
+    const handleEdit = (wilaya) => {
+      setEditWilaya(wilaya);
+      setEditModalOpen(true);
+      setModalError('');
+    };
+
+    const handleAddSave = async (form) => {
+      setModalLoading(true);
+      setModalError('');
+      try {
+        await addwilaya(form);
+        setAddModalOpen(false);
+        setRefreshFlag(f => !f);
+        showNotification({
+          title: 'Wilaya Created',
+          description: 'The wilaya was created successfully.',
+          variant: 'default',
+        });
+      } catch (err) {
+        setModalError(err.message || 'Failed to add wilaya');
+        showNotification({
+          title: 'Error',
+          description: err.message || 'Failed to add wilaya',
+          variant: 'destructive',
+        });
+      } finally {
+        setModalLoading(false);
+      }
+    };
+
+    const handleEditSave = async (form) => {
+      setModalLoading(true);
+      setModalError('');
+      try {
+        await editwilaya(editWilaya._id || editWilaya.id, form);
+        setEditModalOpen(false);
+        setEditWilaya(null);
+        setRefreshFlag(f => !f);
+        showNotification({
+          title: 'Wilaya Updated',
+          description: 'The wilaya was updated successfully.',
+          variant: 'default',
+        });
+      } catch (err) {
+        setModalError(err.message || 'Failed to update wilaya');
+        showNotification({
+          title: 'Error',
+          description: err.message || 'Failed to update wilaya',
+          variant: 'destructive',
+        });
+      } finally {
+        setModalLoading(false);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 className="text-2xl font-bold" style={{ color: '#2e2e2e' }}>
+            Wilayas Management
+          </h2>
+          <button 
+            onClick={handleAdd}
+            className="px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 flex items-center space-x-2"
+            style={{ backgroundColor: '#669999' }}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Wilaya</span>
+          </button>
+        </div>
+        {wilayasLoading ? (
+          <div className="text-center py-8 text-lg text-gray-500">Loading wilayas...</div>
+        ) : wilayasError ? (
+          <div className="text-center py-8 text-lg text-red-500">{wilayasError}</div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Name</th>
+                    <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Number</th>
+                    <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Price to Office</th>
+                    <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Price to Home</th>
+                    <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {wilayas.map((wilaya) => (
+                    <tr key={wilaya._id || wilaya.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4">
+                        <div className="font-medium" style={{ color: '#2e2e2e' }}>
+                          {wilaya.name}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">{wilaya.number}</td>
+                      <td className="py-3 px-4 font-semibold" style={{ color: '#669999' }}>
+                        {wilaya.pricetooffice ? `${wilaya.pricetooffice} DA` : '-'}
+                      </td>
+                      <td className="py-3 px-4 font-semibold" style={{ color: '#669999' }}>
+                        {wilaya.pricetohome ? `${wilaya.pricetohome} DA` : '-'}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center space-x-2">
+                          <button className="p-1 text-green-600 hover:bg-green-50 rounded" onClick={() => handleEdit(wilaya)}>
+                            <Edit className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        {addModalOpen && (
+          <WilayaModal
+            onClose={() => setAddModalOpen(false)}
+            onSave={handleAddSave}
+            loading={modalLoading}
+            error={modalError}
+            initialData={null}
+          />
+        )}
+        {editModalOpen && (
+          <WilayaModal
+            onClose={() => setEditModalOpen(false)}
+            onSave={handleEditSave}
+            loading={modalLoading}
+            error={modalError}
+            initialData={editWilaya}
+          />
+        )}
+      </div>
+    );
+  }
+
   const renderSection = () => {
     switch (activeSection) {
       case 'dashboard': return <DashboardSection />;
       case 'products': return <ProductsSection products={products} productsLoading={productsLoading} productsError={productsError} searchTerm={searchTerm} setSearchTerm={setSearchTerm} openModal={openModal} getStatusColor={getStatusColor} />;
       case 'users': return <UsersSection />;
       case 'categories': return <CategoriesSection />;
+      case 'wilayas': return <WilayasSection />;
       case 'slider': return <SliderSection />;
       case 'analytics': return <AnalyticsSection />;
       case 'orders': return <OrdersSection />;

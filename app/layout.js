@@ -22,7 +22,7 @@ export const metadata = {
     siteName: 'Azerty Computer',
     images: [
       {
-        url: '/favicon.ico',
+        url: 'http://localhost:3000/_next/static/media/Z2.492ff34d.png',
         width: 1200,
         height: 630,
         alt: 'صورة معاينة الموقع',

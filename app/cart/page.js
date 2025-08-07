@@ -8,9 +8,12 @@ import { getCart, removeFromCart, updateCartItemQuantity, getUser } from '@/lib/
 import Link from 'next/link';
 import { addOrder } from '@/lib/api';
 import { showNotification } from '@/components/NotificationSystem';
+import OrderUserInfo from '@/components/OrderUserInfo';
+import useWilayas from '@/hooks/useWilayas';
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [userInfo, setUserInfo] = useState({ name: '', phone: '', address: '', wilaya: '', wilayaObj: null, place: 'home' });
 
   useEffect(() => {
     // Load cart from localStorage on component mount
@@ -44,19 +47,31 @@ export default function CartPage() {
     setCartItems(updatedCart);
   };
 
+  // Calculate dynamic shipping
+  const selectedWilaya = userInfo.wilayaObj;
+  let shipping = 0;
+  if (selectedWilaya) {
+    shipping = userInfo.place === 'office'
+      ? selectedWilaya.pricetooffice
+      : selectedWilaya.pricetohome;
+  }
+
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-  const shipping = subtotal > 500 ? 0 : 29.99;
   const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const total = subtotal + (shipping || 0) ;
 
   const handleOrder = async () => {
-    const user = getUser();
-    if (!user) {
-      window.location.href = '/login';
+    // No longer require login, just use userInfo
+    if (!userInfo.name || !userInfo.phone || !userInfo.address || !userInfo.wilaya || !userInfo.place) {
+      showNotification({
+        title: 'Missing Information',
+        description: 'Please fill in your name, phone, address, wilaya, and place.',
+        variant: 'destructive',
+      });
       return;
     }
     try {
-      await addOrder({});
+      await addOrder({ address: userInfo.address, name: userInfo.name, phone: userInfo.phone, wilaya: userInfo.wilaya, place: userInfo.place, wilayaObj: userInfo.wilayaObj });
       showNotification({
         title: 'Order Placed',
         description: 'Your order has been placed successfully!',
@@ -178,6 +193,8 @@ export default function CartPage() {
                 <h2 className="text-xl font-semibold mb-6" style={{ color: '#2e2e2e' }}>
                   Order Summary
                 </h2>
+                {/* User Info Form */}
+                <OrderUserInfo onChange={setUserInfo} />
                 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
@@ -187,7 +204,7 @@ export default function CartPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-semibold">
-                      {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
+                      {shipping === 0 ? 'Free' : `${shipping}DA`}
                     </span>
                   </div>
 

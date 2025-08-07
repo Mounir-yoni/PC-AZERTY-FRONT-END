@@ -14,6 +14,7 @@ import Footer from '@/components/Footer';
 import './globals.css';
 import { Settings } from "lucide-react";
 import { getHomeProducts } from '@/lib/api';
+import useWilayas from '@/hooks/useWilayas';
 
 export default function Home() {
   const [homeData, setHomeData] = useState({
@@ -23,7 +24,7 @@ export default function Home() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  const { wilayas, isLoading: wilayasLoading, isError: wilayasError } = useWilayas();
   useEffect(() => {
     async function fetchHomeData() {
       setLoading(true);
@@ -45,6 +46,8 @@ export default function Home() {
     }
     fetchHomeData();
   }, []);
+
+  
   
   console.log('Home data set:', homeData);
   if (loading) {
