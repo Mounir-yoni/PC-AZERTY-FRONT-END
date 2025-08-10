@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function TestimonialsSlider() {
+  const t = useTranslations('TestimonialsSlider');
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const testimonials = [
@@ -61,10 +63,10 @@ export default function TestimonialsSlider() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            What Our Customers Say
+            {t('title')}
           </h2>
           <p className="text-lg text-gray-600">
-            Real reviews from real customers
+            {t('subtitle')}
           </p>
         </div>
 

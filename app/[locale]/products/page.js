@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { Search, Filter, Grid, List, Star, ShoppingCart, Heart, ChevronDown } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { getProducts , getCategory } from '@/lib/api';
+import { useTranslations } from 'next-intl';
 export default function ProductsPage() {
+  const t = useTranslations('Products');
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('featured');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -52,23 +54,23 @@ export default function ProductsPage() {
         const data = await getCategory();
         let cats = Array.isArray(data.data) ? data.data : [];
         // Add 'All Products' as the first category
-        cats = [{ _id: 'all', name: 'All Products' }, ...cats];
+        cats = [{ _id: 'all', name: t('allProducts') }, ...cats];
         setCategories(cats);
       } catch (err) {
-        setCategories([{ _id: 'all', name: 'All Products' }]);
+        setCategories([{ _id: 'all', name: t('allProducts') }]);
       }
     }
     fetchCategories();
-  }, []);
+  }, [t]);
   console.log("prod")
   console.log(products)
   const sortOptions = [
-    { value: 'featured', label: 'Featured' },
-    { value: 'price-low', label: 'Price: Low to High' },
-    { value: 'price-high', label: 'Price: High to Low' },
-    { value: 'rating', label: 'Highest Rated' },
-    { value: 'newest', label: 'Newest First' },
-    { value: 'name', label: 'Name A-Z' }
+    { value: 'featured', label: t('sortOptions.featured') },
+    { value: 'price-low', label: t('sortOptions.priceLow') },
+    { value: 'price-high', label: t('sortOptions.priceHigh') },
+    { value: 'rating', label: t('sortOptions.rating') },
+    { value: 'newest', label: t('sortOptions.newest') },
+    { value: 'name', label: t('sortOptions.name') }
   ];
 
   // In the filter logic, treat 'all' as no filter
@@ -213,10 +215,10 @@ export default function ProductsPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            Our Products
+            {t('title')}
           </h1>
           <p className="text-lg text-gray-600">
-            Discover our complete range of premium technology products
+            {t('subtitle')}
           </p>
         </div>
 
@@ -227,7 +229,7 @@ export default function ProductsPage() {
               {/* Search */}
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Search Products
+                  {t('searchLabel')}
                 </label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -237,7 +239,7 @@ export default function ProductsPage() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
                     style={{ '--tw-ring-color': '#4E8786' }}
-                    placeholder="Search..."
+                    placeholder={t('searchPlaceholder')}
                   />
                 </div>
               </div>
@@ -245,11 +247,11 @@ export default function ProductsPage() {
               {/* Categories */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-4" style={{ color: '#2e2e2e' }}>
-                  Categories
+                  {t('categoriesTitle')}
                 </h3>
                 <div className="space-y-2">
                   {categories.length === 0 ? (
-                    <div className="text-gray-400 text-sm">No categories found.</div>
+                    <div className="text-gray-400 text-sm">{t('noCategoriesFound')}</div>
                   ) : (
                     categories.map((category) => (
                       <button
@@ -280,7 +282,7 @@ export default function ProductsPage() {
               {/* Price Range */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-4" style={{ color: '#2e2e2e' }}>
-                  Price Range
+                  {t('priceRangeTitle')}
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
@@ -289,7 +291,7 @@ export default function ProductsPage() {
                       value={priceRange[0]}
                       onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                      placeholder="Min"
+                      placeholder={t('minPlaceholder')}
                     />
                     <span className="text-gray-500">-</span>
                     <input
@@ -297,7 +299,7 @@ export default function ProductsPage() {
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 5000])}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                      placeholder="Max"
+                      placeholder={t('maxPlaceholder')}
                     />
                   </div>
                   <button 
@@ -307,7 +309,7 @@ export default function ProductsPage() {
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#5a8585'}
                     onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
                   >
-                    Reset Filter
+                    {t('resetFilter')}
                   </button>
                 </div>
               </div>
@@ -321,7 +323,7 @@ export default function ProductsPage() {
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex items-center space-x-4">
                   <span className="text-gray-600">
-                    Showing {filteredProducts.length} of {products.length} products
+                    {t('showingCount', { shown: filteredProducts.length, total: products.length })}
                   </span>
                 </div>
 
@@ -351,7 +353,7 @@ export default function ProductsPage() {
 
             {/* Products Grid/List */}
             {loading ? (
-              <div className="text-center py-16 text-lg text-gray-600">Loading products...</div>
+              <div className="text-center py-16 text-lg text-gray-600">{t('loading')}</div>
             ) : error ? (
               <div className="text-center py-16 text-lg text-red-600">{error}</div>
             ) : filteredProducts.length === 0 ? (
@@ -360,10 +362,10 @@ export default function ProductsPage() {
                   <Search className="h-16 w-16 mx-auto" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#2e2e2e' }}>
-                  No products found
+                  {t('empty.title')}
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Try adjusting your search criteria or filters
+                  {t('empty.subtitle')}
                 </p>
                 <button 
                   onClick={() => {
@@ -376,7 +378,7 @@ export default function ProductsPage() {
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#5a8585'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
                 >
-                  Clear All Filters
+                  {t('clearAllFilters')}
                 </button>
               </div>
             ) : (

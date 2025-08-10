@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react';
 import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { getProducts, getComments, addComment } from '@/lib/api';
 import { getToken, addToCart } from '@/lib/storage';
 import { showNotification } from '@/components/NotificationSystem';
+import { useTranslations } from 'next-intl';
 
 export default function ProductClientView({ product }) {
+  const t = useTranslations('Product');
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ export default function ProductClientView({ product }) {
           setComments([]);
         }
       } catch (err) {
-        setError('Failed to load product data');
+        setError(t('errors.loadFailed'));
       } finally {
         setLoading(false);
       }
@@ -60,15 +62,36 @@ export default function ProductClientView({ product }) {
     }
   }, [product]);
 
+  // Meta Pixel tracking for ViewContent
+  useEffect(() => {
+    if (product && window.fbq) {
+      window.fbq('track', 'ViewContent', {
+        content_name: product.title,
+        content_ids: [product._id],
+        content_type: 'product',
+        value: parseFloat(product.price),
+        currency: 'DZD',
+      });
+    }
+  }, [product]);
+
   const handleSubmitComment = async (e) => {
     e.preventDefault();
     const token = getToken();
     if (!token) {
-      alert('Please login to leave a review');
+      showNotification({
+        title: t('reviews.loginRequiredTitle'),
+        description: t('reviews.loginRequiredDescription'),
+        variant: 'destructive',
+      });
       return;
     }
     if (!newComment.trim() || rating === 0) {
-      alert('Please provide both a comment and rating');
+      showNotification({
+        title: t('reviews.missingFieldsTitle'),
+        description: t('reviews.missingFieldsDescription'),
+        variant: 'destructive',
+      });
       return;
     }
     setSubmittingComment(true);
@@ -92,9 +115,17 @@ export default function ProductClientView({ product }) {
       setComments(prev => [newCommentObj, ...prev]);
       setNewComment('');
       setRating(0);
-      alert('Comment submitted successfully!');
+      showNotification({
+        title: t('reviews.submitSuccessTitle'),
+        description: t('reviews.submitSuccessDescription'),
+        variant: 'default',
+      });
     } catch (err) {
-      alert('Failed to submit comment. Please try again.');
+      showNotification({
+        title: t('reviews.submitFailedTitle'),
+        description: t('reviews.submitFailedDescription'),
+        variant: 'destructive',
+      });
     } finally {
       setSubmittingComment(false);
     }
@@ -105,15 +136,27 @@ export default function ProductClientView({ product }) {
     setAddingToCart(true);
     try {
       addToCart(product);
+      
+      // Meta Pixel tracking for AddToCart
+      if (window.fbq) {
+        window.fbq('track', 'AddToCart', {
+          content_name: product.title,
+          content_ids: [product._id],
+          content_type: 'product',
+          value: parseFloat(product.price),
+          currency: 'DZD',
+        });
+      }
+      
       showNotification({
-        title: 'Added to Cart',
-        description: `${product.title} has been added to your cart!`,
+        title: t('notifications.addedToCart.title'),
+        description: t('notifications.addedToCart.description', { title: product.title }),
         variant: 'default',
       });
     } catch (error) {
       showNotification({
-        title: 'Error',
-        description: 'Failed to add to cart. Please try again.',
+        title: t('notifications.error.title'),
+        description: t('notifications.error.description'),
         variant: 'destructive',
       });
     } finally {
@@ -128,7 +171,7 @@ export default function ProductClientView({ product }) {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7a9e9f] mx-auto"></div>
-            <p className="mt-4 text-lg text-gray-600">Loading product...</p>
+            <p className="mt-4 text-lg text-gray-600">{t('loading')}</p>
           </div>
         </main>
         <Footer />
@@ -142,13 +185,13 @@ export default function ProductClientView({ product }) {
         <Navigation />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Product Not Found</h2>
-            <p className="text-gray-600 mb-6">{error || 'The product you are looking for does not exist.'}</p>
+            <h2 className="text-2xl font-bold text-red-600 mb-4">{t('notFound.title')}</h2>
+            <p className="text-gray-600 mb-6">{error || t('notFound.description')}</p>
             <Link 
               href="/"
               className="px-6 py-3 bg-[#7a9e9f] text-white rounded-lg font-semibold hover:bg-[#6a8e8f] transition-colors"
             >
-              Back to Home
+              {t('notFound.backHome')}
             </Link>
           </div>
         </main>
@@ -170,11 +213,11 @@ export default function ProductClientView({ product }) {
         {/* Breadcrumb */}
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-gray-800">Home</Link>
+            <Link href="/" className="hover:text-gray-800">{t('breadcrumbs.home')}</Link>
             <span>/</span>
-            <Link href="/products" className="hover:text-gray-800">Products</Link>
+            <Link href="/products" className="hover:text-gray-800">{t('breadcrumbs.products')}</Link>
             <span>/</span>
-            <span className="text-gray-800">Gaming PCs</span>
+            <span className="text-gray-800">{t('breadcrumbs.category')}</span>
             <span>/</span>
             <span style={{ color: '#7a9e9f' }}>{product.title}</span>
           </div>
@@ -236,7 +279,7 @@ export default function ProductClientView({ product }) {
                 </div>
                 <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-800">
                   <Share2 className="h-4 w-4" />
-                  <span>Share</span>
+                  <span>{t('share')}</span>
                 </button>
               </div>
 
@@ -251,13 +294,13 @@ export default function ProductClientView({ product }) {
                 )}
                 {product.originalPrice && (
                   <span className="px-2 py-1 bg-red-100 text-red-600 text-sm font-semibold rounded">
-                    Save {product.originalPrice - product.price} DA
+                    {t('saveAmount', { amount: (product.originalPrice - product.price) })}
                   </span>
                 )}
               </div>
 
               <p className="text-gray-700 leading-relaxed mb-6">
-                {product.description || 'Experience ultimate gaming performance with our custom-built gaming PC. Featuring the latest components and cutting-edge technology, this system delivers exceptional performance for gaming and content creation.'}
+                {product.description || t('descriptionFallback')}
               </p>
 
               {/* Stock Status */}
@@ -265,7 +308,7 @@ export default function ProductClientView({ product }) {
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <span className="text-green-600 font-medium">
-                    {product.quantity} {product.quantity > 0 ? 'In Stock' : 'Out of Stock'}
+                    {product.quantity} {product.quantity > 0 ? t('stock.inStock') : t('stock.outOfStock')}
                   </span>
                 </div>
               </div>
@@ -279,31 +322,31 @@ export default function ProductClientView({ product }) {
                   style={{ backgroundColor: '#4E8786', color: 'white' }}
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  <span>{addingToCart ? 'Adding...' : `Add to Cart - ${product.price} DA`}</span>
+                  <span>{addingToCart ? t('adding') : t('addToCartWithPrice', { price: product.price })}</span>
                 </button>
               </div>
 
               {/* Features */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-lg" style={{ color: '#2e2e2e' }}>
-                  Key Features:
+                  {t('features.title')}
                 </h3>
                 <ul className="space-y-2">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#4E8786' }}></div>
-                    <span className="text-gray-700">High-performance gaming components</span>
+                    <span className="text-gray-700">{t('features.items.highPerformance')}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#4E8786' }}></div>
-                    <span className="text-gray-700">Custom RGB lighting system</span>
+                    <span className="text-gray-700">{t('features.items.rgb')}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#4E8786' }}></div>
-                    <span className="text-gray-700">Optimized for 4K gaming</span>
+                    <span className="text-gray-700">{t('features.items.optimized4k')}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#4E8786' }}></div>
-                    <span className="text-gray-700">Professional build quality</span>
+                    <span className="text-gray-700">{t('features.items.buildQuality')}</span>
                   </li>
                 </ul>
               </div>
@@ -313,22 +356,22 @@ export default function ProductClientView({ product }) {
                 <div className="flex items-center space-x-3">
                   <Truck className="h-6 w-6" style={{ color: '#4E8786' }} />
                   <div>
-                    <p className="font-medium text-sm">Free Shipping</p>
-                    <p className="text-xs text-gray-600">Orders over 50000 DA</p>
+                    <p className="font-medium text-sm">{t('guarantees.freeShipping')}</p>
+                    <p className="text-xs text-gray-600">{t('guarantees.freeShippingSub')}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="h-6 w-6" style={{ color: '#4E8786' }} />
                   <div>
-                    <p className="font-medium text-sm">2 Year Warranty</p>
-                    <p className="text-xs text-gray-600">Full coverage</p>
+                    <p className="font-medium text-sm">{t('guarantees.warranty')}</p>
+                    <p className="text-xs text-gray-600">{t('guarantees.warrantySub')}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <RotateCcw className="h-6 w-6" style={{ color: '#4E8786' }} />
                   <div>
-                    <p className="font-medium text-sm">30-Day Returns</p>
-                    <p className="text-xs text-gray-600">No questions asked</p>
+                    <p className="font-medium text-sm">{t('guarantees.returns')}</p>
+                    <p className="text-xs text-gray-600">{t('guarantees.returnsSub')}</p>
                   </div>
                 </div>
               </div>
@@ -340,7 +383,7 @@ export default function ProductClientView({ product }) {
         {relatedProducts.length > 0 && (
           <div className="mb-16">
             <h2 className="text-2xl font-bold mb-8" style={{ color: '#2e2e2e' }}>
-              Complete Your Setup
+              {t('related.title')}
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -383,19 +426,19 @@ export default function ProductClientView({ product }) {
         {/* Comments Section */}
         <div className="bg-white rounded-xl shadow-md p-6 lg:p-8">
           <h2 className="text-2xl font-bold mb-8" style={{ color: '#2e2e2e' }}>
-            Customer Reviews ({comments && comments.length > 0 ? comments.length : 0})
+            {t('reviews.title', { count: comments && comments.length > 0 ? comments.length : 0 })}
           </h2>
 
           {/* Add Review Form */}
           <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
             <h3 className="text-lg font-semibold mb-4" style={{ color: '#2e2e2e' }}>
-              Write a Review
+              {t('reviews.writeTitle')}
             </h3>
             
             <form onSubmit={handleSubmitComment} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Rating
+                  {t('reviews.ratingLabel')}
                 </label>
                 <div className="flex items-center space-x-1">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -413,21 +456,21 @@ export default function ProductClientView({ product }) {
                     </button>
                   ))}
                   <span className="ml-2 text-sm text-gray-600">
-                    {rating > 0 ? `${rating} star${rating > 1 ? 's' : ''}` : 'Select rating'}
+                    {rating > 0 ? t('reviews.ratingSelected', { rating }) : t('reviews.selectRating')}
                   </span>
                 </div>
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Your Review
+                  {t('reviews.yourReview')}
                 </label>
                 <textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7a9e9f] focus:border-transparent resize-none transition-colors"
                   rows="4"
-                  placeholder="Share your experience with this product..."
+                  placeholder={t('reviews.placeholder')}
                   required
                 />
               </div>
@@ -438,7 +481,7 @@ export default function ProductClientView({ product }) {
                 className="px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: '#4E8786', color: 'white' }}
               >
-                {submittingComment ? 'Submitting...' : 'Submit Review'}
+                {submittingComment ? t('reviews.submitting') : t('reviews.submit')}
               </button>
             </form>
           </div>
@@ -471,7 +514,7 @@ export default function ProductClientView({ product }) {
                             ))}
                           </div>
                           <span className="text-sm text-gray-600">
-                            {comment.date || comment.createdAt || 'Recent'}
+                            {comment.date || comment.createdAt || t('reviews.recent')}
                           </span>
                         </div>
                       </div>
@@ -482,10 +525,10 @@ export default function ProductClientView({ product }) {
                     {comment.comment || comment.text || comment.content || 'No comment text available'}
                   </p>
                   
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div className="text-xs text-gray-500">
-                      Verified Purchase
-                    </div>
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="text-xs text-gray-500">
+                        {t('reviews.verifiedPurchase')}
+                      </div>
                   </div>
                 </div>
               ))}
@@ -498,8 +541,8 @@ export default function ProductClientView({ product }) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">No reviews yet</h3>
-              <p className="text-gray-500 mb-4">Be the first to share your experience with this product!</p>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">{t('reviews.emptyTitle')}</h3>
+              <p className="text-gray-500 mb-4">{t('reviews.emptySubtitle')}</p>
             </div>
           )}
         </div>

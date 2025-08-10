@@ -3,38 +3,41 @@
 import { Users, Award, Truck, Shield, Heart, Zap, Target, Globe } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import {useTranslations} from 'next-intl';
+import {Link} from '@/i18n/navigation';
 
 export default function AboutPage() {
+  const t = useTranslations('About');
   const stats = [
-    { number: '10+', label: 'Years Experience', icon: Award },
-    { number: '50K+', label: 'Happy Customers', icon: Users },
-    { number: '100K+', label: 'Products Sold', icon: Truck },
-    { number: '99.9%', label: 'Uptime Guarantee', icon: Shield }
+    { number: '10+', label: t('stats.years'), icon: Award },
+    { number: '50K+', label: t('stats.customers'), icon: Users },
+    { number: '100K+', label: t('stats.products'), icon: Truck },
+    { number: '99.9%', label: t('stats.uptime'), icon: Shield }
   ];
 
   const values = [
     {
       icon: Heart,
-      title: 'Customer First',
-      description: 'Every decision we make is centered around providing the best possible experience for our customers.',
+      title: t('values.customer'),
+      description: t('values.customer_description'),
       color: '#669999'
     },
     {
       icon: Zap,
-      title: 'Innovation',
-      description: 'We stay ahead of technology trends to bring you the latest and most advanced products.',
+      title: t('values.innovation'),
+      description: t('values.innovation_description'),
       color: '#669999'
     },
     {
       icon: Target,
-      title: 'Quality Assurance',
-      description: 'We rigorously test every product to ensure it meets our high standards before reaching you.',
+      title: t('values.quality'),
+      description: t('values.quality_description'),
       color: '#669999'
     },
     {
       icon: Globe,
-      title: 'Global Reach',
-      description: 'Serving customers worldwide with fast shipping and localized support in multiple languages.',
+      title: t('values.global'),
+      description: t('values.global_description'),
       color: '#669999'
     }
   ];
@@ -43,35 +46,36 @@ export default function AboutPage() {
   const timeline = [
     {
       year: '2014',
-      title: 'Company Founded',
-      description: 'Started as a small computer repair shop with a vision to democratize technology access.'
+      title: t('timeline.company'),
+      description: t('timeline.company_description')
     },
     {
       year: '2016',
-      title: 'First Retail Location',
-      description: 'Opened our flagship store in Silicon Valley, becoming a local tech destination.'
+      title: t('timeline.location'),
+      description: t('timeline.location_description')
     },
     {
       year: '2018',
-      title: 'Online Expansion',
-      description: 'Launched our e-commerce platform, reaching customers nationwide.'
+      title: t('timeline.online'),
+      description: t('timeline.online_description')
     },
     {
       year: '2020',
-      title: 'Custom PC Division',
-      description: 'Introduced custom PC building services and gaming system specialization.'
+      title: t('timeline.custom'),
+      description: t('timeline.custom_description')
     },
     {
       year: '2022',
-      title: 'Enterprise Solutions',
-      description: 'Expanded into enterprise and professional workstation markets.'
+      title: t('timeline.enterprise'),
+      description: t('timeline.enterprise_description')
     },
     {
       year: '2024',
-      title: 'Global Presence',
-      description: 'Now serving customers in over 50 countries with 24/7 support.'
+      title: t('timeline.global'),
+      description: t('timeline.global_description')
     }
   ];
+
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
@@ -83,12 +87,10 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100"></div>
           <div className="relative max-w-7xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-              About AZERTY
+              {t('title')}
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-              We're passionate about technology and committed to helping you find the perfect 
-              computing solutions for your needs. From gaming enthusiasts to professional creators, 
-              we've got you covered.
+              {t('description')}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button 
@@ -97,7 +99,7 @@ export default function AboutPage() {
                 onMouseEnter={(e) => e.target.style.backgroundColor = '#5a8585'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = '#669999'}
               >
-                Our Story
+                {t('button')}
               </button>
 
             </div>
@@ -128,31 +130,26 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-4xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-                  Our Mission
+                  {t('mission.title')}
                 </h2>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  At AZERTY, we believe technology should empower everyone to achieve their goals. 
-                  Whether you're a gamer seeking the ultimate performance, a creator pushing the 
-                  boundaries of digital art, or a professional building the next big thing, we're 
-                  here to provide the tools you need.
+                  {t('mission.description')}
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                  Our commitment goes beyond just selling products. We're your technology partners, 
-                  offering expert advice, comprehensive support, and solutions tailored to your 
-                  unique requirements.
+                  {t('mission.commitment')}
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#669999' }}></div>
-                    <span className="text-gray-700">Expert Consultation</span>
+                    <span className="text-gray-700">{t('mission.expert_consultation')}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#669999' }}></div>
-                    <span className="text-gray-700">Custom Solutions</span>
+                    <span className="text-gray-700">{t('mission.custom_solutions')}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#669999' }}></div>
-                    <span className="text-gray-700">Lifetime Support</span>
+                    <span className="text-gray-700">{t('mission.lifetime_support')}</span>
                   </div>
                 </div>
               </div>
@@ -160,7 +157,7 @@ export default function AboutPage() {
                 <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-8 h-96 flex items-center justify-center">
                   <div className="text-center">
                     <Users className="h-24 w-24 mx-auto mb-4" style={{ color: '#669999' }} />
-                    <p className="text-gray-600 font-medium">Building Technology Communities</p>
+                    <p className="text-gray-600 font-medium">{t('mission.building_technology_communities')}</p>
                   </div>
                 </div>
               </div>
@@ -173,10 +170,10 @@ export default function AboutPage() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-                Our Core Values
+                {t('values.title')}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                These principles guide everything we do and shape how we serve our community
+                {t('values.description')}
               </p>
             </div>
 
@@ -214,10 +211,10 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-                Our Journey
+                {t('timeline.title')}
               </h2>
               <p className="text-xl text-gray-600">
-                A decade of growth, innovation, and customer success
+                {t('timeline.description')}
               </p>
             </div>
 
@@ -261,20 +258,19 @@ export default function AboutPage() {
         <section className="py-20 px-4" style={{ backgroundColor: '#669999' }}>
           <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-4xl font-bold mb-6">
-              Ready to Join the AZERTY Family?
+              {t('cta.title')}
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Experience the difference that expert knowledge and personalized service can make. 
-              Let's build something amazing together.
+              {t('cta.description')}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button className="px-8 py-3 bg-white rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                 style={{ color: '#669999' }}
               >
-                Shop Now
+                {t('cta.button')}
               </button>
               <button className="px-8 py-3 border-2 border-white rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-white hover:text-gray-800">
-                Contact Us
+                {t('cta.button')}
               </button>
             </div>
           </div>

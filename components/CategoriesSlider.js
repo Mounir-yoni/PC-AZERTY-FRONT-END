@@ -2,17 +2,20 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Cpu, MonitorSpeaker, HardDrive, Gamepad2, Laptop, Headphones } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 export default function CategoriesSlider() {
+  const t = useTranslations('CategoriesSlider');
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const categories = [
-    { name: 'Processors', icon: Cpu, color: '#4E8786' },
-    { name: 'Graphics Cards', icon: MonitorSpeaker, color: '#4E8786' },
-    { name: 'Storage', icon: HardDrive, color: '#4E8786' },
-    { name: 'Gaming', icon: Gamepad2, color: '#4E8786' },
-    { name: 'Laptops', icon: Laptop, color: '#4E8786' },
-    { name: 'Audio', icon: Headphones, color: '#4E8786' },
+    { name: t('categories.processors'), icon: Cpu, color: '#4E8786' },
+    { name: t('categories.graphicsCards'), icon: MonitorSpeaker, color: '#4E8786' },
+    { name: t('categories.storage'), icon: HardDrive, color: '#4E8786' },
+    { name: t('categories.gaming'), icon: Gamepad2, color: '#4E8786' },
+    { name: t('categories.laptops'), icon: Laptop, color: '#4E8786' },
+    { name: t('categories.audio'), icon: Headphones, color: '#4E8786' },
   ];
 
   const itemsPerView = {
@@ -34,10 +37,10 @@ export default function CategoriesSlider() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            Shop by Category
+            {t('title')}
           </h2>
           <p className="text-lg text-gray-600">
-            Find exactly what you're looking for
+            {t('subtitle')}
           </p>
         </div>
 

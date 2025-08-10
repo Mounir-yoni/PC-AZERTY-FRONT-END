@@ -1,23 +1,26 @@
 'use client';
 
 import { Star, ShoppingCart } from 'lucide-react';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 export default function MostRequestedProducts({ products = [] }) {
+  const t = useTranslations('MostRequestedProducts');
+  
   return (
     <section className="py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            Most Requested Products
+            {t('title')}
           </h2>
           <p className="text-lg text-gray-600">
-            Our customers' favorite picks
+            {t('subtitle')}
           </p>
         </div>
 
         {products.length === 0 ? (
-          <div className="text-center py-12 text-lg text-gray-600">No products available.</div>
+          <div className="text-center py-12 text-lg text-gray-600">{t('noProducts')}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {products.map((product) => {
@@ -60,11 +63,13 @@ export default function MostRequestedProducts({ products = [] }) {
         
 
         <div className="text-center">
-          <button 
-            className="px-6 lg:px-8 py-2 lg:py-3 text-base lg:text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 bg-[#4E8786] text-white hover:bg-primary-hover"
-          >
-            View More Products
-          </button>
+          <Link href="/products">
+            <button 
+              className="px-6 lg:px-8 py-2 lg:py-3 text-base lg:text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 bg-[#4E8786] text-white hover:bg-primary-hover"
+            >
+              {t('viewMore')}
+            </button>
+          </Link>
         </div>
       </div>
     </section>

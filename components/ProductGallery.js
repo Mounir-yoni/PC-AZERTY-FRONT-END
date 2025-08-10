@@ -1,15 +1,19 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+
 export default function ProductGallery() {
+  const t = useTranslations('ProductGallery');
   return (
     <section className="py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            Our Product Showcase
+            {t('title')}
           </h2>
           <p className="text-lg text-gray-600">
-            Experience the quality and design of our premium products
+            {t('subtitle')}
           </p>
         </div>
 
@@ -23,18 +27,20 @@ export default function ProductGallery() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 text-white">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">Ultimate Gaming Experience</h3>
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">{t('gaming.title')}</h3>
               <p className="text-sm sm:text-base lg:text-lg opacity-90 mb-4">
-                High-performance gaming setups designed for competitive play
+                {t('gaming.description')}
               </p>
-              <button 
-                className="px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105"
-                style={{ backgroundColor: '#4E8786', color: 'white' }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
-              >
-                Explore Gaming
-              </button>
+              <Link href="/products">
+                <button 
+                  className="px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105"
+                  style={{ backgroundColor: '#4E8786', color: 'white' }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
+                >
+                  {t('gaming.button')}
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -47,18 +53,20 @@ export default function ProductGallery() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 text-white">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">Professional Workstations</h3>
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2">{t('workstation.title')}</h3>
               <p className="text-sm sm:text-base lg:text-lg opacity-90 mb-4">
-                Powerful systems for creators, developers, and professionals
+                {t('workstation.description')}
               </p>
-              <button 
-                className="px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105"
-                style={{ backgroundColor: '#4E8786', color: 'white' }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
-              >
-                View Workstations
-              </button>
+              <Link href="/products">
+                <button 
+                  className="px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105"
+                  style={{ backgroundColor: '#4E8786', color: 'white' }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
+                >
+                  {t('workstation.button')}
+                </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,8 +1,12 @@
 'use client';
 
 import { Monitor, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 export default function Footer() {
+  const t = useTranslations('Footer');
+  
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 py-8 lg:py-16">
@@ -14,8 +18,7 @@ export default function Footer() {
               <span className="text-2xl font-bold">AZERTY COMPUTER</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              Your trusted destination for premium computers, components, and tech accessories. 
-              We've been serving the tech community for over 10 years.
+              {t('company.description')}
             </p>
             <div className="flex space-x-4">
               <a href="https://www.facebook.com/share/1DvoSCL6eX/?mibextid=wwXIfr" className="p-2 rounded-full transition-colors hover:bg-gray-800">
@@ -46,41 +49,81 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">Quick Links</h3>
+            <h3 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">{t('quickLinks.title')}</h3>
             <ul className="space-y-2 lg:space-y-3">
-              {['About Us', 'Contact', 'Shipping Info', 'Returns', 'Privacy Policy', 'Terms of Service'].map((link) => (
-                <li key={link}>
-                  <a 
-                    href="#" 
-                    className="text-gray-400 hover:text-white transition-colors duration-200"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/about" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('quickLinks.about')}
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('quickLinks.contact')}
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('quickLinks.shipping')}
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('quickLinks.returns')}
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('quickLinks.privacy')}
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('quickLinks.terms')}
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">Categories</h3>
+            <h3 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">{t('categories.title')}</h3>
             <ul className="space-y-2 lg:space-y-3">
-              {['Gaming PCs', 'Laptops', 'Components', 'Accessories', 'Monitors', 'Peripherals'].map((category) => (
-                <li key={category}>
-                  <a 
-                    href="#" 
-                    className="text-gray-400 hover:text-white transition-colors duration-200"
-                  >
-                    {category}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/products" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('categories.gamingPCs')}
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('categories.laptops')}
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('categories.components')}
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('categories.accessories')}
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('categories.monitors')}
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="text-gray-400 hover:text-white transition-colors duration-200">
+                  {t('categories.peripherals')}
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">Contact Us</h3>
+            <h3 className="text-base lg:text-lg font-semibold mb-4 lg:mb-6">{t('contact.title')}</h3>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 mt-1" style={{ color: '#4E8786' }} />
@@ -105,11 +148,11 @@ export default function Footer() {
 
             {/* Newsletter */}
             <div className="mt-6">
-              <h4 className="text-sm lg:text-base font-semibold mb-3">Newsletter</h4>
+              <h4 className="text-sm lg:text-base font-semibold mb-3">{t('newsletter.title')}</h4>
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                 <input
                   type="email"
-                  placeholder="Your email"
+                  placeholder={t('newsletter.placeholder')}
                   className="flex-1 px-3 py-2 text-sm lg:text-base bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-gray-500"
                 />
                 <button 
@@ -118,7 +161,7 @@ export default function Footer() {
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
                 >
-                  Subscribe
+                  {t('newsletter.subscribe')}
                 </button>
               </div>
             </div>
@@ -129,12 +172,12 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 lg:mt-12 pt-6 lg:pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <p className="text-sm lg:text-base text-gray-400 text-center sm:text-left">
-              © 2025 AZERTY. All rights reserved.
+              {t('bottom.copyright')}
             </p>
             <div className="flex space-x-6 text-gray-400">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="#" className="hover:text-white transition-colors">Support</a>
+              <a href="#" className="hover:text-white transition-colors">{t('bottom.privacy')}</a>
+              <a href="#" className="hover:text-white transition-colors">{t('bottom.terms')}</a>
+              <a href="#" className="hover:text-white transition-colors">{t('bottom.support')}</a>
             </div>
           </div>
         </div>

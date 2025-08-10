@@ -7,8 +7,10 @@ import Footer from '@/components/Footer';
 import { getUser } from '@/lib/storage';
 import { useRouter } from 'next/navigation';
 import { getuserorder } from '@/lib/api';
+import { useTranslations } from 'next-intl';
 
 export default function ProfilePage() {
+  const t = useTranslations('Profile');
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,12 +83,12 @@ export default function ProfilePage() {
         setOrders(data.data || []);
       })
       .catch(err => {
-        setOrdersError('Failed to load orders');
+        setOrdersError(t('orders.loadFailed'));
       })
       .finally(() => {
         setOrdersLoading(false);
       });
-  }, [user]);
+  }, [user, t]);
 
   // Show loading state while checking user
   if (isLoading) {
@@ -96,7 +98,7 @@ export default function ProfilePage() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7a9e9f] mx-auto"></div>
-            <p className="mt-4 text-lg text-gray-600">Loading profile...</p>
+            <p className="mt-4 text-lg text-gray-600">{t('loadingProfile')}</p>
           </div>
         </main>
         <Footer />
@@ -112,7 +114,7 @@ export default function ProfilePage() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7a9e9f] mx-auto"></div>
-            <p className="mt-4 text-lg text-gray-600">Redirecting to login...</p>
+            <p className="mt-4 text-lg text-gray-600">{t('redirecting')}</p>
           </div>
         </main>
         <Footer />
@@ -121,9 +123,9 @@ export default function ProfilePage() {
   }
 
   const profileSections = [
-    { id: 'profile', name: 'Profile Info', icon: User },
-    { id: 'orders', name: 'Order History', icon: Package },
-    { id: 'notifications', name: 'Notifications', icon: Bell }
+    { id: 'profile', name: t('sections.profile'), icon: User },
+    { id: 'orders', name: t('sections.orders'), icon: Package },
+    { id: 'notifications', name: t('sections.notifications'), icon: Bell }
   ];
 
   const handleSave = () => {
@@ -180,7 +182,7 @@ export default function ProfilePage() {
       <div className="bg-white rounded-xl shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold" style={{ color: '#2e2e2e' }}>
-            Profile Information
+            {t('profileInformation')}
           </h2>
           {!isEditing ? (
             <button
@@ -189,7 +191,7 @@ export default function ProfilePage() {
               style={{ backgroundColor: '#669999', color: 'white' }}
             >
               <Edit className="h-4 w-4" />
-              <span>Edit Profile</span>
+              <span>{t('buttons.editProfile')}</span>
             </button>
           ) : (
             <div className="flex space-x-2">
@@ -199,14 +201,14 @@ export default function ProfilePage() {
                 style={{ backgroundColor: '#669999', color: 'white' }}
               >
                 <Save className="h-4 w-4" />
-                <span>Save</span>
+                <span>{t('buttons.save')}</span>
               </button>
               <button
                 onClick={handleCancel}
                 className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
               >
                 <X className="h-4 w-4" />
-                <span>Cancel</span>
+                <span>{t('buttons.cancel')}</span>
               </button>
             </div>
           )}
@@ -231,10 +233,10 @@ export default function ProfilePage() {
             <h3 className="text-xl font-semibold" style={{ color: '#2e2e2e' }}>
               {userData.firstName} {userData.lastName}
             </h3>
-            <p className="text-gray-600">Member since {new Date(userData.joinDate).toLocaleDateString()}</p>
+            <p className="text-gray-600">{t('memberSince', { date: new Date(userData.joinDate).toLocaleDateString() })}</p>
             <div className="flex items-center space-x-4 mt-2 text-sm">
-              <span style={{ color: '#669999' }}>{userData.totalOrders} Orders</span>
-              <span style={{ color: '#669999' }}>${userData.totalSpent.toLocaleString()} Total Spent</span>
+              <span style={{ color: '#669999' }}>{userData.totalOrders} {t('ordersShort')}</span>
+              <span style={{ color: '#669999' }}>${userData.totalSpent.toLocaleString()} {t('totalSpentShort')}</span>
             </div>
           </div>
         </div>
@@ -243,7 +245,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-              First Name
+              {t('fields.firstName')}
             </label>
             {isEditing ? (
               <input
@@ -262,7 +264,7 @@ export default function ProfilePage() {
 
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-              Last Name
+              {t('fields.lastName')}
             </label>
             {isEditing ? (
               <input
@@ -281,7 +283,7 @@ export default function ProfilePage() {
 
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-              Email Address
+              {t('fields.email')}
             </label>
             {isEditing ? (
               <input
@@ -300,7 +302,7 @@ export default function ProfilePage() {
 
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-              Phone Number
+              {t('fields.phone')}
             </label>
             {isEditing ? (
               <input
@@ -319,7 +321,7 @@ export default function ProfilePage() {
 
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-              Date of Birth
+              {t('fields.dateOfBirth')}
             </label>
             {isEditing ? (
               <input
@@ -340,12 +342,12 @@ export default function ProfilePage() {
         {/* Address Information */}
         <div className="mt-8">
           <h3 className="text-lg font-semibold mb-4" style={{ color: '#2e2e2e' }}>
-            Address Information
+            {t('address.title')}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                Street Address
+                {t('address.street')}
               </label>
               {isEditing ? (
                 <input
@@ -364,7 +366,7 @@ export default function ProfilePage() {
 
             <div>
               <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                City
+                {t('address.city')}
               </label>
               {isEditing ? (
                 <input
@@ -382,7 +384,7 @@ export default function ProfilePage() {
 
             <div>
               <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                State
+                {t('address.state')}
               </label>
               {isEditing ? (
                 <input
@@ -400,7 +402,7 @@ export default function ProfilePage() {
 
             <div>
               <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                ZIP Code
+                {t('address.zip')}
               </label>
               {isEditing ? (
                 <input
@@ -427,7 +429,7 @@ export default function ProfilePage() {
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-md p-6">
         <h2 className="text-2xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-          Order History
+          {t('orders.title')}
         </h2>
         
         {/* Order Statistics */}
@@ -436,35 +438,35 @@ export default function ProfilePage() {
             <div className="text-2xl font-bold" style={{ color: '#669999' }}>
               {ordersLoading ? '-' : orders.length}
             </div>
-            <div className="text-sm text-gray-600">Total Orders</div>
+            <div className="text-sm text-gray-600">{t('orders.total')}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold" style={{ color: '#669999' }}>
               {ordersLoading ? '-' : orders.filter(o => o.status && o.status.toLowerCase() === 'delivered').length}
             </div>
-            <div className="text-sm text-gray-600">Delivered</div>
+            <div className="text-sm text-gray-600">{t('orders.delivered')}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold" style={{ color: '#669999' }}>
               {ordersLoading ? '-' : `$${orders.reduce((sum, order) => sum + (order.totalValue || order.amount || 0), 0).toLocaleString()}`}
             </div>
-            <div className="text-sm text-gray-600">Total Spent</div>
+            <div className="text-sm text-gray-600">{t('orders.totalSpent')}</div>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold" style={{ color: '#669999' }}>
               {ordersLoading ? '-' : orders.filter(o => o.status && (o.status.toLowerCase() === 'processing' || o.status.toLowerCase() === 'shipped')).length}
             </div>
-            <div className="text-sm text-gray-600">Active Orders</div>
+            <div className="text-sm text-gray-600">{t('orders.active')}</div>
           </div>
         </div>
 
         {/* Orders List */}
         {ordersLoading ? (
-          <div className="text-center py-8 text-lg text-gray-500">Loading orders...</div>
+          <div className="text-center py-8 text-lg text-gray-500">{t('orders.loading')}</div>
         ) : ordersError ? (
           <div className="text-center py-8 text-lg text-red-500">{ordersError}</div>
         ) : orders.length === 0 ? (
-          <div className="text-center py-8 text-lg text-gray-400">No orders found.</div>
+          <div className="text-center py-8 text-lg text-gray-400">{t('orders.empty')}</div>
         ) : (
           <div className="space-y-4">
             {orders.map((order) => {
@@ -483,7 +485,7 @@ export default function ProfilePage() {
                         <h3 className="font-semibold text-lg" style={{ color: '#2e2e2e' }}>
                           #{(order._id || order.id || '').toString().slice(-8)}
                         </h3>
-                        <p className="text-gray-600">Ordered on {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : (order.date ? new Date(order.date).toLocaleDateString() : '')}</p>
+                        <p className="text-gray-600">{t('orders.orderedOn', { date: (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : (order.date ? new Date(order.date).toLocaleDateString() : '')) })}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-4">
@@ -496,12 +498,12 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   {/* Order Items */}
-                  <div className="mb-4">
-                    <h4 className="font-medium mb-2" style={{ color: '#2e2e2e' }}>Items:</h4>
+                    <div className="mb-4">
+                    <h4 className="font-medium mb-2" style={{ color: '#2e2e2e' }}>{t('orders.items')}</h4>
                     <div className="space-y-2">
                       {(order.products || order.items || []).map((item, index) => (
                         <div key={index} className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
-                          <span className="text-gray-700">{item.product?.title || item.name || 'Product'} (x{item.quantity || 1})</span>
+                          <span className="text-gray-700">{item.product?.title || item.name || t('orders.product')} (x{item.quantity || 1})</span>
                           <span className="font-medium">{(item.price || 0)}DA</span>
                         </div>
                       ))}
@@ -512,24 +514,24 @@ export default function ProfilePage() {
                     <div className="mb-4 sm:mb-0">
                       {order.trackingNumber && (
                         <p className="text-sm text-gray-600">
-                          Tracking: <span className="font-medium">{order.trackingNumber}</span>
+                          {t('orders.tracking')}: <span className="font-medium">{order.trackingNumber}</span>
                         </p>
                       )}
                       {order.estimatedDelivery && (
                         <p className="text-sm text-gray-600">
-                          Estimated Delivery: <span className="font-medium">{new Date(order.estimatedDelivery).toLocaleDateString()}</span>
+                          {t('orders.estimatedDelivery')}: <span className="font-medium">{new Date(order.estimatedDelivery).toLocaleDateString()}</span>
                         </p>
                       )}
                     </div>
                     <div className="flex space-x-2">
                       <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                         <Eye className="h-4 w-4" />
-                        <span>View Details</span>
+                        <span>{t('orders.viewDetails')}</span>
                       </button>
                       {order.status && order.status.toLowerCase() === 'delivered' && (
                         <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                           <Download className="h-4 w-4" />
-                          <span>Invoice</span>
+                          <span>{t('orders.invoice')}</span>
                         </button>
                       )}
                     </div>
@@ -626,10 +628,10 @@ export default function ProfilePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            My Profile
+            {t('title')}
           </h1>
           <p className="text-lg text-gray-600">
-            Manage your account settings and view your order history
+            {t('subtitle')}
           </p>
         </div>
 

@@ -6,8 +6,10 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { gettheparts } from '@/lib/api';
 import { addToCart } from '@/lib/storage';
+import { useTranslations } from 'next-intl';
 
 export default function PCBuilderPage() {
+  const t = useTranslations('PCBuilder');
   const [selectedComponents, setSelectedComponents] = useState({
     CPU: null,
     motherboard: null,
@@ -35,14 +37,14 @@ export default function PCBuilderPage() {
   const [error, setError] = useState('');
 
   const componentCategories = [
-    { id: 'CPU', name: 'Processor', icon: Cpu, required: true },
-    { id: 'motherboard', name: 'Motherboard', icon: Motherboard, required: true },
-    { id: 'ram', name: 'Memory (RAM)', icon: MemoryStick, required: true },
-    { id: 'gpu', name: 'Graphics Card', icon: MonitorSpeaker, required: true },
-    { id: 'storage', name: 'Storage', icon: HardDrive, required: true },
-    { id: 'psu', name: 'Power Supply', icon: Zap, required: true },
-    { id: 'cooling', name: 'Cooling', icon: Fan, required: false },
-    { id: 'case', name: 'PC Case', icon: Motherboard, required: false }
+    { id: 'CPU', name: t('categories.CPU'), icon: Cpu, required: true },
+    { id: 'motherboard', name: t('categories.motherboard'), icon: Motherboard, required: true },
+    { id: 'ram', name: t('categories.ram'), icon: MemoryStick, required: true },
+    { id: 'gpu', name: t('categories.gpu'), icon: MonitorSpeaker, required: true },
+    { id: 'storage', name: t('categories.storage'), icon: HardDrive, required: true },
+    { id: 'psu', name: t('categories.psu'), icon: Zap, required: true },
+    { id: 'cooling', name: t('categories.cooling'), icon: Fan, required: false },
+    { id: 'case', name: t('categories.case'), icon: Motherboard, required: false }
   ];
 
   // Add a new useEffect to fetch parts for the active category only
@@ -60,7 +62,10 @@ export default function PCBuilderPage() {
           }));
         }
       } catch (err) {
-        if (isMounted) setError('Failed to load parts for ' + activeCategory);
+        if (isMounted) {
+          const activeName = componentCategories.find(c => c.id === activeCategory)?.name || activeCategory;
+          setError(t('errors.loadParts', { category: activeName }));
+        }
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -103,14 +108,14 @@ export default function PCBuilderPage() {
     // CPU and Motherboard socket compatibility
     if (selectedComponents.CPU && selectedComponents.motherboard) {
       if (selectedComponents.CPU.socket !== selectedComponents.motherboard.socket) {
-        issues.push('CPU and Motherboard sockets are incompatible');
+        issues.push(t('compatibilityIssues.cpuMotherboard'));
       }
     }
 
     // RAM and Motherboard compatibility
     if (selectedComponents.ram && selectedComponents.motherboard) {
       if (selectedComponents.ram.type !== selectedComponents.motherboard.ramType) {
-        issues.push('RAM type is incompatible with Motherboard');
+        issues.push(t('compatibilityIssues.ramMotherboard'));
       }
     }
 
@@ -119,14 +124,14 @@ export default function PCBuilderPage() {
       const totalPower = getTotalPowerDraw();
       const psuWattage = selectedComponents.psu.wattage;
       if (totalPower > psuWattage * 0.8) { // 80% rule
-        issues.push(`Power Supply may be insufficient. Recommended: ${Math.ceil(totalPower / 0.8)}W`);
+        issues.push(t('compatibilityIssues.psuInsufficient', { recommendedWattage: Math.ceil(totalPower / 0.8) }));
       }
     }
 
     // GPU and Case clearance
     if (selectedComponents.gpu && selectedComponents.case) {
       if (selectedComponents.gpu.length > selectedComponents.case.maxGpuLength) {
-        issues.push('Graphics Card may not fit in selected Case');
+        issues.push(t('compatibilityIssues.gpuCase'));
       }
     }
 
@@ -196,7 +201,7 @@ export default function PCBuilderPage() {
     const requiredCategories = componentCategories.filter(c => c.required).map(c => c.id);
     const selectedRequired = requiredCategories.map(cat => selectedComponents[cat]).filter(Boolean);
     selectedRequired.forEach(part => addToCart(part));
-    alert('All selected parts have been added to your cart!');
+    alert(t('notifications.addedToCart'));
     // Clear all chosen parts
     setSelectedComponents({
       cpu: null,
@@ -214,7 +219,7 @@ export default function PCBuilderPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Navigation />
-        <div className="flex-1 flex items-center justify-center text-lg text-gray-600">Loading PC parts...</div>
+        <div className="flex-1 flex items-center justify-center text-lg text-gray-600">{t('loading')}</div>
         <Footer />
       </div>
     );
@@ -237,11 +242,11 @@ export default function PCBuilderPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-            PC Builder
+            {t('title')}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Build your dream PC with our interactive component selector. 
-            Get real-time compatibility checks and expert recommendations.
+            {t('subtitle.line1')} 
+            {t('subtitle.line2')}
           </p>
         </div>
 
@@ -250,7 +255,7 @@ export default function PCBuilderPage() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
               <h2 className="text-2xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-                Your Build
+                {t('yourBuild')}
               </h2>
 
               {/* Component List */}
@@ -296,7 +301,7 @@ export default function PCBuilderPage() {
                             onClick={() => setActiveCategory(category.id)}
                             className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
                           >
-                            Choose {category.name}
+                            {t('chooseCategory', { category: category.name })}
                           </button>
                         </div>
                       )}
@@ -312,7 +317,7 @@ export default function PCBuilderPage() {
                   className="w-full flex items-center justify-between p-3 rounded-lg border transition-colors hover:bg-gray-50"
                 >
                   <span className="font-medium" style={{ color: '#2e2e2e' }}>
-                    Compatibility Check
+                    {t('compatibilityCheck')}
                   </span>
                   <div className="flex items-center space-x-2">
                     {getCompatibilityIssues().length === 0 ? (
@@ -327,7 +332,7 @@ export default function PCBuilderPage() {
                   <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                     {getCompatibilityIssues().length === 0 ? (
                       <p className="text-sm text-green-600">
-                        ✓ All components are compatible
+                        ✓ {t('allCompatible')}
                       </p>
                     ) : (
                       <div className="space-y-2">
@@ -347,7 +352,7 @@ export default function PCBuilderPage() {
               <div className="mb-6 p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium" style={{ color: '#2e2e2e' }}>
-                    Estimated Power Draw
+                    {t('estimatedPowerDraw')}
                   </span>
                   <span className="text-sm font-bold" style={{ color: '#669999' }}>
                     {getTotalPowerDraw()}W
@@ -370,7 +375,7 @@ export default function PCBuilderPage() {
               <div className="border-t pt-4">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-lg font-semibold" style={{ color: '#2e2e2e' }}>
-                    Total Price
+                    {t('totalPrice')}
                   </span>
                   <span className="text-2xl font-bold" style={{ color: '#669999' }}>
                     {getTotalPrice()}DA
@@ -385,7 +390,7 @@ export default function PCBuilderPage() {
                   onClick={handleAddToCart}
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  <span>Add to Cart</span>
+                  <span>{t('addToCart')}</span>
                 </button>
               </div>
             </div>
@@ -427,7 +432,7 @@ export default function PCBuilderPage() {
                 <div className="flex items-center space-x-2 mb-4">
                   <Info className="h-5 w-5" style={{ color: '#669999' }} />
                   <h3 className="text-lg font-semibold" style={{ color: '#2e2e2e' }}>
-                    Recommended for {componentCategories.find(c => c.id === activeCategory)?.name}
+                    {t('recommendations.titleFor', { category: componentCategories.find(c => c.id === activeCategory)?.name })}
                   </h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -446,7 +451,7 @@ export default function PCBuilderPage() {
             {/* All Components */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <h3 className="text-xl font-semibold mb-6" style={{ color: '#2e2e2e' }}>
-                All {componentCategories.find(c => c.id === activeCategory)?.name} Options
+                {t('allOptionsFor', { category: componentCategories.find(c => c.id === activeCategory)?.name })}
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

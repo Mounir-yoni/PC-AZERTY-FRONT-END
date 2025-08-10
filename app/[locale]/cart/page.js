@@ -5,15 +5,17 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, CreditCard } from 'lucide-
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { getCart, removeFromCart, updateCartItemQuantity, getUser } from '@/lib/storage';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { addOrder } from '@/lib/api';
 import { showNotification } from '@/components/NotificationSystem';
 import OrderUserInfo from '@/components/OrderUserInfo';
 import useWilayas from '@/hooks/useWilayas';
+import { useTranslations } from 'next-intl';
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [userInfo, setUserInfo] = useState({ name: '', phone: '', address: '', wilaya: '', wilayaObj: null, place: 'home' });
+  const t = useTranslations('Cart');
 
   useEffect(() => {
     // Load cart from localStorage on component mount
@@ -40,11 +42,39 @@ export default function CartPage() {
     }
     const updatedCart = updateCartItemQuantity(id, newQuantity);
     setCartItems(updatedCart);
+    
+    // Meta Pixel tracking for cart quantity update
+    if (window.fbq) {
+      const item = cartItems.find(item => item._id === id || item.id === id);
+      if (item) {
+        window.fbq('track', 'CustomizeProduct', {
+          content_name: item.title || item.name,
+          content_ids: [item._id || item.id],
+          content_type: 'product',
+          value: parseFloat(item.price || 0),
+          currency: 'DZD',
+          quantity: newQuantity,
+        });
+      }
+    }
   };
 
   const removeItem = (id) => {
+    const item = cartItems.find(item => item._id === id || item.id === id);
     const updatedCart = removeFromCart(id);
     setCartItems(updatedCart);
+    
+    // Meta Pixel tracking for remove from cart
+    if (window.fbq && item) {
+      window.fbq('track', 'RemoveFromCart', {
+        content_name: item.title || item.name,
+        content_ids: [item._id || item.id],
+        content_type: 'product',
+        value: parseFloat(item.price || 0),
+        currency: 'DZD',
+        quantity: item.quantity || 1,
+      });
+    }
   };
 
   // Calculate dynamic shipping
@@ -64,8 +94,8 @@ export default function CartPage() {
     // No longer require login, just use userInfo
     if (!userInfo.name || !userInfo.phone || !userInfo.address || !userInfo.wilaya || !userInfo.place) {
       showNotification({
-        title: 'Missing Information',
-        description: 'Please fill in your name, phone, address, wilaya, and place.',
+        title: t('notifications.missingInfo.title'),
+        description: t('notifications.missingInfo.description'),
         variant: 'destructive',
       });
       return;
@@ -73,14 +103,14 @@ export default function CartPage() {
     try {
       await addOrder({ address: userInfo.address, name: userInfo.name, phone: userInfo.phone, wilaya: userInfo.wilaya, place: userInfo.place, wilayaObj: userInfo.wilayaObj });
       showNotification({
-        title: 'Order Placed',
-        description: 'Your order has been placed successfully!',
+        title: t('notifications.orderSuccess.title'),
+        description: t('notifications.orderSuccess.description'),
         variant: 'default',
       });
     } catch (err) {
       showNotification({
-        title: 'Order Failed',
-        description: err?.message || 'Failed to place order. Please try again.',
+        title: t('notifications.orderFailed.title'),
+        description: err?.message || t('notifications.orderFailed.description'),
         variant: 'destructive',
       });
     }
@@ -98,11 +128,11 @@ export default function CartPage() {
               <ArrowLeft className="h-5 w-5" style={{ color: '#2e2e2e' }} />
             </Link>
             <h1 className="text-3xl md:text-4xl font-bold" style={{ color: '#2e2e2e' }}>
-              Shopping Cart
+              {t('title')}
             </h1>
           </div>
           <p className="text-gray-600">
-            {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
+            {t('itemsInCart', { count: cartItems.length })}
           </p>
         </div>
 
@@ -111,16 +141,16 @@ export default function CartPage() {
           <div className="text-center py-16">
             <ShoppingBag className="h-24 w-24 mx-auto mb-6 text-gray-400" />
             <h2 className="text-2xl font-semibold mb-4" style={{ color: '#2e2e2e' }}>
-              Your cart is empty
+              {t('empty.title')}
             </h2>
             <p className="text-gray-600 mb-8">
-              Looks like you haven't added any items to your cart yet
+              {t('empty.subtitle')}
             </p>
             <Link href="/products">
               <button 
                 className="px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 bg-[#4E8786] text-white hover:bg-primary-hover"
               >
-                Continue Shopping
+                {t('continueShopping')}
               </button>
             </Link>
           </div>
@@ -177,7 +207,7 @@ export default function CartPage() {
                             {((item.price || 0) * (item.quantity || 1))}DA
                           </p>
                           <p className="text-sm text-gray-500">
-                            {item.price || 0}DA each
+                            {(item.price || 0)}DA {t('each')}
                           </p>
                         </div>
                       </div>
@@ -191,26 +221,26 @@ export default function CartPage() {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl p-6 shadow-md sticky top-24">
                 <h2 className="text-xl font-semibold mb-6" style={{ color: '#2e2e2e' }}>
-                  Order Summary
+                  {t('summary.title')}
                 </h2>
                 {/* User Info Form */}
                 <OrderUserInfo onChange={setUserInfo} />
                 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
+                    <span className="text-gray-600">{t('summary.subtotal')}</span>
                     <span className="font-semibold" style={{color:'#4E8786'}}>{subtotal}DA</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
+                    <span className="text-gray-600">{t('summary.shipping')}</span>
                     <span className="font-semibold">
-                      {shipping === 0 ? 'Free' : `${shipping}DA`}
+                      {shipping === 0 ? t('summary.free') : `${shipping}DA`}
                     </span>
                   </div>
 
                   <div className="border-t pt-4">
                     <div className="flex justify-between text-lg font-bold">
-                      <span style={{ color: '#2e2e2e' }}>Total</span>
+                      <span style={{ color: '#2e2e2e' }}>{t('summary.total')}</span>
                       <span style={{ color: '#4E8786' }}>{total} DA</span>
                     </div>
                   </div>
@@ -223,14 +253,14 @@ export default function CartPage() {
                   onClick={handleOrder}
                 >
                   <CreditCard className="h-5 w-5" />
-                  <span>ORDER</span>
+                  <span>{t('summary.orderNow')}</span>
                 </button>
 
                 <Link href="/products">
                   <button className="w-full py-2 px-4 rounded-lg font-semibold border-2 transition-all duration-300 hover:bg-gray-50"
                     style={{ borderColor: '#4E8786', color: '#4E8786' }}
                   >
-                    Continue Shopping
+                    {t('continueShopping')}
                   </button>
                 </Link>
               </div>

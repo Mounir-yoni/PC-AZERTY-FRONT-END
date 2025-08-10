@@ -1,6 +1,10 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+
 export default function BrandsSection() {
+  const t = useTranslations('BrandsSection');
   const brands = [
     { name: 'Intel', logo: 'INTEL' },
     { name: 'AMD', logo: 'AMD' },
@@ -17,10 +21,10 @@ export default function BrandsSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            Trusted Brands
+            {t('title')}
           </h2>
           <p className="text-lg text-gray-600">
-            We partner with the world's leading technology brands
+            {t('subtitle')}
           </p>
         </div>
 
@@ -44,16 +48,18 @@ export default function BrandsSection() {
 
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">
-            Authorized dealer for all major brands with full warranty support
+            {t('description')}
           </p>
-          <button 
-            className="px-4 lg:px-6 py-2 rounded-lg font-semibold text-sm lg:text-base transition-all duration-300 hover:scale-105"
-            style={{ backgroundColor: '#4E8786', color: 'white' }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
-          >
-            View All Brands
-          </button>
+          <Link href="/products">
+            <button 
+              className="px-4 lg:px-6 py-2 rounded-lg font-semibold text-sm lg:text-base transition-all duration-300 hover:scale-105"
+              style={{ backgroundColor: '#4E8786', color: 'white' }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#6a8e8f'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#4E8786'}
+            >
+              {t('viewAllBrands')}
+            </button>
+          </Link>
         </div>
       </div>
     </section>

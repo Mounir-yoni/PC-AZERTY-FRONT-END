@@ -1,0 +1,523 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "about": "Go to the about page",
+    "loading": "Loading...",
+    "loadingError": "Failed to load home data."
+  },
+  "About": {
+    "title": "About AZERTY",
+    "description": "We're passionate about technology and committed to helping you find the perfect computing solutions for your needs. From gaming enthusiasts to professional creators, we've got you covered.",
+    "button": "Our Story",
+    "values": {
+      "title": "Our Core Values",
+      "description": "These principles guide everything we do and shape how we serve our community",
+      "customer": "Customer First",
+      "customer_description": "Every decision we make is centered around providing the best possible experience for our customers.",
+      "innovation": "Innovation",
+      "innovation_description": "We stay ahead of technology trends to bring you the latest and most advanced products.",
+      "quality": "Quality Assurance",
+      "quality_description": "We rigorously test every product to ensure it meets our high standards before reaching you.",
+      "global": "Global Reach",
+      "global_description": "Serving customers worldwide with fast shipping and localized support in multiple languages."
+    },
+    "timeline": {
+      "title": "Our Journey",
+      "description": "A decade of growth, innovation, and customer success",
+      "company": "Company Founded",
+      "company_description": "Started as a small computer repair shop with a vision to democratize technology access.",
+      "location": "First Retail Location",
+      "location_description": "Opened our flagship store in Silicon Valley, becoming a local tech destination.",
+      "online": "Online Expansion",
+      "online_description": "Launched our e-commerce platform, reaching customers nationwide.",
+      "custom": "Custom PC Division",
+      "custom_description": "Introduced custom PC building services and gaming system specialization.",
+      "enterprise": "Enterprise Solutions",
+      "enterprise_description": "Expanded into enterprise and professional workstation markets.",
+      "global": "Global Presence",
+      "global_description": "Now serving customers in over 50 countries with 24/7 support."
+    },
+    "stats": {
+      "years": "Years of Experience",
+      "customers": "Happy Customers",
+      "products": "Products Sold",
+      "uptime": "Uptime Guarantee"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "At AZERTY, we believe technology should empower everyone to achieve their goals.",
+      "commitment": "Our commitment goes beyond just selling products. We're your technology partners, offering expert advice, comprehensive support, and solutions tailored to your unique requirements.",
+      "expert_consultation": "Expert Consultation",
+      "custom_solutions": "Custom Solutions",
+      "lifetime_support": "Lifetime Support",
+      "building_technology_communities": "Building Technology Communities"
+    },
+    "cta": {
+      "title": "Ready to Join the AZERTY Family?",
+      "description": "Let's build something amazing together.",
+      "button": "Contact Us"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "We're here to answer all your questions and help you find the perfect computing solutions for your needs.",
+      "button": "Contact Us"
+    }
+  },
+  "Contact": {
+    "title": "Get in Touch",
+    "description": "Have questions about our products or need technical support? We're here to help! Reach out to our expert team and get the assistance you need.",
+    "contactInfo": {
+      "visit": "Visit Our Store",
+      "call": "Call Us",
+      "email": "Email Us",
+      "hours": "Business Hours",
+      "support": "24/7 Support"
+    },
+    "form": {
+      "title": "Send us a Message",
+      "description": "Fill out the form below and we'll get back to you within 24 hours.",
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "inquiryType": "Inquiry Type",
+      "subject": "Subject",
+      "message": "Message",
+      "namePlaceholder": "Your full name",
+      "emailPlaceholder": "your@email.com",
+      "phonePlaceholder": "(555) 123-4567",
+      "subjectPlaceholder": "Brief description of your inquiry",
+      "messagePlaceholder": "Please provide details about your inquiry...",
+      "sendButton": "Send Message",
+      "required": "*"
+    },
+    "inquiryTypes": {
+      "general": "General Inquiry",
+      "support": "Technical Support",
+      "sales": "Sales Question",
+      "warranty": "Warranty Claim",
+      "partnership": "Business Partnership"
+    },
+    "map": {
+      "title": "Interactive Map"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "returnPolicy": {
+        "question": "What are your return policies?",
+        "answer": "We offer a 30-day return policy on all products with original packaging and receipt."
+      },
+      "support": {
+        "question": "Do you offer technical support?",
+        "answer": "Yes! Our expert technicians provide free technical support for all purchased products."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all financing options through our partners."
+      }
+    }
+  },
+  "Login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your AZERTY account",
+    "backToHome": "Back to Home",
+    "email": "Email Address",
+    "password": "Password",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "orContinueWith": "Or continue with",
+    "noAccount": "Don't have an account?",
+    "signUpHere": "Sign up here",
+    "notifications": {
+      "loginSuccess": "Login Successful",
+      "welcomeBack": "Welcome back!",
+      "loginFailed": "Login Failed",
+      "loginFailedMessage": "Login failed. Please try again."
+    }
+  },
+  "SignUp": {
+    "title": "Create Account",
+    "subtitle": "Join AZERTY and start shopping",
+    "backToHome": "Back to Home",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "address": "Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstNamePlaceholder": "First name",
+    "lastNamePlaceholder": "Last name",
+    "emailPlaceholder": "Enter your email",
+    "phonePlaceholder": "Enter your phone number",
+    "addressPlaceholder": "Enter your address",
+    "passwordPlaceholder": "Create a password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "agreeToTerms": "I agree to the",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "subscribeNewsletter": "Subscribe to our newsletter for deals and updates",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInHere": "Sign in here",
+    "loginDivider": "LOGIN",
+    "notifications": {
+      "signupSuccess": "Signup Successful",
+      "accountCreated": "Your account has been created. Please log in.",
+      "signupFailed": "Signup Failed",
+      "signupFailedMessage": "Signup failed. Please try again.",
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
+  "Products": {
+    "title": "Our Products",
+    "subtitle": "Discover our complete range of premium technology products",
+    "searchLabel": "Search Products",
+    "searchPlaceholder": "Search...",
+    "categoriesTitle": "Categories",
+    "noCategoriesFound": "No categories found.",
+    "priceRangeTitle": "Price Range",
+    "minPlaceholder": "Min",
+    "maxPlaceholder": "Max",
+    "resetFilter": "Reset Filter",
+    "showingCount": "Showing {shown} of {total} products",
+    "loading": "Loading products...",
+    "empty": {
+      "title": "No products found",
+      "subtitle": "Try adjusting your search criteria or filters"
+    },
+    "clearAllFilters": "Clear All Filters",
+    "allProducts": "All Products",
+    "sortOptions": {
+      "featured": "Featured",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "rating": "Highest Rated",
+      "newest": "Newest First",
+      "name": "Name A-Z"
+    }
+  },
+  "PCBuilder": {
+    "title": "PC Builder",
+    "subtitle": {
+      "line1": "Build your dream PC with our interactive component selector.",
+      "line2": "Get real-time compatibility checks and expert recommendations."
+    },
+    "yourBuild": "Your Build",
+    "chooseCategory": "Choose {category}",
+    "compatibilityCheck": "Compatibility Check",
+    "allCompatible": "All components are compatible",
+    "estimatedPowerDraw": "Estimated Power Draw",
+    "totalPrice": "Total Price",
+    "addToCart": "Add to Cart",
+    "notifications": {
+      "addedToCart": "All selected parts have been added to your cart!"
+    },
+    "errors": {
+      "loadParts": "Failed to load parts for {category}"
+    },
+    "categories": {
+      "CPU": "Processor",
+      "motherboard": "Motherboard",
+      "ram": "Memory (RAM)",
+      "gpu": "Graphics Card",
+      "storage": "Storage",
+      "psu": "Power Supply",
+      "cooling": "Cooling",
+      "case": "PC Case"
+    },
+    "compatibilityIssues": {
+      "cpuMotherboard": "CPU and Motherboard sockets are incompatible",
+      "ramMotherboard": "RAM type is incompatible with Motherboard",
+      "psuInsufficient": "Power Supply may be insufficient. Recommended: {recommendedWattage}W",
+      "gpuCase": "Graphics Card may not fit in selected Case"
+    },
+    "recommendations": {
+      "titleFor": "Recommended for {category}"
+    },
+    "allOptionsFor": "All {category} Options",
+    "loading": "Loading PC parts..."
+  },
+  "Profile": {
+    "title": "My Profile",
+    "subtitle": "Manage your account settings and view your order history",
+    "loadingProfile": "Loading profile...",
+    "redirecting": "Redirecting to login...",
+    "sections": {
+      "profile": "Profile Info",
+      "orders": "Order History",
+      "notifications": "Notifications"
+    },
+    "profileInformation": "Profile Information",
+    "buttons": {
+      "editProfile": "Edit Profile",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "memberSince": "Member since {date}",
+    "ordersShort": "Orders",
+    "totalSpentShort": "Total Spent",
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "dateOfBirth": "Date of Birth"
+    },
+    "address": {
+      "title": "Address Information",
+      "street": "Street Address",
+      "city": "City",
+      "state": "State",
+      "zip": "ZIP Code"
+    },
+    "orders": {
+      "title": "Order History",
+      "total": "Total Orders",
+      "delivered": "Delivered",
+      "totalSpent": "Total Spent",
+      "active": "Active Orders",
+      "loading": "Loading orders...",
+      "loadFailed": "Failed to load orders",
+      "empty": "No orders found.",
+      "orderedOn": "Ordered on {date}",
+      "items": "Items:",
+      "product": "Product",
+      "tracking": "Tracking",
+      "estimatedDelivery": "Estimated Delivery",
+      "viewDetails": "View Details",
+      "invoice": "Invoice"
+    }
+  },
+  "Product": {
+    "loading": "Loading product...",
+    "notFound": {
+      "title": "Product Not Found",
+      "description": "The product you are looking for does not exist.",
+      "backHome": "Back to Home"
+    },
+    "breadcrumbs": {
+      "home": "Home",
+      "products": "Products",
+      "category": "Gaming PCs"
+    },
+    "share": "Share",
+    "saveAmount": "Save {amount} DA",
+    "descriptionFallback": "Experience ultimate gaming performance with our custom-built gaming PC. Featuring the latest components and cutting-edge technology, this system delivers exceptional performance for gaming and content creation.",
+    "stock": {
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock"
+    },
+    "adding": "Adding...",
+    "addToCartWithPrice": "Add to Cart - {price} DA",
+    "features": {
+      "title": "Key Features:",
+      "items": {
+        "highPerformance": "High-performance gaming components",
+        "rgb": "Custom RGB lighting system",
+        "optimized4k": "Optimized for 4K gaming",
+        "buildQuality": "Professional build quality"
+      }
+    },
+    "guarantees": {
+      "freeShipping": "Free Shipping",
+      "freeShippingSub": "Orders over 50000 DA",
+      "warranty": "2 Year Warranty",
+      "warrantySub": "Full coverage",
+      "returns": "30-Day Returns",
+      "returnsSub": "No questions asked"
+    },
+    "related": {
+      "title": "Complete Your Setup"
+    },
+    "reviews": {
+      "title": "Customer Reviews ({count})",
+      "writeTitle": "Write a Review",
+      "ratingLabel": "Rating",
+      "ratingSelected": "{rating} {rating, plural, one {star} other {stars}}",
+      "selectRating": "Select rating",
+      "yourReview": "Your Review",
+      "placeholder": "Share your experience with this product...",
+      "submitting": "Submitting...",
+      "submit": "Submit Review",
+      "recent": "Recent",
+      "verifiedPurchase": "Verified Purchase",
+      "emptyTitle": "No reviews yet",
+      "emptySubtitle": "Be the first to share your experience with this product!",
+      "loginRequiredTitle": "Login Required",
+      "loginRequiredDescription": "Please login to leave a review.",
+      "missingFieldsTitle": "Missing Information",
+      "missingFieldsDescription": "Please provide both a comment and rating.",
+      "submitSuccessTitle": "Review Submitted",
+      "submitSuccessDescription": "Your review has been submitted successfully!",
+      "submitFailedTitle": "Submission Failed",
+      "submitFailedDescription": "Failed to submit comment. Please try again."
+    },
+    "notifications": {
+      "addedToCart": {
+        "title": "Added to Cart",
+        "description": "{title} has been added to your cart!"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to add to cart. Please try again."
+      }
+    },
+    "errors": {
+      "loadFailed": "Failed to load product data"
+    }
+  },
+  "Navigation": {
+    "menu": {
+      "home": "Home",
+      "products": "Products",
+      "builder": "PC Builder",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "auth": {
+      "profile": "Profile",
+      "adminPanel": "Admin Panel",
+      "logout": "Logout",
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    },
+    "language": {
+      "switchTooltip": "Switch language",
+      "english": "English",
+      "french": "French",
+      "label": "Language"
+    }
+  },
+  "Cart": {
+    "title": "Shopping Cart",
+    "itemsInCart": "{count} {count, plural, one {item} other {items}} in your cart",
+    "empty": {
+      "title": "Your cart is empty",
+      "subtitle": "Looks like you haven't added any items to your cart yet"
+    },
+    "continueShopping": "Continue Shopping",
+    "each": "each",
+    "summary": {
+      "title": "Order Summary",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "Free",
+      "total": "Total",
+      "orderNow": "Order Now"
+    },
+    "notifications": {
+      "missingInfo": {
+        "title": "Missing Information",
+        "description": "Please fill in your name, phone, address, wilaya, and place."
+      },
+      "orderSuccess": {
+        "title": "Order Placed",
+        "description": "Your order has been placed successfully!"
+      },
+      "orderFailed": {
+        "title": "Order Failed",
+        "description": "Failed to place order. Please try again."
+      }
+    }
+  },
+  "Footer": {
+    "company": {
+      "description": "Your trusted destination for premium computers, components, and tech accessories. We've been serving the tech community for over 10 years."
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "about": "About Us",
+      "contact": "Contact",
+      "shipping": "Shipping Info",
+      "returns": "Returns",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "categories": {
+      "title": "Categories",
+      "gamingPCs": "Gaming PCs",
+      "laptops": "Laptops",
+      "components": "Components",
+      "accessories": "Accessories",
+      "monitors": "Monitors",
+      "peripherals": "Peripherals"
+    },
+    "contact": {
+      "title": "Contact Us"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "placeholder": "Your email",
+      "subscribe": "Subscribe"
+    },
+    "bottom": {
+      "copyright": "© 2025 AZERTY. All rights reserved.",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "support": "Support"
+    }
+  },
+  "CategoriesSlider": {
+    "title": "Shop by Category",
+    "subtitle": "Find exactly what you're looking for",
+    "categories": {
+      "processors": "Processors",
+      "graphicsCards": "Graphics Cards",
+      "storage": "Storage",
+      "gaming": "Gaming",
+      "laptops": "Laptops",
+      "audio": "Audio"
+    }
+  },
+  "MostRequestedProducts": {
+    "title": "Most Requested Products",
+    "subtitle": "Our customers' favorite picks",
+    "noProducts": "No products available.",
+    "viewMore": "View More Products"
+  },
+  "NewProducts": {
+    "title": "New Products",
+    "subtitle": "Latest arrivals in our store",
+    "noProducts": "No new products available.",
+    "newBadge": "New",
+    "viewAllNew": "View All New Products"
+  },
+  "ProductGallery": {
+    "title": "Our Product Showcase",
+    "subtitle": "Experience the quality and design of our premium products",
+    "gaming": {
+      "title": "Ultimate Gaming Experience",
+      "description": "High-performance gaming setups designed for competitive play",
+      "button": "Explore Gaming"
+    },
+    "workstation": {
+      "title": "Professional Workstations",
+      "description": "Powerful systems for creators, developers, and professionals",
+      "button": "View Workstations"
+    }
+  },
+  "BestDeals": {
+    "title": "Best Deals & Offers",
+    "subtitle": "Limited time offers you don't want to miss",
+    "noDeals": "No deals available.",
+    "discountBadge": "-20% OFF",
+    "timeLeft": "2 days left",
+    "viewAllDeals": "View All Deals"
+  },
+  "BrandsSection": {
+    "title": "Trusted Brands",
+    "subtitle": "We partner with the world's leading technology brands",
+    "description": "Authorized dealer for all major brands with full warranty support",
+    "viewAllBrands": "View All Brands"
+  },
+  "TestimonialsSlider": {
+    "title": "What Our Customers Say",
+    "subtitle": "Real reviews from real customers"
+  }
+}

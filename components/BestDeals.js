@@ -1,23 +1,26 @@
 'use client';
 
 import { Star, ShoppingCart, Clock } from 'lucide-react';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 export default function BestDeals({ products = [] }) {
+  const t = useTranslations('BestDeals');
+  
   return (
     <section className="py-16 px-4" style={{ backgroundColor: 'white' }}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-            Best Deals & Offers
+            {t('title')}
           </h2>
           <p className="text-lg text-gray-600">
-            Limited time offers you don't want to miss
+            {t('subtitle')}
           </p>
         </div>
 
         {products.length === 0 ? (
-          <div className="text-center py-12 text-lg text-gray-600">No deals available.</div>
+          <div className="text-center py-12 text-lg text-gray-600">{t('noDeals')}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {products.map((product) => {
@@ -34,14 +37,14 @@ export default function BestDeals({ products = [] }) {
                     {/* Discount Badge */}
                     <div className="absolute top-3 left-3 z-10">
                       <span className="px-2 py-1 text-xs font-semibold text-white rounded-full bg-red-500">
-                        -20% OFF
+                        {t('discountBadge')}
                       </span>
                     </div>
 
                     {/* Time Left Badge */}
                     <div className="absolute top-3 right-3 flex items-center bg-white rounded-full px-2 py-1 text-xs z-10">
                       <Clock className="h-3 w-3 mr-1 text-red-500" />
-                      <span style={{ color: '#2e2e2e' }}>2 days left</span>
+                      <span style={{ color: '#2e2e2e' }}>{t('timeLeft')}</span>
                     </div>
 
                     {/* Shopping Cart Button */}
@@ -82,11 +85,13 @@ export default function BestDeals({ products = [] }) {
         )}
 
         <div className="text-center">
-          <button 
-            className="px-6 lg:px-8 py-2 lg:py-3 text-base lg:text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 bg-[#4E8786] text-white hover:bg-primary-hover"
-          >
-            View All Deals
-          </button>
+          <Link href="/products">
+            <button 
+              className="px-6 lg:px-8 py-2 lg:py-3 text-base lg:text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 bg-[#4E8786] text-white hover:bg-primary-hover"
+            >
+              {t('viewAllDeals')}
+            </button>
+          </Link>
         </div>
       </div>
     </section>

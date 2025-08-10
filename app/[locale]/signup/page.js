@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { signup } from '@/lib/api';
 import { showNotification } from '@/components/NotificationSystem';
+import { useTranslations } from 'next-intl';
 
 export default function SignUpPage() {
+  const t = useTranslations('SignUp');
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,10 +32,10 @@ export default function SignUpPage() {
     e.preventDefault();
     setError('');
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('notifications.passwordMismatch'));
       showNotification({
-        title: 'Signup Failed',
-        description: 'Passwords do not match',
+        title: t('notifications.signupFailed'),
+        description: t('notifications.passwordMismatch'),
         variant: 'destructive',
       });
       return;
@@ -48,16 +51,16 @@ export default function SignUpPage() {
         address: formData.address,
       });
       showNotification({
-        title: 'Signup Successful',
-        description: 'Your account has been created. Please log in.',
+        title: t('notifications.signupSuccess'),
+        description: t('notifications.accountCreated'),
         variant: 'default',
       });
       window.location.href = '/login';
     } catch (err) {
-      setError(err?.message || 'Signup failed. Please try again.');
+      setError(err?.message || t('notifications.signupFailedMessage'));
       showNotification({
-        title: 'Signup Failed',
-        description: err?.message || 'Signup failed. Please try again.',
+        title: t('notifications.signupFailed'),
+        description: err?.message || t('notifications.signupFailedMessage'),
         variant: 'destructive',
       });
     } finally {
@@ -83,7 +86,7 @@ export default function SignUpPage() {
           <div className="mb-6">
             <Link href="/" className="inline-flex items-center text-gray-600 hover:text-gray-800 transition-colors">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+              {t('backToHome')}
             </Link>
           </div>
 
@@ -91,10 +94,10 @@ export default function SignUpPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2" style={{ color: '#2e2e2e' }}>
-                Create Account
+                {t('title')}
               </h1>
               <p className="text-gray-600">
-                Join TechHub and start shopping
+                {t('subtitle')}
               </p>
             </div>
 
@@ -106,7 +109,7 @@ export default function SignUpPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                    First Name
+                    {t('firstName')}
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -117,14 +120,14 @@ export default function SignUpPage() {
                       value={formData.firstName}
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                      placeholder="First name"
+                      placeholder={t('firstNamePlaceholder')}
                       required
                     />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="lastName" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                    Last Name
+                    {t('lastName')}
                   </label>
                   <input
                     type="text"
@@ -133,7 +136,7 @@ export default function SignUpPage() {
                     value={formData.lastName}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                    placeholder="Last name"
+                    placeholder={t('lastNamePlaceholder')}
                     required
                   />
                 </div>
@@ -142,7 +145,7 @@ export default function SignUpPage() {
               {/* Email Field */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Email Address
+                  {t('email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -153,7 +156,7 @@ export default function SignUpPage() {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                    placeholder="Enter your email"
+                    placeholder={t('emailPlaceholder')}
                     required
                   />
                 </div>
@@ -162,7 +165,7 @@ export default function SignUpPage() {
               {/* Phone Field */}
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Phone Number
+                  {t('phone')}
                 </label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -173,7 +176,7 @@ export default function SignUpPage() {
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                    placeholder="Enter your phone number"
+                    placeholder={t('phonePlaceholder')}
                     required
                   />
                 </div>
@@ -182,7 +185,7 @@ export default function SignUpPage() {
               {/* Address Field */}
               <div>
                 <label htmlFor="address" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Address
+                  {t('address')}
                 </label>
                 <input
                   type="text"
@@ -191,7 +194,7 @@ export default function SignUpPage() {
                   value={formData.address}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                  placeholder="Enter your address"
+                  placeholder={t('addressPlaceholder')}
                   required
                 />
               </div>
@@ -199,7 +202,7 @@ export default function SignUpPage() {
               {/* Password Field */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Password
+                  {t('password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -210,7 +213,7 @@ export default function SignUpPage() {
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                    placeholder="Create a password"
+                    placeholder={t('passwordPlaceholder')}
                     required
                   />
                   <button
@@ -226,7 +229,7 @@ export default function SignUpPage() {
               {/* Confirm Password Field */}
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Confirm Password
+                  {t('confirmPassword')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -237,7 +240,7 @@ export default function SignUpPage() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
-                    placeholder="Confirm your password"
+                    placeholder={t('confirmPasswordPlaceholder')}
                     required
                   />
                   <button
@@ -263,13 +266,13 @@ export default function SignUpPage() {
                     required
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    I agree to the{' '}
+                    {t('agreeToTerms')}{' '}
                     <Link href="/terms" className="hover:underline" style={{ color: '#4E8786' }}>
-                      Terms of Service
+                      {t('termsOfService')}
                     </Link>{' '}
-                    and{' '}
+                    {t('and')}{' '}
                     <Link href="/privacy" className="hover:underline" style={{ color: '#4E8786' }}>
-                      Privacy Policy
+                      {t('privacyPolicy')}
                     </Link>
                   </span>
                 </label>
@@ -283,7 +286,7 @@ export default function SignUpPage() {
                     style={{ accentColor: '#4E8786' }}
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    Subscribe to our newsletter for deals and updates
+                    {t('subscribeNewsletter')}
                   </span>
                 </label>
               </div>
@@ -294,7 +297,7 @@ export default function SignUpPage() {
                 className="w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 bg-[#4E8786] text-white hover:bg-primary-hover disabled:opacity-60"
                 disabled={loading}
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? t('creatingAccount') : t('createAccount')}
               </button>
 
               {/* Divider */}
@@ -303,7 +306,7 @@ export default function SignUpPage() {
                   <div className="w-full border-t border-gray-300"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">LOGIN</span>
+                  <span className="px-2 bg-white text-gray-500">{t('loginDivider')}</span>
                 </div>
               </div>
 
@@ -313,9 +316,9 @@ export default function SignUpPage() {
             {/* Login Link */}
             <div className="mt-8 text-center">
               <p className="text-gray-600">
-                Already have an account?{' '}
+                {t('alreadyHaveAccount')}{' '}
                 <Link href="/login" className="font-semibold hover:underline" style={{ color: '#4E8786' }}>
-                  Sign in here
+                  {t('signInHere')}
                 </Link>
               </p>
             </div>

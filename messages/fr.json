@@ -1,0 +1,523 @@
+{
+  "HomePage": {
+    "title": "Bonjour le monde!",
+    "about": "Aller à la page à propos",
+    "loading": "Chargement...",
+    "loadingError": "Échec du chargement des données d'accueil."
+  },
+  "About": {
+    "title": "À propos de AZERTY",
+    "description": "Nous sommes passionnés par la technologie et déterminés à vous aider à trouver les solutions de calcul parfaites pour vos besoins. Des amateurs de jeux aux créateurs professionnels, nous avons tout pour vous.",
+    "button": "Notre Histoire",
+    "values": {
+      "title": "Nos Valeurs",
+      "description": "Ces principes guident tout ce que nous faisons et influencent la façon dont nous servons notre communauté",
+      "customer": "Client Premier",
+      "customer_description": "Chaque décision que nous prenons est centrée sur la fourniture de la meilleure expérience possible pour nos clients.",
+      "innovation": "Innovation",
+      "innovation_description": "Nous restons en avance sur les tendances technologiques pour vous apporter les derniers produits et les plus avancés.",
+      "quality": "Assurance de Qualité",
+      "quality_description": "Nous testons chaque produit pour garantir qu'il répond à nos hautes normes avant de vous parvenir.",
+      "global": "Portée Mondiale",
+      "global_description": "Servant nos clients dans plus de 50 pays avec un support 24/7 et des services locaux dans plusieurs langues."
+    },
+    "timeline": {
+      "title": "Notre Parcours",
+      "description": "Une décennie de croissance, d'innovation et de succès client",
+      "company": "Création de l'Entreprise",
+      "company_description": "Commencé comme un petit atelier de réparation de matériel informatique avec une vision de rendre la technologie accessible à tous.",
+      "location": "Premier Point de Vente",
+      "location_description": "Ouverture de notre magasin phare à Silicon Valley, devenant un point de rendez-vous technologique local.",
+      "online": "Expansion en ligne",
+      "online_description": "Lancement de notre plateforme e-commerce, atteignant les clients à travers le pays.",
+      "custom": "Division des PC Personnalisés",
+      "custom_description": "Introduction de services de construction de PC personnalisés et de spécialisation dans les systèmes de jeux.",
+      "enterprise": "Solutions d'Entreprise",
+      "enterprise_description": "Expansion dans les marchés d'entreprise et de stations de travail professionnelles.",
+      "global": "Présence Mondiale",
+      "global_description": "Maintenant, nous servons nos clients dans plus de 50 pays avec un support 24/7."
+    },
+    "stats": {
+      "years": "Années d'Expérience",
+      "customers": "Clients Satisfaits",
+      "products": "Produits Vendus",
+      "uptime": "Garantie de Disponibilité"
+    },
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Chez AZERTY, nous croyons que la technologie doit permettre à tous de réaliser leurs objectifs.",
+      "commitment": "Notre engagement va au-delà de la simple vente de produits. Nous sommes vos partenaires technologiques, offrant conseils experts, un support complet et des solutions adaptées à vos besoins uniques.",
+      "expert_consultation": "Consultation Expert",
+      "custom_solutions": "Solutions Personnalisées",
+      "lifetime_support": "Support de Vie",
+      "building_technology_communities": "Construction de Communautés Technologiques"
+    },
+    "cta": {
+      "title": "Prêt à rejoindre la Famille AZERTY?",
+      "description": "Faisons quelque chose de génial ensemble.",
+      "button": "Contactez-nous"
+    },
+    "contact": {
+      "title": "Contactez-nous",
+      "description": "Nous sommes là pour répondre à toutes vos questions et vous aider à trouver les solutions de calcul parfaites pour vos besoins.",
+      "button": "Contactez-nous"
+    }
+  },
+  "Contact": {
+    "title": "Contactez-nous",
+    "description": "Vous avez des questions sur nos produits ou besoin d'un support technique ? Nous sommes là pour vous aider ! Contactez notre équipe d'experts et obtenez l'assistance dont vous avez besoin.",
+    "contactInfo": {
+      "visit": "Visitez Notre Magasin",
+      "call": "Appelez-nous",
+      "email": "Envoyez-nous un Email",
+      "hours": "Heures d'Ouverture",
+      "support": "Support 24/7"
+    },
+    "form": {
+      "title": "Envoyez-nous un Message",
+      "description": "Remplissez le formulaire ci-dessous et nous vous répondrons dans les 24 heures.",
+      "name": "Nom Complet",
+      "email": "Adresse Email",
+      "phone": "Numéro de Téléphone",
+      "inquiryType": "Type de Demande",
+      "subject": "Sujet",
+      "message": "Message",
+      "namePlaceholder": "Votre nom complet",
+      "emailPlaceholder": "votre@email.com",
+      "phonePlaceholder": "(555) 123-4567",
+      "subjectPlaceholder": "Brève description de votre demande",
+      "messagePlaceholder": "Veuillez fournir des détails sur votre demande...",
+      "sendButton": "Envoyer le Message",
+      "required": "*"
+    },
+    "inquiryTypes": {
+      "general": "Demande Générale",
+      "support": "Support Technique",
+      "sales": "Question de Vente",
+      "warranty": "Réclamation de Garantie",
+      "partnership": "Partenariat Commercial"
+    },
+    "map": {
+      "title": "Carte Interactive"
+    },
+    "faq": {
+      "title": "Questions Fréquemment Posées",
+      "returnPolicy": {
+        "question": "Quelles sont vos politiques de retour ?",
+        "answer": "Nous offrons une politique de retour de 30 jours sur tous les produits avec l'emballage d'origine et le reçu."
+      },
+      "support": {
+        "question": "Offrez-vous un support technique ?",
+        "answer": "Oui ! Nos techniciens experts fournissent un support technique gratuit pour tous les produits achetés."
+      },
+      "payment": {
+        "question": "Quels modes de paiement acceptez-vous ?",
+        "answer": "Nous acceptons toutes les options de financement par l'intermédiaire de nos partenaires."
+      }
+    }
+  },
+  "Login": {
+    "title": "Bon Retour",
+    "subtitle": "Connectez-vous à votre compte AZERTY",
+    "backToHome": "Retour à l'Accueil",
+    "email": "Adresse Email",
+    "password": "Mot de Passe",
+    "emailPlaceholder": "Entrez votre email",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se Connecter",
+    "signingIn": "Connexion...",
+    "orContinueWith": "Ou continuer avec",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUpHere": "Inscrivez-vous ici",
+    "notifications": {
+      "loginSuccess": "Connexion Réussie",
+      "welcomeBack": "Bon retour !",
+      "loginFailed": "Échec de la Connexion",
+      "loginFailedMessage": "Échec de la connexion. Veuillez réessayer."
+    }
+  },
+  "SignUp": {
+    "title": "Créer un Compte",
+    "subtitle": "Rejoignez AZERTY et commencez vos achats",
+    "backToHome": "Retour à l'Accueil",
+    "firstName": "Prénom",
+    "lastName": "Nom de Famille",
+    "email": "Adresse Email",
+    "phone": "Numéro de Téléphone",
+    "address": "Adresse",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "firstNamePlaceholder": "Prénom",
+    "lastNamePlaceholder": "Nom de famille",
+    "emailPlaceholder": "Entrez votre email",
+    "phonePlaceholder": "Entrez votre numéro de téléphone",
+    "addressPlaceholder": "Entrez votre adresse",
+    "passwordPlaceholder": "Créez un mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+    "agreeToTerms": "J'accepte les",
+    "termsOfService": "Conditions d'Utilisation",
+    "and": "et la",
+    "privacyPolicy": "Politique de Confidentialité",
+    "subscribeNewsletter": "S'abonner à notre newsletter pour les offres et mises à jour",
+    "createAccount": "Créer un Compte",
+    "creatingAccount": "Création du Compte...",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signInHere": "Connectez-vous ici",
+    "loginDivider": "CONNEXION",
+    "notifications": {
+      "signupSuccess": "Inscription Réussie",
+      "accountCreated": "Votre compte a été créé. Veuillez vous connecter.",
+      "signupFailed": "Échec de l'Inscription",
+      "signupFailedMessage": "Échec de l'inscription. Veuillez réessayer.",
+      "passwordMismatch": "Les mots de passe ne correspondent pas"
+    }
+  },
+  "Products": {
+    "title": "Nos Produits",
+    "subtitle": "Découvrez notre gamme complète de produits technologiques haut de gamme",
+    "searchLabel": "Rechercher des produits",
+    "searchPlaceholder": "Rechercher...",
+    "categoriesTitle": "Catégories",
+    "noCategoriesFound": "Aucune catégorie trouvée.",
+    "priceRangeTitle": "Fourchette de prix",
+    "minPlaceholder": "Min",
+    "maxPlaceholder": "Max",
+    "resetFilter": "Réinitialiser le filtre",
+    "showingCount": "Affichage de {shown} sur {total} produits",
+    "loading": "Chargement des produits...",
+    "empty": {
+      "title": "Aucun produit trouvé",
+      "subtitle": "Essayez d'ajuster vos critères de recherche ou vos filtres"
+    },
+    "clearAllFilters": "Effacer tous les filtres",
+    "allProducts": "Tous les produits",
+    "sortOptions": {
+      "featured": "En vedette",
+      "priceLow": "Prix : du plus bas au plus élevé",
+      "priceHigh": "Prix : du plus élevé au plus bas",
+      "rating": "Les mieux notés",
+      "newest": "Les plus récents",
+      "name": "Nom A-Z"
+    }
+  },
+  "PCBuilder": {
+    "title": "Assembleur PC",
+    "subtitle": {
+      "line1": "Construisez le PC de vos rêves avec notre sélecteur de composants interactif.",
+      "line2": "Obtenez des vérifications de compatibilité en temps réel et des recommandations d'experts."
+    },
+    "yourBuild": "Votre Configuration",
+    "chooseCategory": "Choisir {category}",
+    "compatibilityCheck": "Vérification de compatibilité",
+    "allCompatible": "Tous les composants sont compatibles",
+    "estimatedPowerDraw": "Consommation électrique estimée",
+    "totalPrice": "Prix total",
+    "addToCart": "Ajouter au panier",
+    "notifications": {
+      "addedToCart": "Toutes les pièces sélectionnées ont été ajoutées à votre panier !"
+    },
+    "errors": {
+      "loadParts": "Échec du chargement des pièces pour {category}"
+    },
+    "categories": {
+      "CPU": "Processeur",
+      "motherboard": "Carte mère",
+      "ram": "Mémoire (RAM)",
+      "gpu": "Carte graphique",
+      "storage": "Stockage",
+      "psu": "Alimentation",
+      "cooling": "Refroidissement",
+      "case": "Boîtier PC"
+    },
+    "compatibilityIssues": {
+      "cpuMotherboard": "Les sockets du CPU et de la carte mère sont incompatibles",
+      "ramMotherboard": "Le type de RAM est incompatible avec la carte mère",
+      "psuInsufficient": "L'alimentation peut être insuffisante. Recommandé : {recommendedWattage}W",
+      "gpuCase": "La carte graphique peut ne pas rentrer dans le boîtier sélectionné"
+    },
+    "recommendations": {
+      "titleFor": "Recommandé pour {category}"
+    },
+    "allOptionsFor": "Toutes les options {category}",
+    "loading": "Chargement des pièces de PC..."
+  },
+  "Profile": {
+    "title": "Mon Profil",
+    "subtitle": "Gérez les paramètres de votre compte et consultez votre historique de commandes",
+    "loadingProfile": "Chargement du profil...",
+    "redirecting": "Redirection vers la connexion...",
+    "sections": {
+      "profile": "Infos du profil",
+      "orders": "Historique des commandes",
+      "notifications": "Notifications"
+    },
+    "profileInformation": "Informations du profil",
+    "buttons": {
+      "editProfile": "Modifier le profil",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
+    "memberSince": "Membre depuis le {date}",
+    "ordersShort": "Commandes",
+    "totalSpentShort": "Total dépensé",
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "email": "Adresse email",
+      "phone": "Numéro de téléphone",
+      "dateOfBirth": "Date de naissance"
+    },
+    "address": {
+      "title": "Informations d'adresse",
+      "street": "Adresse",
+      "city": "Ville",
+      "state": "État / Région",
+      "zip": "Code postal"
+    },
+    "orders": {
+      "title": "Historique des commandes",
+      "total": "Commandes totales",
+      "delivered": "Livrées",
+      "totalSpent": "Total dépensé",
+      "active": "Commandes actives",
+      "loading": "Chargement des commandes...",
+      "loadFailed": "Échec du chargement des commandes",
+      "empty": "Aucune commande trouvée.",
+      "orderedOn": "Commandé le {date}",
+      "items": "Articles :",
+      "product": "Produit",
+      "tracking": "Suivi",
+      "estimatedDelivery": "Livraison estimée",
+      "viewDetails": "Voir les détails",
+      "invoice": "Facture"
+    }
+  },
+  "Product": {
+    "loading": "Chargement du produit...",
+    "notFound": {
+      "title": "Produit introuvable",
+      "description": "Le produit que vous recherchez n'existe pas.",
+      "backHome": "Retour à l'accueil"
+    },
+    "breadcrumbs": {
+      "home": "Accueil",
+      "products": "Produits",
+      "category": "PC de jeu"
+    },
+    "share": "Partager",
+    "saveAmount": "Économisez {amount} DA",
+    "descriptionFallback": "Bénéficiez de performances de jeu ultimes avec notre PC de jeu personnalisé. Équipé des derniers composants et d'une technologie de pointe, ce système offre des performances exceptionnelles pour le jeu et la création de contenu.",
+    "stock": {
+      "inStock": "En stock",
+      "outOfStock": "Rupture de stock"
+    },
+    "adding": "Ajout...",
+    "addToCartWithPrice": "Ajouter au panier - {price} DA",
+    "features": {
+      "title": "Caractéristiques clés :",
+      "items": {
+        "highPerformance": "Composants de jeu haute performance",
+        "rgb": "Système d'éclairage RGB personnalisé",
+        "optimized4k": "Optimisé pour le jeu en 4K",
+        "buildQuality": "Qualité de fabrication professionnelle"
+      }
+    },
+    "guarantees": {
+      "freeShipping": "Livraison gratuite",
+      "freeShippingSub": "Commandes de plus de 50000 DA",
+      "warranty": "Garantie 2 ans",
+      "warrantySub": "Couverture complète",
+      "returns": "Retours sous 30 jours",
+      "returnsSub": "Sans poser de questions"
+    },
+    "related": {
+      "title": "Complétez votre configuration"
+    },
+    "reviews": {
+      "title": "Avis des clients ({count})",
+      "writeTitle": "Rédiger un avis",
+      "ratingLabel": "Note",
+      "ratingSelected": "{rating} {rating, plural, one {étoile} other {étoiles}}",
+      "selectRating": "Sélectionner une note",
+      "yourReview": "Votre avis",
+      "placeholder": "Partagez votre expérience avec ce produit...",
+      "submitting": "Envoi...",
+      "submit": "Envoyer l'avis",
+      "recent": "Récent",
+      "verifiedPurchase": "Achat vérifié",
+      "emptyTitle": "Pas encore d'avis",
+      "emptySubtitle": "Soyez le premier à partager votre expérience avec ce produit !",
+      "loginRequiredTitle": "Connexion requise",
+      "loginRequiredDescription": "Veuillez vous connecter pour laisser un avis.",
+      "missingFieldsTitle": "Informations manquantes",
+      "missingFieldsDescription": "Veuillez fournir à la fois un commentaire et une note.",
+      "submitSuccessTitle": "Avis envoyé",
+      "submitSuccessDescription": "Votre avis a été envoyé avec succès !",
+      "submitFailedTitle": "Échec de l'envoi",
+      "submitFailedDescription": "Échec de l'envoi du commentaire. Veuillez réessayer."
+    },
+    "notifications": {
+      "addedToCart": {
+        "title": "Ajouté au panier",
+        "description": "{title} a été ajouté à votre panier !"
+      },
+      "error": {
+        "title": "Erreur",
+        "description": "Échec de l'ajout au panier. Veuillez réessayer."
+      }
+    },
+    "errors": {
+      "loadFailed": "Échec du chargement des données du produit"
+    }
+  },
+  "Navigation": {
+    "menu": {
+      "home": "Accueil",
+      "products": "Produits",
+      "builder": "Assembleur PC",
+      "about": "À propos",
+      "contact": "Contact"
+    },
+    "auth": {
+      "profile": "Profil",
+      "adminPanel": "Panneau d'administration",
+      "logout": "Se déconnecter",
+      "signIn": "Se connecter",
+      "signUp": "S'inscrire"
+    },
+    "language": {
+      "switchTooltip": "Changer de langue",
+      "english": "Anglais",
+      "french": "Français",
+      "label": "Langue"
+    }
+  },
+  "Cart": {
+    "title": "Panier",
+    "itemsInCart": "{count} {count, plural, one {article} other {articles}} dans votre panier",
+    "empty": {
+      "title": "Votre panier est vide",
+      "subtitle": "On dirait que vous n'avez pas encore ajouté d'articles à votre panier"
+    },
+    "continueShopping": "Continuer vos achats",
+    "each": "chacun",
+    "summary": {
+      "title": "Récapitulatif de la commande",
+      "subtotal": "Sous-total",
+      "shipping": "Livraison",
+      "free": "Gratuite",
+      "total": "Total",
+      "orderNow": "Commander"
+    },
+    "notifications": {
+      "missingInfo": {
+        "title": "Informations manquantes",
+        "description": "Veuillez renseigner votre nom, téléphone, adresse, wilaya et lieu."
+      },
+      "orderSuccess": {
+        "title": "Commande passée",
+        "description": "Votre commande a été passée avec succès !"
+      },
+      "orderFailed": {
+        "title": "Échec de la commande",
+        "description": "Échec de la commande. Veuillez réessayer."
+      }
+    }
+  },
+  "Footer": {
+    "company": {
+      "description": "Votre destination de confiance pour les ordinateurs haut de gamme, les composants et les accessoires technologiques. Nous servons la communauté technologique depuis plus de 10 ans."
+    },
+    "quickLinks": {
+      "title": "Liens rapides",
+      "about": "À propos",
+      "contact": "Contact",
+      "shipping": "Infos livraison",
+      "returns": "Retours",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation"
+    },
+    "categories": {
+      "title": "Catégories",
+      "gamingPCs": "PC de jeu",
+      "laptops": "Ordinateurs portables",
+      "components": "Composants",
+      "accessories": "Accessoires",
+      "monitors": "Moniteurs",
+      "peripherals": "Périphériques"
+    },
+    "contact": {
+      "title": "Contactez-nous"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "placeholder": "Votre email",
+      "subscribe": "S'abonner"
+    },
+    "bottom": {
+      "copyright": "© 2025 AZERTY. Tous droits réservés.",
+      "privacy": "Confidentialité",
+      "terms": "Conditions",
+      "support": "Support"
+    }
+  },
+  "CategoriesSlider": {
+    "title": "Acheter par catégorie",
+    "subtitle": "Trouvez exactement ce que vous cherchez",
+    "categories": {
+      "processors": "Processeurs",
+      "graphicsCards": "Cartes graphiques",
+      "storage": "Stockage",
+      "gaming": "Gaming",
+      "laptops": "Ordinateurs portables",
+      "audio": "Audio"
+    }
+  },
+  "MostRequestedProducts": {
+    "title": "Produits les plus demandés",
+    "subtitle": "Les choix favoris de nos clients",
+    "noProducts": "Aucun produit disponible.",
+    "viewMore": "Voir plus de produits"
+  },
+  "NewProducts": {
+    "title": "Nouveaux produits",
+    "subtitle": "Dernières arrivées dans notre magasin",
+    "noProducts": "Aucun nouveau produit disponible.",
+    "newBadge": "Nouveau",
+    "viewAllNew": "Voir tous les nouveaux produits"
+  },
+  "ProductGallery": {
+    "title": "Vitrine de nos produits",
+    "subtitle": "Découvrez la qualité et le design de nos produits haut de gamme",
+    "gaming": {
+      "title": "Expérience de jeu ultime",
+      "description": "Configurations de jeu haute performance conçues pour le jeu compétitif",
+      "button": "Explorer le gaming"
+    },
+    "workstation": {
+      "title": "Stations de travail professionnelles",
+      "description": "Systèmes puissants pour créateurs, développeurs et professionnels",
+      "button": "Voir les stations de travail"
+    }
+  },
+  "BestDeals": {
+    "title": "Meilleures offres et promotions",
+    "subtitle": "Offres à durée limitée à ne pas manquer",
+    "noDeals": "Aucune offre disponible.",
+    "discountBadge": "-20% DE REMISE",
+    "timeLeft": "2 jours restants",
+    "viewAllDeals": "Voir toutes les offres"
+  },
+  "BrandsSection": {
+    "title": "Marques de confiance",
+    "subtitle": "Nous collaborons avec les principales marques technologiques mondiales",
+    "description": "Revendeur autorisé pour toutes les grandes marques avec support de garantie complète",
+    "viewAllBrands": "Voir toutes les marques"
+  },
+  "TestimonialsSlider": {
+    "title": "Ce que disent nos clients",
+    "subtitle": "Avis réels de vrais clients"
+  }
+}

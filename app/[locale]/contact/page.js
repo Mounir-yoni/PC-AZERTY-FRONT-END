@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, MessageSquare, User, Building } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { useTranslations } from 'next-intl';
 
 export default function ContactPage() {
+  const t = useTranslations('Contact');
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,36 +35,36 @@ export default function ContactPage() {
   const contactInfo = [
     {
       icon: MapPin,
-      title: 'Visit Our Store',
+      title: t('contactInfo.visit'),
       details: ['06 rue Ounnoughi Benghadfa', 'Ouled Brahem'],
       color: '#669999'
     },
     {
       icon: Phone,
-      title: 'Call Us',
+      title: t('contactInfo.call'),
       details: ['0772725573', '0667294070'],
       color: '#669999'
     },
     {
       icon: Mail,
-      title: 'Email Us',
+      title: t('contactInfo.email'),
       details: ['azertycomputerdz@gmail.com', ''],
       color: '#669999'
     },
     {
       icon: Clock,
-      title: 'Business Hours',
-      details: ['24/7 Support'],
+      title: t('contactInfo.hours'),
+      details: [t('contactInfo.support')],
       color: '#669999'
     }
   ];
 
   const inquiryTypes = [
-    { value: 'general', label: 'General Inquiry' },
-    { value: 'support', label: 'Technical Support' },
-    { value: 'sales', label: 'Sales Question' },
-    { value: 'warranty', label: 'Warranty Claim' },
-    { value: 'partnership', label: 'Business Partnership' }
+    { value: 'general', label: t('inquiryTypes.general') },
+    { value: 'support', label: t('inquiryTypes.support') },
+    { value: 'sales', label: t('inquiryTypes.sales') },
+    { value: 'warranty', label: t('inquiryTypes.warranty') },
+    { value: 'partnership', label: t('inquiryTypes.partnership') }
   ];
 
   return (
@@ -72,11 +75,10 @@ export default function ContactPage() {
         {/* Header Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-            Get in Touch
+            {t('title')}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Have questions about our products or need technical support? We're here to help! 
-            Reach out to our expert team and get the assistance you need.
+            {t('description')}
           </p>
         </div>
 
@@ -100,9 +102,11 @@ export default function ContactPage() {
                 </h3>
                 <div className="space-y-1">
                   {info.details.map((detail, idx) => (
-                    <p key={idx} className="text-gray-600">
-                      {detail}
-                    </p>
+                    detail && (
+                      <p key={idx} className="text-gray-600">
+                        {detail}
+                      </p>
+                    )
                   ))}
                 </div>
               </div>
@@ -115,10 +119,10 @@ export default function ContactPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="mb-8">
               <h2 className="text-3xl font-bold mb-4" style={{ color: '#2e2e2e' }}>
-                Send us a Message
+                {t('form.title')}
               </h2>
               <p className="text-gray-600">
-                Fill out the form below and we'll get back to you within 24 hours.
+                {t('form.description')}
               </p>
             </div>
 
@@ -127,7 +131,7 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                    Full Name *
+                    {t('form.name')} {t('form.required')}
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -139,14 +143,14 @@ export default function ContactPage() {
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
                       style={{ '--tw-ring-color': '#669999' }}
-                      placeholder="Your full name"
+                      placeholder={t('form.namePlaceholder')}
                       required
                     />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                    Email Address *
+                    {t('form.email')} {t('form.required')}
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -158,7 +162,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
                       style={{ '--tw-ring-color': '#669999' }}
-                      placeholder="your@email.com"
+                      placeholder={t('form.emailPlaceholder')}
                       required
                     />
                   </div>
@@ -169,7 +173,7 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                    Phone Number
+                    {t('form.phone')}
                   </label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -181,13 +185,13 @@ export default function ContactPage() {
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
                       style={{ '--tw-ring-color': '#669999' }}
-                      placeholder="(555) 123-4567"
+                      placeholder={t('form.phonePlaceholder')}
                     />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="inquiryType" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                    Inquiry Type
+                    {t('form.inquiryType')}
                   </label>
                   <div className="relative">
                     <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -212,7 +216,7 @@ export default function ContactPage() {
               {/* Subject */}
               <div>
                 <label htmlFor="subject" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Subject *
+                  {t('form.subject')} {t('form.required')}
                 </label>
                 <input
                   type="text"
@@ -222,7 +226,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all"
                   style={{ '--tw-ring-color': '#669999' }}
-                  placeholder="Brief description of your inquiry"
+                  placeholder={t('form.subjectPlaceholder')}
                   required
                 />
               </div>
@@ -230,7 +234,7 @@ export default function ContactPage() {
               {/* Message */}
               <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
-                  Message *
+                  {t('form.message')} {t('form.required')}
                 </label>
                 <div className="relative">
                   <MessageSquare className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -242,7 +246,7 @@ export default function ContactPage() {
                     rows="6"
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent transition-all resize-none"
                     style={{ '--tw-ring-color': '#669999' }}
-                    placeholder="Please provide details about your inquiry..."
+                    placeholder={t('form.messagePlaceholder')}
                     required
                   />
                 </div>
@@ -257,7 +261,7 @@ export default function ContactPage() {
                 onMouseLeave={(e) => e.target.style.backgroundColor = '#669999'}
               >
                 <Send className="h-5 w-5" />
-                <span>Send Message</span>
+                <span>{t('form.sendButton')}</span>
               </button>
             </form>
           </div>
@@ -269,7 +273,7 @@ export default function ContactPage() {
               <div className="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 mx-auto mb-4" style={{ color: '#669999' }} />
-                  <p className="text-gray-600 font-medium">Interactive Map</p>
+                  <p className="text-gray-600 font-medium">{t('map.title')}</p>
                   <p className="text-sm text-gray-500">06 rue Ounnoughi Benghadfa, Ouled Brahem</p>
                 </div>
               </div>
@@ -278,31 +282,31 @@ export default function ContactPage() {
             {/* FAQ Section */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <h3 className="text-2xl font-bold mb-6" style={{ color: '#2e2e2e' }}>
-                Frequently Asked Questions
+                {t('faq.title')}
               </h3>
               <div className="space-y-4">
                 <div className="border-b border-gray-200 pb-4">
                   <h4 className="font-semibold mb-2" style={{ color: '#669999' }}>
-                    What are your return policies?
+                    {t('faq.returnPolicy.question')}
                   </h4>
                   <p className="text-gray-600 text-sm">
-                    We offer a 30-day return policy on all products with original packaging and receipt.
+                    {t('faq.returnPolicy.answer')}
                   </p>
                 </div>
                 <div className="border-b border-gray-200 pb-4">
                   <h4 className="font-semibold mb-2" style={{ color: '#669999' }}>
-                    Do you offer technical support?
+                    {t('faq.support.question')}
                   </h4>
                   <p className="text-gray-600 text-sm">
-                    Yes! Our expert technicians provide free technical support for all purchased products.
+                    {t('faq.support.answer')}
                   </p>
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2" style={{ color: '#669999' }}>
-                    What payment methods do you accept?
+                    {t('faq.payment.question')}
                   </h4>
                   <p className="text-gray-600 text-sm">
-                    We accept all financing options through our partners.
+                    {t('faq.payment.answer')}
                   </p>
                 </div>
               </div>

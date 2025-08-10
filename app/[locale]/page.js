@@ -15,8 +15,12 @@ import './globals.css';
 import { Settings } from "lucide-react";
 import { getHomeProducts } from '@/lib/api';
 import useWilayas from '@/hooks/useWilayas';
+import {useTranslations} from 'next-intl';
+import {Link} from '@/i18n/navigation';
+
 
 export default function Home() {
+  const t = useTranslations('HomePage');
   const [homeData, setHomeData] = useState({
     latest: [],
     bestSelling: [],
@@ -38,7 +42,7 @@ export default function Home() {
           discounted: data.discounted || []
         });
       } catch (err) {
-        setError('Failed to load home data.');
+        setError(t('loadingError'));
         console.error('Error fetching home data:', err);
       } finally {
         setLoading(false);
@@ -54,7 +58,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
-        <div className="text-center py-12 text-lg text-gray-600">Loading...</div>
+        <div className="text-center py-12 text-lg text-gray-600">{t('loading')}</div>
         <Footer />
       </div>
     );

@@ -2,22 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import { Menu, X, Search, ShoppingCart, User, Monitor } from 'lucide-react';
-import Link from 'next/link';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
+import { useLocale } from 'next-intl';
 import Image from 'next/image';
 import { Settings } from "lucide-react";
 import { getUser, removeUser, getCartItemCount, getToken, removeToken } from '@/lib/storage';
-import { usePathname } from 'next/navigation';
+// usePathname imported from i18n/navigation
 
 
 import image from './Z2.png'; // Adjust the path as necessary
+import { useTranslations } from 'next-intl';
+
 export default function Navigation() {
+  const t = useTranslations('Navigation');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const [cartCount, setCartCount] = useState(0);
+  const [showLocaleMenu, setShowLocaleMenu] = useState(false);
+  const currentLocale = useLocale();
   
   useEffect(() => {
     setUser(getUser());
@@ -73,13 +80,35 @@ export default function Navigation() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [showProfileMenu]);
 
+  // Close locale dropdown when clicking outside
+  useEffect(() => {
+    if (!showLocaleMenu) return;
+    function handleClick(e) {
+      if (!e.target.closest('.locale-menu-container')) setShowLocaleMenu(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showLocaleMenu]);
+
   const menuItems = [
-    { name: 'Home page', href: '/' },
-    { name: 'Products', href: '/products' },
-    { name: 'PC builder', href: '/pc-builder' },
-    { name: 'About us', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: t('menu.home'), href: '/' },
+    { name: t('menu.products'), href: '/products' },
+    { name: t('menu.builder'), href: '/pc-builder' },
+    { name: t('menu.about'), href: '/about' },
+    { name: t('menu.contact'), href: '/contact' },
   ];
+
+  const chooseLocale = (locale) => {
+    if (locale === currentLocale) {
+      setShowLocaleMenu(false);
+      return;
+    }
+    // Use window.location for locale switching to ensure proper navigation
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace(`/${currentLocale}`, `/${locale}`);
+    window.location.href = newPath;
+    setShowLocaleMenu(false);
+  };
 
   return (
     <header className={`shadow-md sticky top-0 z-50 transition-all duration-300 ${
@@ -94,7 +123,7 @@ export default function Navigation() {
             */
            } 
               <div className="flex items-center sticky gap-0">
-                <a href="/" className="flex flex-col items-center justify-center ">
+                <Link href="/" className="flex flex-col items-center justify-center ">
                   <div className="flex items-center mb-0">
                     <Image
                       src={image}
@@ -110,7 +139,7 @@ export default function Navigation() {
                   <span className="text-xs sm:text-sm font-semibold text-white mt-0 tracking-widest" style={{ color: '#ded4d2', letterSpacing: '0.25em',lineHeight:"0.5",textTransform:"uppercase" }}>
                     computer
                   </span>
-                </a>
+                </Link>
               </div>
             
           </div>
@@ -118,13 +147,13 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-6 xl:space-x-8 bg-red">
             {menuItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className="text-sm xl:text-base font-medium transition-colors duration-200 hover:text-white whitespace-nowrap text-white/90"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -164,7 +193,7 @@ export default function Navigation() {
                       className="block px-5 py-3 text-gray-800 hover:bg-gray-100 rounded-t-xl transition-colors"
                       onClick={() => setShowProfileMenu(false)}
                     >
-                      Profile
+                      {t('auth.profile')}
                     </Link>
                     {user.role === 'admin' && (
                       <Link
@@ -172,14 +201,14 @@ export default function Navigation() {
                         className="block px-5 py-3 text-gray-800 hover:bg-gray-100 transition-colors"
                         onClick={() => setShowProfileMenu(false)}
                       >
-                        Admin Panel
+                        {t('auth.adminPanel')}
                       </Link>
                     )}
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-5 py-3 text-red-600 hover:bg-gray-100 rounded-b-xl transition-colors"
                     >
-                      Logout
+                      {t('auth.logout')}
                     </button>
                   </div>
                 )}
@@ -204,6 +233,34 @@ export default function Navigation() {
               </svg>
               <span className="hidden sm:inline text-sm">0772725573</span>
             </Link>
+
+            {/* Language Dropdown */}
+            <div className="relative locale-menu-container hidden sm:flex">
+              <button
+                onClick={() => setShowLocaleMenu((v) => !v)}
+                className="px-2 py-1 rounded-md border border-white/40 text-white text-xs uppercase hover:bg-white/20 flex items-center gap-1"
+                title={t('language.switchTooltip')}
+              >
+                <span>{currentLocale.toUpperCase()}</span>
+                <svg className={`w-3 h-3 transition-transform ${showLocaleMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              {showLocaleMenu && (
+                <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-md shadow-lg border border-gray-100 z-50">
+                  <button
+                    onClick={() => chooseLocale('en')}
+                    className={`w-full text-left px-3 py-2 text-sm rounded-t-md hover:bg-gray-50 ${currentLocale === 'en' ? 'bg-gray-50 font-semibold' : ''}`}
+                  >
+                    {t('language.english')} (EN)
+                  </button>
+                  <button
+                    onClick={() => chooseLocale('fr')}
+                    className={`w-full text-left px-3 py-2 text-sm rounded-b-md hover:bg-gray-50 ${currentLocale === 'fr' ? 'bg-gray-50 font-semibold' : ''}`}
+                  >
+                    {t('language.french')} (FR)
+                  </button>
+                </div>
+              )}
+            </div>
 
 
             {/* Mobile menu button */}
@@ -236,14 +293,14 @@ export default function Navigation() {
                 {/* Main Menu Items */}
                 <div className="space-y-2 mb-6">
                   {menuItems.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
                       className="block px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
                 {/* Mobile Auth Links */}
@@ -256,7 +313,7 @@ export default function Navigation() {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <User className="h-5 w-5 mr-3 text-white" />
-                        {user?.name || user?.email || "Profile"}
+                        {user?.name || user?.email || t('auth.profile')}
                       </Link>
                       {user?.role === 'admin' && (
                         <Link
@@ -265,7 +322,7 @@ export default function Navigation() {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <Settings className="h-5 w-5 mr-3 text-white" />
-                          Admin Panel
+                          {t('auth.adminPanel')}
                         </Link>
                       )}
                       <button
@@ -273,7 +330,7 @@ export default function Navigation() {
                         className="flex items-center w-full px-5 py-3 rounded-xl font-medium transition-colors hover:bg-white/20 text-white text-base"
                       >
                         <X className="h-5 w-5 mr-3 text-white" />
-                        Logout
+                        {t('auth.logout')}
                       </button>
                     </>
                   ) : (
@@ -284,7 +341,7 @@ export default function Navigation() {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <User className="h-5 w-5 mr-3 text-white" />
-                        Sign In
+                        {t('auth.signIn')}
                       </Link>
                       <Link
                         href="/signup"
@@ -292,10 +349,31 @@ export default function Navigation() {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <User className="h-5 w-5 mr-3 text-white" />
-                        Sign Up
+                        {t('auth.signUp')}
                       </Link>
                     </>
                   )}
+                </div>
+
+                {/* Mobile Language Switch */}
+                <div className="border-t border-white/20 pt-5">
+                  <div className="flex items-center justify-between px-5">
+                    <span className="text-white/90 text-sm">{t('language.label')}</span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => chooseLocale('en')}
+                        className={`px-3 py-1 rounded-md text-sm border ${currentLocale === 'en' ? 'bg-white text-[#4E8786] border-white' : 'text-white border-white/40'}`}
+                      >
+                        EN
+                      </button>
+                      <button
+                        onClick={() => chooseLocale('fr')}
+                        className={`px-3 py-1 rounded-md text-sm border ${currentLocale === 'fr' ? 'bg-white text-[#4E8786] border-white' : 'text-white border-white/40'}`}
+                      >
+                        FR
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </nav>
             </div>
