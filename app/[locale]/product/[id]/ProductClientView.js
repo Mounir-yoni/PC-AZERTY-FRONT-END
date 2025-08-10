@@ -26,7 +26,6 @@ export default function ProductClientView({ product }) {
       setLoading(true);
       setError('');
       try {
-        // Fetch related products
         const productsResponse = await getProducts();
         const allProducts = productsResponse.data;
         const filteredProducts = allProducts
@@ -34,44 +33,45 @@ export default function ProductClientView({ product }) {
           .slice(0, 4);
         setRelatedProducts(filteredProducts);
 
-        // Fetch comments
         try {
           const commentsResponse = await getComments(product._id);
           let commentsData = [];
-          if (commentsResponse && commentsResponse.data) {
-            if (Array.isArray(commentsResponse.data)) {
-              commentsData = commentsResponse.data;
-            } else if (commentsResponse.data.comments && Array.isArray(commentsResponse.data.comments)) {
-              commentsData = commentsResponse.data.comments;
-            } else if (commentsResponse.data.data && Array.isArray(commentsResponse.data.data)) {
-              commentsData = commentsResponse.data.data;
-            }
+          if (Array.isArray(commentsResponse.data)) {
+            commentsData = commentsResponse.data;
+          } else if (commentsResponse.data?.comments) {
+            commentsData = commentsResponse.data.comments;
+          } else if (commentsResponse.data?.data) {
+            commentsData = commentsResponse.data.data;
           }
           setComments(commentsData);
-        } catch (commentsError) {
+        } catch {
           setComments([]);
         }
-      } catch (err) {
+      } catch {
         setError(t('errors.loadFailed'));
       } finally {
         setLoading(false);
       }
     }
-    if (product && product._id) {
+    if (product?._id) {
       fetchData();
     }
-  }, [product]);
+  }, [product, t]);
 
-  // Meta Pixel tracking for ViewContent
+  // Meta Pixel - ViewContent
   useEffect(() => {
-    if (product && window.fbq) {
-      window.fbq('track', 'ViewContent', {
-        content_name: product.title,
-        content_ids: [product._id],
-        content_type: 'product',
-        value: parseFloat(product.price),
-        currency: 'DZD',
-      });
+    if (typeof window !== "undefined" && window.fbq && product) {
+      try {
+        window.fbq('track', 'ViewContent', {
+          content_name: product.title,
+          content_ids: [product._id],
+          content_type: 'product',
+          value: parseFloat(product.price),
+          currency: 'DZD',
+        });
+      } catch (err) {
+        console.warn("Meta Pixel tracking failed:", err);
+      }
     }
   }, [product]);
 
@@ -96,23 +96,14 @@ export default function ProductClientView({ product }) {
     }
     setSubmittingComment(true);
     try {
-      const commentData = {
-        comment: newComment,
-        rating: rating
-      };
-      const response = await addComment(product._id, commentData, token);
-      const newCommentObj = {
+      const response = await addComment(product._id, { comment: newComment, rating }, token);
+      setComments(prev => [{
         _id: response.data._id || Date.now().toString(),
-        user: response.data.user || {
-          name: 'You',
-          email: 'user@example.com'
-        },
+        user: response.data.user || { name: 'You' },
         comment: newComment,
-        rating: rating,
+        rating,
         date: new Date().toISOString().split('T')[0],
-        helpful: 0
-      };
-      setComments(prev => [newCommentObj, ...prev]);
+      }, ...prev]);
       setNewComment('');
       setRating(0);
       showNotification({
@@ -120,7 +111,7 @@ export default function ProductClientView({ product }) {
         description: t('reviews.submitSuccessDescription'),
         variant: 'default',
       });
-    } catch (err) {
+    } catch {
       showNotification({
         title: t('reviews.submitFailedTitle'),
         description: t('reviews.submitFailedDescription'),
@@ -136,24 +127,28 @@ export default function ProductClientView({ product }) {
     setAddingToCart(true);
     try {
       addToCart(product);
-      
-      // Meta Pixel tracking for AddToCart
-      if (window.fbq) {
-        window.fbq('track', 'AddToCart', {
-          content_name: product.title,
-          content_ids: [product._id],
-          content_type: 'product',
-          value: parseFloat(product.price),
-          currency: 'DZD',
-        });
+
+      // Meta Pixel - AddToCart
+      if (typeof window !== "undefined" && window.fbq) {
+        try {
+          window.fbq('track', 'AddToCart', {
+            content_name: product.title,
+            content_ids: [product._id],
+            content_type: 'product',
+            value: parseFloat(product.price),
+            currency: 'DZD',
+          });
+        } catch (err) {
+          console.warn("Meta Pixel AddToCart failed:", err);
+        }
       }
-      
+
       showNotification({
         title: t('notifications.addedToCart.title'),
         description: t('notifications.addedToCart.description', { title: product.title }),
         variant: 'default',
       });
-    } catch (error) {
+    } catch {
       showNotification({
         title: t('notifications.error.title'),
         description: t('notifications.error.description'),
@@ -163,47 +158,6 @@ export default function ProductClientView({ product }) {
       setAddingToCart(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
-        <Navigation />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7a9e9f] mx-auto"></div>
-            <p className="mt-4 text-lg text-gray-600">{t('loading')}</p>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (error || !product) {
-    return (
-      <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
-        <Navigation />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">{t('notFound.title')}</h2>
-            <p className="text-gray-600 mb-6">{error || t('notFound.description')}</p>
-            <Link 
-              href="/"
-              className="px-6 py-3 bg-[#7a9e9f] text-white rounded-lg font-semibold hover:bg-[#6a8e8f] transition-colors"
-            >
-              {t('notFound.backHome')}
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Create images array from product data
-  const productImages = product.imagecover ? [product.imagecover] : [
-    'https://images.pexels.com/photos/2399840/pexels-photo-2399840.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1'
-  ];
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f5f5f2' }}>
@@ -228,7 +182,7 @@ export default function ProductClientView({ product }) {
           <div className="space-y-4">
             <div className="relative">
                 <img
-                  src={productImages[0]}
+                  src={product.imagecover}
                   alt={product.title}
                   className="w-[90%] object-contain rounded-xl shadow-sm transition-transform duration-300 hover:scale-105"
                 />
@@ -238,9 +192,9 @@ export default function ProductClientView({ product }) {
             </div>
             
             {/* Thumbnail Images */}
-            {productImages.length > 1 && (
+            {product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
-                {productImages.map((image, index) => (
+                {product.images.map((image, index) => (
                   <button
                     key={index}
                     className="relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"

@@ -35,6 +35,24 @@ export default function CartPage() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  // Meta Pixel tracking for ViewCart
+  useEffect(() => {
+    if (cartItems.length > 0 && window.fbq) {
+      const content_ids = cartItems.map(item => item._id || item.id);
+      const content_names = cartItems.map(item => item.title || item.name);
+      const total_value = cartItems.reduce((sum, item) => sum + (parseFloat(item.price || 0) * (item.quantity || 1)), 0);
+      
+      window.fbq('track', 'ViewCart', {
+        content_ids: content_ids,
+        content_names: content_names,
+        content_type: 'product',
+        value: total_value,
+        currency: 'DZD',
+        num_items: cartItems.length,
+      });
+    }
+  }, [cartItems]);
+
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity === 0) {
       removeItem(id);
@@ -100,8 +118,40 @@ export default function CartPage() {
       });
       return;
     }
+    
+    // Meta Pixel tracking for InitiateCheckout
+    if (window.fbq) {
+      const content_ids = cartItems.map(item => item._id || item.id);
+      const content_names = cartItems.map(item => item.title || item.name);
+      
+      window.fbq('track', 'InitiateCheckout', {
+        content_ids: content_ids,
+        content_names: content_names,
+        content_type: 'product',
+        value: total,
+        currency: 'DZD',
+        num_items: cartItems.length,
+      });
+    }
+    
     try {
       await addOrder({ address: userInfo.address, name: userInfo.name, phone: userInfo.phone, wilaya: userInfo.wilaya, place: userInfo.place, wilayaObj: userInfo.wilayaObj });
+      
+      // Meta Pixel tracking for Purchase
+      if (window.fbq) {
+        const content_ids = cartItems.map(item => item._id || item.id);
+        const content_names = cartItems.map(item => item.title || item.name);
+        
+        window.fbq('track', 'Purchase', {
+          content_ids: content_ids,
+          content_names: content_names,
+          content_type: 'product',
+          value: total,
+          currency: 'DZD',
+          num_items: cartItems.length,
+        });
+      }
+      
       showNotification({
         title: t('notifications.orderSuccess.title'),
         description: t('notifications.orderSuccess.description'),
