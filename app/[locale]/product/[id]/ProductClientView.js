@@ -396,31 +396,31 @@ export default function ProductClientView({ product }) {
                 </div>
               </div>
 
-              {/* Add to Cart */}
+              {/* Order Now and Add to Cart */}
               <div className="space-y-4 mb-8">
                 <button
-                  onClick={handleAddToCart}
-                  disabled={addingToCart}
-                  className="w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => setShowDirectOrder(true)}
+                  className="w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2"
                   style={{ backgroundColor: '#4E8786', color: 'white' }}
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  <span>{addingToCart ? t('adding') : t('addToCartWithPrice', { price: product.price })}</span>
+                  <CreditCard className="h-5 w-5" />
+                  <span>{t('directOrder.orderNow')}</span>
                 </button>
                 
-                {/* Direct Order Section */}
+                {/* Add to Cart Section */}
                 <div className="border-t pt-6">
                   <div className="text-center mb-4">
                     <span className="text-sm text-gray-500">{t('directOrder.or')}</span>
                   </div>
                   
                   <button
-                    onClick={() => setShowDirectOrder(true)}
-                    className="w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 border-2"
+                    onClick={handleAddToCart}
+                    disabled={addingToCart}
+                    className="w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 border-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ borderColor: '#4E8786', color: '#4E8786' }}
                   >
-                    <CreditCard className="h-5 w-5" />
-                    <span>{t('directOrder.orderNow')}</span>
+                    <ShoppingCart className="h-5 w-5" />
+                    <span>{addingToCart ? t('adding') : t('addToCartWithPrice', { price: product.price })}</span>
                   </button>
                 </div>
               </div>
