@@ -17,7 +17,7 @@ export async function generateStaticParams() {
     const products = data.data || [];
 
     // اللغات المدعومة
-    const locales = ['fr', 'en', 'ar'];
+    const locales = ['fr', 'en'];
 
     // توليد باراميترات لكل لغة ولكل منتج
     const params = [];

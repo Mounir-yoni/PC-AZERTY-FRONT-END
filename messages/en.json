@@ -21,7 +21,7 @@
       "global": "Global Reach",
       "global_description": "Serving customers worldwide with fast shipping and localized support in multiple languages."
     },
-    "timeline": {
+   "timeline": {
       "title": "Our Journey",
       "description": "A decade of growth, innovation, and customer success",
       "company": "Company Founded",
@@ -43,7 +43,7 @@
       "products": "Products Sold",
       "uptime": "Uptime Guarantee"
     },
-    "mission": {
+   "mission": {
       "title": "Our Mission",
       "description": "At AZERTY, we believe technology should empower everyone to achieve their goals.",
       "commitment": "Our commitment goes beyond just selling products. We're your technology partners, offering expert advice, comprehensive support, and solutions tailored to your unique requirements.",
@@ -57,7 +57,7 @@
       "description": "Let's build something amazing together.",
       "button": "Contact Us"
     },
-    "contact": {
+  "contact": {
       "title": "Contact Us",
       "description": "We're here to answer all your questions and help you find the perfect computing solutions for your needs.",
       "button": "Contact Us"
@@ -73,7 +73,7 @@
       "hours": "Business Hours",
       "support": "24/7 Support"
     },
-    "form": {
+   "form": {
       "title": "Send us a Message",
       "description": "Fill out the form below and we'll get back to you within 24 hours.",
       "name": "Full Name",
@@ -97,7 +97,7 @@
       "warranty": "Warranty Claim",
       "partnership": "Business Partnership"
     },
-    "map": {
+  "map": {
       "title": "Interactive Map"
     },
     "faq": {
@@ -127,7 +127,7 @@
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
     "signIn": "Sign In",
-    "signingIn": "Signing In...",
+    "signingIn": "Signing in...",
     "orContinueWith": "Or continue with",
     "noAccount": "Don't have an account?",
     "signUpHere": "Sign up here",
@@ -139,8 +139,8 @@
     }
   },
   "SignUp": {
-    "title": "Create Account",
-    "subtitle": "Join AZERTY and start shopping",
+    "title": "Create an Account",
+    "subtitle": "Join AZERTY and start your shopping",
     "backToHome": "Back to Home",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -149,8 +149,8 @@
     "address": "Address",
     "password": "Password",
     "confirmPassword": "Confirm Password",
-    "firstNamePlaceholder": "First name",
-    "lastNamePlaceholder": "Last name",
+    "firstNamePlaceholder": "First Name",
+    "lastNamePlaceholder": "Last Name",
     "emailPlaceholder": "Enter your email",
     "phonePlaceholder": "Enter your phone number",
     "addressPlaceholder": "Enter your address",
@@ -158,17 +158,17 @@
     "confirmPasswordPlaceholder": "Confirm your password",
     "agreeToTerms": "I agree to the",
     "termsOfService": "Terms of Service",
-    "and": "and",
+    "and": "and the",
     "privacyPolicy": "Privacy Policy",
-    "subscribeNewsletter": "Subscribe to our newsletter for deals and updates",
-    "createAccount": "Create Account",
+    "subscribeNewsletter": "Subscribe to our newsletter for offers and updates",
+    "createAccount": "Create an Account",
     "creatingAccount": "Creating Account...",
     "alreadyHaveAccount": "Already have an account?",
     "signInHere": "Sign in here",
     "loginDivider": "LOGIN",
     "notifications": {
       "signupSuccess": "Signup Successful",
-      "accountCreated": "Your account has been created. Please log in.",
+      "accountCreated": "Your account has been created. Please sign in.",
       "signupFailed": "Signup Failed",
       "signupFailedMessage": "Signup failed. Please try again.",
       "passwordMismatch": "Passwords do not match"
@@ -176,11 +176,11 @@
   },
   "Products": {
     "title": "Our Products",
-    "subtitle": "Discover our complete range of premium technology products",
-    "searchLabel": "Search Products",
+    "subtitle": "Discover our complete range of high-end technological products",
+    "searchLabel": "Search for products",
     "searchPlaceholder": "Search...",
     "categoriesTitle": "Categories",
-    "noCategoriesFound": "No categories found.",
+    "noCategoriesFound": "No category found.",
     "priceRangeTitle": "Price Range",
     "minPlaceholder": "Min",
     "maxPlaceholder": "Max",
@@ -188,7 +188,7 @@
     "showingCount": "Showing {shown} of {total} products",
     "loading": "Loading products...",
     "empty": {
-      "title": "No products found",
+      "title": "No product found",
       "subtitle": "Try adjusting your search criteria or filters"
     },
     "clearAllFilters": "Clear All Filters",
@@ -197,8 +197,8 @@
       "featured": "Featured",
       "priceLow": "Price: Low to High",
       "priceHigh": "Price: High to Low",
-      "rating": "Highest Rated",
-      "newest": "Newest First",
+      "rating": "Best Rated",
+      "newest": "Newest",
       "name": "Name A-Z"
     }
   },
@@ -216,13 +216,13 @@
     "totalPrice": "Total Price",
     "addToCart": "Add to Cart",
     "notifications": {
-      "addedToCart": "All selected parts have been added to your cart!"
+      "addedToCart": "All selected pieces have been added to your cart!"
     },
     "errors": {
       "loadParts": "Failed to load parts for {category}"
     },
     "categories": {
-      "CPU": "Processor",
+      "CPU": "CPU",
       "motherboard": "Motherboard",
       "ram": "Memory (RAM)",
       "gpu": "Graphics Card",
@@ -232,15 +232,15 @@
       "case": "PC Case"
     },
     "compatibilityIssues": {
-      "cpuMotherboard": "CPU and Motherboard sockets are incompatible",
-      "ramMotherboard": "RAM type is incompatible with Motherboard",
-      "psuInsufficient": "Power Supply may be insufficient. Recommended: {recommendedWattage}W",
-      "gpuCase": "Graphics Card may not fit in selected Case"
+      "cpuMotherboard": "The CPU and motherboard sockets are incompatible",
+      "ramMotherboard": "The RAM type is incompatible with the motherboard",
+      "psuInsufficient": "The power supply may be insufficient. Recommended: {recommendedWattage}W",
+      "gpuCase": "The graphics card may not fit in the selected case"
     },
     "recommendations": {
       "titleFor": "Recommended for {category}"
     },
-    "allOptionsFor": "All {category} Options",
+    "allOptionsFor": "All options {category}",
     "loading": "Loading PC parts..."
   },
   "Profile": {
@@ -249,11 +249,11 @@
     "loadingProfile": "Loading profile...",
     "redirecting": "Redirecting to login...",
     "sections": {
-      "profile": "Profile Info",
+      "profile": "Profile Information",
       "orders": "Order History",
       "notifications": "Notifications"
     },
-    "profileInformation": "Profile Information",
+    "profileInformation": "Informations du profil",
     "buttons": {
       "editProfile": "Edit Profile",
       "save": "Save",
@@ -261,7 +261,7 @@
     },
     "memberSince": "Member since {date}",
     "ordersShort": "Orders",
-    "totalSpentShort": "Total Spent",
+    "totalSpentShort": "Total spent",
     "fields": {
       "firstName": "First Name",
       "lastName": "Last Name",
@@ -271,10 +271,10 @@
     },
     "address": {
       "title": "Address Information",
-      "street": "Street Address",
+      "street": "Street",
       "city": "City",
-      "state": "State",
-      "zip": "ZIP Code"
+      "state": "State / Region",
+      "zip": "Zip Code"
     },
     "orders": {
       "title": "Order History",
@@ -297,18 +297,19 @@
   "Product": {
     "loading": "Loading product...",
     "notFound": {
-      "title": "Product Not Found",
+      "title": "Product not found",
       "description": "The product you are looking for does not exist.",
-      "backHome": "Back to Home"
+      "backHome": "Back Home",
+      "loadingWilayas": "Loading wilayas..."
     },
     "breadcrumbs": {
       "home": "Home",
       "products": "Products",
-      "category": "Gaming PCs"
+      "category": "PC Gaming"
     },
     "share": "Share",
     "saveAmount": "Save {amount} DA",
-    "descriptionFallback": "Experience ultimate gaming performance with our custom-built gaming PC. Featuring the latest components and cutting-edge technology, this system delivers exceptional performance for gaming and content creation.",
+    "descriptionFallback": "Enjoy ultimate gaming performance with our custom gaming PC. Equipped with the latest components and cutting-edge technology, this system offers exceptional performance for gaming and content creation.",
     "stock": {
       "inStock": "In Stock",
       "outOfStock": "Out of Stock"
@@ -327,20 +328,20 @@
     "guarantees": {
       "freeShipping": "Free Shipping",
       "freeShippingSub": "Orders over 50000 DA",
-      "warranty": "2 Year Warranty",
-      "warrantySub": "Full coverage",
-      "returns": "30-Day Returns",
+      "warranty": "2-Year Warranty",
+      "warrantySub": "Full Coverage",
+      "returns": "Returns within 30 days",
       "returnsSub": "No questions asked"
     },
     "related": {
-      "title": "Complete Your Setup"
+      "title": "Complete your configuration"
     },
     "reviews": {
       "title": "Customer Reviews ({count})",
       "writeTitle": "Write a Review",
       "ratingLabel": "Rating",
       "ratingSelected": "{rating} {rating, plural, one {star} other {stars}}",
-      "selectRating": "Select rating",
+      "selectRating": "Select a rating",
       "yourReview": "Your Review",
       "placeholder": "Share your experience with this product...",
       "submitting": "Submitting...",
@@ -352,11 +353,11 @@
       "loginRequiredTitle": "Login Required",
       "loginRequiredDescription": "Please login to leave a review.",
       "missingFieldsTitle": "Missing Information",
-      "missingFieldsDescription": "Please provide both a comment and rating.",
+      "missingFieldsDescription": "Please provide both a comment and a rating.",
       "submitSuccessTitle": "Review Submitted",
       "submitSuccessDescription": "Your review has been submitted successfully!",
       "submitFailedTitle": "Submission Failed",
-      "submitFailedDescription": "Failed to submit comment. Please try again."
+      "submitFailedDescription": "Failed to submit the comment. Please try again."
     },
     "notifications": {
       "addedToCart": {
@@ -366,10 +367,42 @@
       "error": {
         "title": "Error",
         "description": "Failed to add to cart. Please try again."
+      },
+      "missingInfo": {
+        "title": "Missing Information",
+        "description": "Please fill in your name, phone number, address, wilaya and place."
+      },
+      "orderSuccess": {
+        "title": "Order Placed",
+        "description": "Your order has been placed successfully!"
+      },
+      "orderFailed": {
+        "title": "Order Failed",
+        "description": "Order failed. Please try again."
       }
     },
     "errors": {
       "loadFailed": "Failed to load product data"
+    },
+    "directOrder": {
+      "or": "or",
+      "orderNow": "Order Now",
+      "title": "Direct Order",
+      "close": "Close",
+      "productSummary": "Product Summary",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "address": "Address",
+      "addressPlaceholder": "Enter your complete address",
+      "wilaya": "Province/State",
+      "selectWilaya": "Select your province/state",
+      "deliveryType": "Delivery Type",
+      "homeDelivery": "Home Delivery",
+      "officeDelivery": "Office Delivery",
+      "placeOrder": "Place Order",
+      "placingOrder": "Placing order..."
     }
   },
   "Navigation": {
@@ -377,7 +410,7 @@
       "home": "Home",
       "products": "Products",
       "builder": "PC Builder",
-      "about": "About Us",
+      "about": "About",
       "contact": "Contact"
     },
     "auth": {
@@ -385,21 +418,21 @@
       "adminPanel": "Admin Panel",
       "logout": "Logout",
       "signIn": "Sign In",
-      "signUp": "Sign Up"
+      "signUp": "S'inscrire"
     },
     "language": {
-      "switchTooltip": "Switch language",
+      "switchTooltip": "Change language",
       "english": "English",
       "french": "French",
       "label": "Language"
     }
   },
   "Cart": {
-    "title": "Shopping Cart",
+    "title": "Cart",
     "itemsInCart": "{count} {count, plural, one {item} other {items}} in your cart",
     "empty": {
       "title": "Your cart is empty",
-      "subtitle": "Looks like you haven't added any items to your cart yet"
+      "subtitle": "It looks like you haven't added any items to your cart yet"
     },
     "continueShopping": "Continue Shopping",
     "each": "each",
@@ -414,7 +447,7 @@
     "notifications": {
       "missingInfo": {
         "title": "Missing Information",
-        "description": "Please fill in your name, phone, address, wilaya, and place."
+        "description": "Please fill in your name, phone number, address, wilaya and place."
       },
       "orderSuccess": {
         "title": "Order Placed",
@@ -422,19 +455,19 @@
       },
       "orderFailed": {
         "title": "Order Failed",
-        "description": "Failed to place order. Please try again."
+        "description": "Order failed. Please try again."
       }
     }
   },
   "Footer": {
     "company": {
-      "description": "Your trusted destination for premium computers, components, and tech accessories. We've been serving the tech community for over 10 years."
+      "description": "Your trusted destination for high-end computers, components, and technological accessories. We've been serving the technology community for over 10 years."
     },
     "quickLinks": {
       "title": "Quick Links",
-      "about": "About Us",
+      "about": "About",
       "contact": "Contact",
-      "shipping": "Shipping Info",
+      "shipping": "Shipping",
       "returns": "Returns",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
@@ -464,7 +497,7 @@
     }
   },
   "CategoriesSlider": {
-    "title": "Shop by Category",
+    "title": "Buy by category",
     "subtitle": "Find exactly what you're looking for",
     "categories": {
       "processors": "Processors",
@@ -477,47 +510,50 @@
   },
   "MostRequestedProducts": {
     "title": "Most Requested Products",
-    "subtitle": "Our customers' favorite picks",
-    "noProducts": "No products available.",
-    "viewMore": "View More Products"
+    "subtitle": "The favorites of our customers",
+    "noProducts": "No product available.",
+    "viewMore": "View more products"
   },
   "NewProducts": {
     "title": "New Products",
     "subtitle": "Latest arrivals in our store",
-    "noProducts": "No new products available.",
+    "noProducts": "No new product available.",
     "newBadge": "New",
-    "viewAllNew": "View All New Products"
+    "viewAllNew": "View all new products"
   },
   "ProductGallery": {
-    "title": "Our Product Showcase",
-    "subtitle": "Experience the quality and design of our premium products",
+    "title": "Our products showcase",
+    "subtitle": "Discover the quality and design of our high-end products",
     "gaming": {
-      "title": "Ultimate Gaming Experience",
-      "description": "High-performance gaming setups designed for competitive play",
-      "button": "Explore Gaming"
+      "title": "Ultimate gaming experience",
+      "description": "High-performance gaming configurations designed for competitive gaming",
+      "button": "Explore gaming"
     },
     "workstation": {
-      "title": "Professional Workstations",
+      "title": "Professional workstations",
       "description": "Powerful systems for creators, developers, and professionals",
-      "button": "View Workstations"
+      "button": "View workstations"
     }
   },
   "BestDeals": {
-    "title": "Best Deals & Offers",
-    "subtitle": "Limited time offers you don't want to miss",
-    "noDeals": "No deals available.",
-    "discountBadge": "-20% OFF",
+    "title": "Best deals and promotions",
+    "subtitle": "Limited time offers you can't miss",
+    "noDeals": "No deal available.",
+    "discountBadge": "-20% DISCOUNT",
     "timeLeft": "2 days left",
-    "viewAllDeals": "View All Deals"
+    "viewAllDeals": "View all deals"
   },
   "BrandsSection": {
-    "title": "Trusted Brands",
-    "subtitle": "We partner with the world's leading technology brands",
-    "description": "Authorized dealer for all major brands with full warranty support",
-    "viewAllBrands": "View All Brands"
+    "title": "Trusted brands",
+    "subtitle": "We collaborate with the world's leading technology brands",
+    "description": "Authorized reseller for all major brands with full warranty support",
+    "viewAllBrands": "View all brands"
   },
   "TestimonialsSlider": {
-    "title": "What Our Customers Say",
+    "title": "What our customers say",
     "subtitle": "Real reviews from real customers"
+  },
+  "wilayas": {
+    "loading": "Loading wilayas..."
   }
 }

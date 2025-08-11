@@ -299,7 +299,8 @@
     "notFound": {
       "title": "Produit introuvable",
       "description": "Le produit que vous recherchez n'existe pas.",
-      "backHome": "Retour à l'accueil"
+      "backHome": "Retour à l'accueil",
+      "loadingWilayas": "Chargement des wilayas..."
     },
     "breadcrumbs": {
       "home": "Accueil",
@@ -366,10 +367,42 @@
       "error": {
         "title": "Erreur",
         "description": "Échec de l'ajout au panier. Veuillez réessayer."
+      },
+      "missingInfo": {
+        "title": "Informations manquantes",
+        "description": "Veuillez renseigner votre nom, téléphone, adresse, wilaya et lieu."
+      },
+      "orderSuccess": {
+        "title": "Commande passée",
+        "description": "Votre commande a été passée avec succès !"
+      },
+      "orderFailed": {
+        "title": "Échec de la commande",
+        "description": "Échec de la commande. Veuillez réessayer."
       }
     },
     "errors": {
       "loadFailed": "Échec du chargement des données du produit"
+    },
+    "directOrder": {
+      "or": "ou",
+      "orderNow": "Commander maintenant",
+      "title": "Commande directe",
+      "close": "Fermer",
+      "productSummary": "Résumé du produit",
+      "name": "Nom complet",
+      "namePlaceholder": "Entrez votre nom complet",
+      "phone": "Numéro de téléphone",
+      "phonePlaceholder": "Entrez votre numéro de téléphone",
+      "address": "Adresse",
+      "addressPlaceholder": "Entrez votre adresse complète",
+      "wilaya": "Province/État",
+      "selectWilaya": "Sélectionnez votre province/état",
+      "deliveryType": "Type de livraison",
+      "homeDelivery": "Livraison à domicile",
+      "officeDelivery": "Retrait au bureau",
+      "placeOrder": "Passer la commande",
+      "placingOrder": "Passage de la commande..."
     }
   },
   "Navigation": {
@@ -519,5 +552,8 @@
   "TestimonialsSlider": {
     "title": "Ce que disent nos clients",
     "subtitle": "Avis réels de vrais clients"
+  },
+  "wilayas": {
+    "loading": "Chargement des wilayas..."
   }
 }

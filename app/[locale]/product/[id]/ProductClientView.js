@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, CreditCard } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Link } from '@/i18n/navigation';
@@ -9,6 +9,7 @@ import { getProducts, getComments, addComment } from '@/lib/api';
 import { getToken, addToCart } from '@/lib/storage';
 import { showNotification } from '@/components/NotificationSystem';
 import { useTranslations } from 'next-intl';
+import useWilayas from '@/hooks/useWilayas';
 
 export default function ProductClientView({ product }) {
   const t = useTranslations('Product');
@@ -20,6 +21,24 @@ export default function ProductClientView({ product }) {
   const [rating, setRating] = useState(0);
   const [submittingComment, setSubmittingComment] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [showDirectOrder, setShowDirectOrder] = useState(false);
+  const [directOrderForm, setDirectOrderForm] = useState({
+    name: '',
+    phone: '',
+    address: '',
+    wilaya: '',
+    deliveryType: 'home'
+  });
+  const [submittingOrder, setSubmittingOrder] = useState(false);
+
+  // Fetch wilaya data using useWilayas hook
+  const { wilayas, isLoading: wilayasLoading, isError: wilayasError } = useWilayas();
+
+  // Calculate shipping cost when wilaya or delivery type changes
+  const selectedWilaya = wilayas?.find(w => w._id === directOrderForm.wilaya);
+  const shippingCost = selectedWilaya 
+    ? (directOrderForm.deliveryType === 'office' ? selectedWilaya.pricetooffice : selectedWilaya.pricetohome)
+    : 0;
 
   useEffect(() => {
     async function fetchData() {
@@ -36,12 +55,12 @@ export default function ProductClientView({ product }) {
         try {
           const commentsResponse = await getComments(product._id);
           let commentsData = [];
-          if (Array.isArray(commentsResponse.data)) {
-            commentsData = commentsResponse.data;
+            if (Array.isArray(commentsResponse.data)) {
+              commentsData = commentsResponse.data;
           } else if (commentsResponse.data?.comments) {
-            commentsData = commentsResponse.data.comments;
+              commentsData = commentsResponse.data.comments;
           } else if (commentsResponse.data?.data) {
-            commentsData = commentsResponse.data.data;
+              commentsData = commentsResponse.data.data;
           }
           setComments(commentsData);
         } catch {
@@ -156,6 +175,84 @@ export default function ProductClientView({ product }) {
       });
     } finally {
       setAddingToCart(false);
+    }
+  };
+
+  const handleDirectOrder = async (e) => {
+    e.preventDefault();
+    
+    if (!directOrderForm.name || !directOrderForm.phone || !directOrderForm.address || !directOrderForm.wilaya) {
+      showNotification({
+        title: t('notifications.missingInfo.title'),
+        description: t('notifications.missingInfo.description'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setSubmittingOrder(true);
+    
+    try {
+      // Get the selected wilaya object for shipping calculations
+      const selectedWilaya = wilayas.find(w => w._id === directOrderForm.wilaya);
+      if (!selectedWilaya) {
+        throw new Error('Selected wilaya not found');
+      }
+
+      // Use the calculated shipping cost
+      const shipping = shippingCost;
+
+      // Meta Pixel tracking for InitiateCheckout
+      if (window.fbq) {
+        window.fbq('track', 'InitiateCheckout', {
+          content_ids: [product._id],
+          content_names: [product.title],
+          content_type: 'product',
+          value: parseFloat(product.price) + (shipping || 0),
+          currency: 'DZD',
+          num_items: 1,
+        });
+      }
+
+      // Here you would typically call your order API
+      // For now, we'll simulate a successful order
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Meta Pixel tracking for Purchase
+      if (window.fbq) {
+        window.fbq('track', 'Purchase', {
+          content_ids: [product._id],
+          content_names: [product.title],
+          content_type: 'product',
+          value: parseFloat(product.price) + (shipping || 0),
+          currency: 'DZD',
+          num_items: 1,
+        });
+      }
+
+      showNotification({
+        title: t('notifications.orderSuccess.title'),
+        description: t('notifications.orderSuccess.description'),
+        variant: 'default',
+      });
+      
+      setShowDirectOrder(false);
+      setDirectOrderForm({
+        name: '',
+        phone: '',
+        address: '',
+        wilaya: '',
+        deliveryType: 'home'
+      });
+      
+    } catch (error) {
+      showNotification({
+        title: t('notifications.orderFailed.title'),
+        description: error?.message || t('notifications.orderFailed.description'),
+        variant: 'destructive',
+      });
+    } finally {
+      setSubmittingOrder(false);
     }
   };
 
@@ -278,6 +375,22 @@ export default function ProductClientView({ product }) {
                   <ShoppingCart className="h-5 w-5" />
                   <span>{addingToCart ? t('adding') : t('addToCartWithPrice', { price: product.price })}</span>
                 </button>
+                
+                {/* Direct Order Section */}
+                <div className="border-t pt-6">
+                  <div className="text-center mb-4">
+                    <span className="text-sm text-gray-500">{t('directOrder.or')}</span>
+                  </div>
+                  
+                  <button
+                    onClick={() => setShowDirectOrder(true)}
+                    className="w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 border-2"
+                    style={{ borderColor: '#4E8786', color: '#4E8786' }}
+                  >
+                    <CreditCard className="h-5 w-5" />
+                    <span>{t('directOrder.orderNow')}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Features */}
@@ -332,6 +445,181 @@ export default function ProductClientView({ product }) {
             </div>
           </div>
         </div>
+
+        {/* Direct Order Modal */}
+        {showDirectOrder && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold" style={{ color: '#2e2e2e' }}>
+                    {t('directOrder.title')}
+                  </h3>
+                  <button
+                    onClick={() => setShowDirectOrder(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Product Summary */}
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={product.imagecover}
+                      alt={product.title}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h4 className="font-semibold" style={{ color: '#2e2e2e' }}>
+                        {product.title}
+                      </h4>
+                      <p className="text-lg font-bold" style={{ color: '#4E8786' }}>
+                        {product.price} DA
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Shipping Cost Display */}
+                  {directOrderForm.wilaya && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="flex justify-between items-center text-sm">
+                        <span style={{ color: '#2e2e2e' }}>{t('directOrder.productPrice')}</span>
+                        <span style={{ color: '#4E8786' }}>{product.price} DA</span>
+                      </div>
+                      {selectedWilaya && (
+                        <>
+                          <div className="flex justify-between items-center text-sm mt-1">
+                            <span style={{ color: '#2e2e2e' }}>{t('directOrder.shipping')} ({directOrderForm.deliveryType === 'office' ? t('directOrder.office') : t('directOrder.home')}):</span>
+                            <span style={{ color: '#4E8786' }}>{shippingCost} DA</span>
+                          </div>
+                          <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-gray-200">
+                            <span style={{ color: '#2e2e2e' }}>{t('directOrder.total')}</span>
+                            <span style={{ color: '#4E8786' }}>{parseFloat(product.price) + shippingCost} DA</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Order Form */}
+                <form onSubmit={handleDirectOrder} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
+                      {t('directOrder.name')}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={directOrderForm.name}
+                      onChange={(e) => setDirectOrderForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E8786] focus:border-transparent"
+                      placeholder={t('directOrder.namePlaceholder')}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
+                      {t('directOrder.phone')}
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={directOrderForm.phone}
+                      onChange={(e) => setDirectOrderForm(prev => ({ ...prev, phone: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E8786] focus:border-transparent"
+                      placeholder={t('directOrder.phonePlaceholder')}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
+                      {t('directOrder.address')}
+                    </label>
+                    <textarea
+                      required
+                      rows="3"
+                      value={directOrderForm.address}
+                      onChange={(e) => setDirectOrderForm(prev => ({ ...prev, address: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E8786] focus:border-transparent resize-none"
+                      placeholder={t('directOrder.addressPlaceholder')}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
+                      {t('directOrder.wilaya')}
+                    </label>
+                    <select
+                      required
+                      value={directOrderForm.wilaya}
+                      onChange={(e) => setDirectOrderForm(prev => ({ ...prev, wilaya: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4E8786] focus:border-transparent"
+                      disabled={wilayasLoading}
+                    >
+                      <option value="">{t('directOrder.selectWilaya')}</option>
+                      {wilayas && wilayas.length > 0 && wilayas.map((wilaya) => (
+                        <option key={wilaya._id} value={wilaya._id}>
+                          {wilaya.name}
+                        </option>
+                      ))}
+                    </select>
+                    {wilayasError && (
+                      <p className="text-red-500 text-sm mt-1">Failed to load provinces</p>
+                    )}
+                    {wilayasLoading && (
+                      <p className="text-gray-500 text-sm mt-1">Loading provinces...</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#2e2e2e' }}>
+                      {t('directOrder.deliveryType')}
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          name="deliveryType"
+                          value="home"
+                          checked={directOrderForm.deliveryType === 'home'}
+                          onChange={(e) => setDirectOrderForm(prev => ({ ...prev, deliveryType: e.target.value }))}
+                          className="text-[#4E8786] focus:ring-[#4E8786]"
+                        />
+                        <span className="text-sm">{t('directOrder.homeDelivery')}</span>
+                      </label>
+                      <label className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          name="deliveryType"
+                          value="office"
+                          checked={directOrderForm.deliveryType === 'office'}
+                          onChange={(e) => setDirectOrderForm(prev => ({ ...prev, deliveryType: e.target.value }))}
+                          className="text-[#4E8786] focus:ring-[#4E8786]"
+                        />
+                        <span className="text-sm">{t('directOrder.officeDelivery')}</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submittingOrder}
+                    className="w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: '#4E8786', color: 'white' }}
+                  >
+                    <CreditCard className="h-5 w-5" />
+                    <span>{submittingOrder ? t('directOrder.placingOrder') : t('directOrder.placeOrder')}</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
