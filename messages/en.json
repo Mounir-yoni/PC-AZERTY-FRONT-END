@@ -21,7 +21,7 @@
       "global": "Global Reach",
       "global_description": "Serving customers worldwide with fast shipping and localized support in multiple languages."
     },
-   "timeline": {
+    "timeline": {
       "title": "Our Journey",
       "description": "A decade of growth, innovation, and customer success",
       "company": "Company Founded",
@@ -43,7 +43,7 @@
       "products": "Products Sold",
       "uptime": "Uptime Guarantee"
     },
-   "mission": {
+    "mission": {
       "title": "Our Mission",
       "description": "At AZERTY, we believe technology should empower everyone to achieve their goals.",
       "commitment": "Our commitment goes beyond just selling products. We're your technology partners, offering expert advice, comprehensive support, and solutions tailored to your unique requirements.",
@@ -57,7 +57,7 @@
       "description": "Let's build something amazing together.",
       "button": "Contact Us"
     },
-  "contact": {
+    "contact": {
       "title": "Contact Us",
       "description": "We're here to answer all your questions and help you find the perfect computing solutions for your needs.",
       "button": "Contact Us"
@@ -73,7 +73,7 @@
       "hours": "Business Hours",
       "support": "24/7 Support"
     },
-   "form": {
+    "form": {
       "title": "Send us a Message",
       "description": "Fill out the form below and we'll get back to you within 24 hours.",
       "name": "Full Name",
@@ -97,7 +97,7 @@
       "warranty": "Warranty Claim",
       "partnership": "Business Partnership"
     },
-  "map": {
+    "map": {
       "title": "Interactive Map"
     },
     "faq": {
@@ -357,7 +357,9 @@
       "submitSuccessTitle": "Review Submitted",
       "submitSuccessDescription": "Your review has been submitted successfully!",
       "submitFailedTitle": "Submission Failed",
-      "submitFailedDescription": "Failed to submit the comment. Please try again."
+      "submitFailedDescription": "Failed to submit the comment. Please try again.",
+      "anonymousUser": "Anonymous",
+      "noCommentText": "No comment text available"
     },
     "notifications": {
       "addedToCart": {
@@ -402,7 +404,12 @@
       "homeDelivery": "Home Delivery",
       "officeDelivery": "Office Delivery",
       "placeOrder": "Place Order",
-      "placingOrder": "Placing order..."
+      "placingOrder": "Placing order...",
+      "productPrice": "Product Price",
+      "shipping": "Shipping Cost",
+      "office": "Office",
+      "home": "Home",
+      "total": "Total"
     }
   },
   "Navigation": {
@@ -554,6 +561,7 @@
     "subtitle": "Real reviews from real customers"
   },
   "wilayas": {
-    "loading": "Loading wilayas..."
+    "loading": "Loading wilayas...",
+    "loadFailed": "Failed to load provinces"
   }
 }

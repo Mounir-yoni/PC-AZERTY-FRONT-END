@@ -5,8 +5,8 @@ import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, CreditCard
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Link } from '@/i18n/navigation';
-import { getProducts, getComments, addComment } from '@/lib/api';
-import { getToken, addToCart } from '@/lib/storage';
+import { getProducts, getComments, addComment, addOrder } from '@/lib/api';
+import { getToken, addToCart, getCart, removeItem } from '@/lib/storage';
 import { showNotification } from '@/components/NotificationSystem';
 import { useTranslations } from 'next-intl';
 import useWilayas from '@/hooks/useWilayas';
@@ -199,32 +199,58 @@ export default function ProductClientView({ product }) {
         throw new Error('Selected wilaya not found');
       }
 
-      // Use the calculated shipping cost
-      const shipping = shippingCost;
-
       // Meta Pixel tracking for InitiateCheckout
       if (window.fbq) {
         window.fbq('track', 'InitiateCheckout', {
           content_ids: [product._id],
           content_names: [product.title],
           content_type: 'product',
-          value: parseFloat(product.price) + (shipping || 0),
+          value: parseFloat(product.price) + shippingCost,
           currency: 'DZD',
           num_items: 1,
         });
       }
 
-      // Here you would typically call your order API
-      // For now, we'll simulate a successful order
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save current cart state
+      const currentCart = getCart();
       
+      // Temporarily set cart to only contain the current product
+      const tempCart = [{
+        _id: product._id,
+        title: product.title,
+        price: parseFloat(product.price),
+        quantity: 1,
+        imagecover: product.imagecover
+      }];
+      
+      // Set the temporary cart
+      localStorage.setItem('cart', JSON.stringify(tempCart));
+
+      // Call addOrder with the direct order data
+      await addOrder({
+        address: directOrderForm.address,
+        name: directOrderForm.name,
+        phone: directOrderForm.phone,
+        wilaya: directOrderForm.wilaya,
+        place: directOrderForm.deliveryType,
+        wilayaObj: selectedWilaya,
+        preserveCart: true
+      });
+
+      // Restore the original cart after successful order
+      if (currentCart && currentCart.length > 0) {
+        localStorage.setItem('cart', JSON.stringify(currentCart));
+      } else {
+        removeItem('cart');
+      }
+
       // Meta Pixel tracking for Purchase
       if (window.fbq) {
         window.fbq('track', 'Purchase', {
           content_ids: [product._id],
           content_names: [product.title],
           content_type: 'product',
-          value: parseFloat(product.price) + (shipping || 0),
+          value: parseFloat(product.price) + shippingCost,
           currency: 'DZD',
           num_items: 1,
         });
@@ -244,8 +270,14 @@ export default function ProductClientView({ product }) {
         wilaya: '',
         deliveryType: 'home'
       });
+
+      // Redirect to home page after successful order (optional)
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
       
     } catch (error) {
+      console.error('Direct order error:', error);
       showNotification({
         title: t('notifications.orderFailed.title'),
         description: error?.message || t('notifications.orderFailed.description'),
@@ -569,10 +601,10 @@ export default function ProductClientView({ product }) {
                       ))}
                     </select>
                     {wilayasError && (
-                      <p className="text-red-500 text-sm mt-1">Failed to load provinces</p>
+                      <p className="text-red-500 text-sm mt-1">{t('wilayas.loadFailed')}</p>
                     )}
                     {wilayasLoading && (
-                      <p className="text-gray-500 text-sm mt-1">Loading provinces...</p>
+                      <p className="text-gray-500 text-sm mt-1">{t('wilayas.loading')}</p>
                     )}
                   </div>
 
@@ -742,7 +774,7 @@ export default function ProductClientView({ product }) {
                       </div>
                       <div>
                         <h4 className="font-semibold text-lg" style={{ color: '#2e2e2e' }}>
-                          {typeof comment.user === 'object' ? comment.user.name : (comment.user || comment.userName || 'Anonymous')}
+                          {typeof comment.user === 'object' ? comment.user.name : (comment.user || comment.userName || t('reviews.anonymousUser'))}
                         </h4>
                         <div className="flex items-center space-x-2 mt-1">
                           <div className="flex items-center">
@@ -764,7 +796,7 @@ export default function ProductClientView({ product }) {
                   </div>
                   
                   <p className="text-gray-700 leading-relaxed mb-4 text-base">
-                    {comment.comment || comment.text || comment.content || 'No comment text available'}
+                    {comment.comment || comment.text || comment.content || t('reviews.noCommentText')}
                   </p>
                   
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">

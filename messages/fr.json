@@ -357,7 +357,9 @@
       "submitSuccessTitle": "Avis envoyé",
       "submitSuccessDescription": "Votre avis a été envoyé avec succès !",
       "submitFailedTitle": "Échec de l'envoi",
-      "submitFailedDescription": "Échec de l'envoi du commentaire. Veuillez réessayer."
+      "submitFailedDescription": "Échec de l'envoi du commentaire. Veuillez réessayer.",
+      "anonymousUser": "Anonyme",
+      "noCommentText": "Aucun texte de commentaire disponible"
     },
     "notifications": {
       "addedToCart": {
@@ -402,7 +404,12 @@
       "homeDelivery": "Livraison à domicile",
       "officeDelivery": "Retrait au bureau",
       "placeOrder": "Passer la commande",
-      "placingOrder": "Passage de la commande..."
+      "placingOrder": "Passage de la commande...",
+      "productPrice": "Prix du produit",
+      "shipping": "Frais de livraison",
+      "office": "Bureau",
+      "home": "Domicile",
+      "total": "Total"
     }
   },
   "Navigation": {
@@ -554,6 +561,7 @@
     "subtitle": "Avis réels de vrais clients"
   },
   "wilayas": {
-    "loading": "Chargement des wilayas..."
+    "loading": "Chargement des wilayas...",
+    "loadFailed": "Échec du chargement des provinces"
   }
 }
