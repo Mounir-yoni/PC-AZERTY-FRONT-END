@@ -409,7 +409,8 @@
       "shipping": "Frais de livraison",
       "office": "Bureau",
       "home": "Domicile",
-      "total": "Total"
+      "total": "Total",
+      "freeShipping": "Livraison gratuite incluse"
     }
   },
   "Navigation": {
@@ -449,7 +450,8 @@
       "shipping": "Livraison",
       "free": "Gratuite",
       "total": "Total",
-      "orderNow": "Commander"
+      "orderNow": "Commander",
+      "freeShippingIncluded": "Livraison gratuite incluse"
     },
     "notifications": {
       "missingInfo": {

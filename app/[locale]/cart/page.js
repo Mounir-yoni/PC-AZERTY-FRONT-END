@@ -95,18 +95,24 @@ export default function CartPage() {
     }
   };
 
-  // Calculate dynamic shipping
+  // Calculate dynamic shipping based on product livraison field
   const selectedWilaya = userInfo.wilayaObj;
   let shipping = 0;
+  let hasFreeShipping = false;
+  
   if (selectedWilaya) {
-    shipping = userInfo.place === 'office'
-      ? selectedWilaya.pricetooffice
-      : selectedWilaya.pricetohome;
+    // Check if any product has free shipping
+    hasFreeShipping = cartItems.some(item => item.livraison === 'free');
+    
+    if (!hasFreeShipping) {
+      shipping = userInfo.place === 'office'
+        ? selectedWilaya.pricetooffice
+        : selectedWilaya.pricetohome;
+    }
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-  const tax = subtotal * 0.08;
-  const total = subtotal + (shipping || 0) ;
+  const total = subtotal + (hasFreeShipping ? 0 : shipping);
 
   const handleOrder = async () => {
     // No longer require login, just use userInfo
@@ -284,9 +290,14 @@ export default function CartPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">{t('summary.shipping')}</span>
                     <span className="font-semibold">
-                      {shipping === 0 ? t('summary.free') : `${shipping}DA`}
+                      {hasFreeShipping ? t('summary.free') : `${shipping}DA`}
                     </span>
                   </div>
+                  {hasFreeShipping && (
+                    <div className="text-sm text-green-600 font-medium text-center py-1 bg-green-50 rounded-lg">
+                      🚚 {t('summary.freeShippingIncluded')}
+                    </div>
+                  )}
 
                   <div className="border-t pt-4">
                     <div className="flex justify-between text-lg font-bold">

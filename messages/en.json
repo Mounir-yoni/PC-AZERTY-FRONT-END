@@ -409,7 +409,8 @@
       "shipping": "Shipping Cost",
       "office": "Office",
       "home": "Home",
-      "total": "Total"
+      "total": "Total",
+      "freeShipping": "Free shipping included"
     }
   },
   "Navigation": {
@@ -449,7 +450,8 @@
       "shipping": "Shipping",
       "free": "Free",
       "total": "Total",
-      "orderNow": "Order Now"
+      "orderNow": "Order Now",
+      "freeShippingIncluded": "Free shipping included"
     },
     "notifications": {
       "missingInfo": {

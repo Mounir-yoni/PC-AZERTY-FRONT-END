@@ -36,7 +36,7 @@ export default function ProductClientView({ product }) {
 
   // Calculate shipping cost when wilaya or delivery type changes
   const selectedWilaya = wilayas?.find(w => w._id === directOrderForm.wilaya);
-  const shippingCost = selectedWilaya 
+  const shippingCost = selectedWilaya && product.livraison !== 'free'
     ? (directOrderForm.deliveryType === 'office' ? selectedWilaya.pricetooffice : selectedWilaya.pricetohome)
     : 0;
 
@@ -524,10 +524,16 @@ export default function ProductClientView({ product }) {
                       </div>
                       {selectedWilaya && (
                         <>
-                          <div className="flex justify-between items-center text-sm mt-1">
-                            <span style={{ color: '#2e2e2e' }}>{t('directOrder.shipping')} ({directOrderForm.deliveryType === 'office' ? t('directOrder.office') : t('directOrder.home')}):</span>
-                            <span style={{ color: '#4E8786' }}>{shippingCost} DA</span>
-                          </div>
+                          {product.livraison === 'free' ? (
+                            <div className="text-sm text-green-600 font-medium text-center py-1 bg-green-50 rounded-lg mt-2">
+                              🚚 {t('directOrder.freeShipping')}
+                            </div>
+                          ) : (
+                            <div className="flex justify-between items-center text-sm mt-1">
+                              <span style={{ color: '#2e2e2e' }}>{t('directOrder.shipping')} ({directOrderForm.deliveryType === 'office' ? t('directOrder.office') : t('directOrder.home')}):</span>
+                              <span style={{ color: '#4E8786' }}>{shippingCost} DA</span>
+                            </div>
+                          )}
                           <div className="flex justify-between items-center font-semibold mt-2 pt-2 border-t border-gray-200">
                             <span style={{ color: '#2e2e2e' }}>{t('directOrder.total')}</span>
                             <span style={{ color: '#4E8786' }}>{parseFloat(product.price) + shippingCost} DA</span>

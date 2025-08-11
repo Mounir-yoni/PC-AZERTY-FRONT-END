@@ -220,6 +220,7 @@ function ProductsSection({ products, productsLoading, productsError, searchTerm,
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Price</th>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>quantity</th>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Status</th>
+                  <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Shipping</th>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Sales</th>
                   <th className="text-left py-3 px-4 font-semibold" style={{ color: '#2e2e2e' }}>Actions</th>
                 </tr>
@@ -240,6 +241,11 @@ function ProductsSection({ products, productsLoading, productsError, searchTerm,
                     <td className="py-3 px-4">
                       <span className={`text-xs px-2 py-1 rounded-full ${product.active ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-200'}`}>
                         {product.active ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className={`text-xs px-2 py-1 rounded-full ${product.livraison === 'free' ? 'text-green-600 bg-green-100' : 'text-blue-600 bg-blue-100'}`}>
+                        {product.livraison === 'free' ? 'Free' : 'Paid'}
                       </span>
                     </td>
                     <td className="py-3 px-4">
@@ -296,6 +302,7 @@ function EditProductModal({ product, onClose, onSave, loading, error }) {
     category: product?.category?._id || product?.category || '',
     Partname: product?.Partname || '',
     active: product?.active !== undefined ? product.active : true,
+    livraison: product?.livraison || 'Not free',
     imagecover: null
   });
   const [categories, setCategories] = useState([]);
@@ -347,6 +354,7 @@ function EditProductModal({ product, onClose, onSave, loading, error }) {
       category: product?.category?._id || product?.category || '',
       Partname: product?.Partname || '',
       active: product?.active !== undefined ? product.active : true,
+      livraison: product?.livraison || 'Not free',
       imagecover: null
     });
   }, [product]);
@@ -470,6 +478,19 @@ function EditProductModal({ product, onClose, onSave, loading, error }) {
               <option value="false">Inactive</option>
             </select>
 
+            <select
+              name="livraison"
+              value={form.livraison}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+              required
+            >
+              <option value="Not free">Shipping: Not Free</option>
+              <option value="free">Shipping: Free</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               name="imagecover"
               type="file"
@@ -514,7 +535,8 @@ function AddProductModal({ onClose, onSave, loading, error }) {
     description: '',
     category: '',
     imagecover: null, // will hold the File object
-    Partname: ''
+    Partname: '',
+    livraison: 'Not free' // default value for shipping
   });
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -595,6 +617,18 @@ function AddProductModal({ onClose, onSave, loading, error }) {
             <option value="psu">psu</option>
             <option value="cooling">cooling</option>
             <option value="case">case</option>
+          </select>
+          
+          {/* Livraison (Shipping) Selector */}
+          <select
+            name="livraison"
+            value={form.livraison}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded"
+            required
+          >
+            <option value="Not free">Shipping: Not Free</option>
+            <option value="free">Shipping: Free</option>
           </select>
           {/* Add more fields as needed */}
           {error && <div className="text-red-500 text-sm">{error}</div>}
